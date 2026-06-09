@@ -2,7 +2,7 @@
 
 Backend API and data seeding tools for the 82-0 accolade workspace.
 
-This server stores player accolade data in `data/players_accolades.json`, serves it through Express, and includes scripts for fetching NBA data, resuming long seed runs, and recalculating `legacy_points`.
+This server stores player accolade data in `data/players_accolades.json`, serves it through Express, and includes scripts for fetching NBA data, resuming long seed runs, recalculating `legacy_points`, and deriving team-era Classic scores.
 
 ## Setup
 
@@ -12,16 +12,17 @@ Install dependencies:
 npm install
 ```
 
-Create a local `.env` from `.env.example` and set your BALLDONTLIE API key:
+Create a local `.env` from `.env.example`:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-Required:
+Defaults are already usable locally:
 
 ```env
-BALLDONTLIE_API_KEY=your_key_here
+PORT=4000
+FRONTEND_ORIGIN=http://localhost:3000,http://127.0.0.1:3000
 ```
 
 Do not commit `.env`.
@@ -53,12 +54,22 @@ The server reads `data/players_accolades.json` fresh on each request, so seed up
 Available scripts:
 
 ```powershell
+npm start
+npm run dev
 npm run seed
 npm run seed:active
 npm run seed:active:resume
 npm run seed:full
 npm run seed:full:resume
+npm run seed:goat-rankings
 npm run seed:legacy-points
+npm run seed:classic-points
+npm run seed:position-bonus
+npm run backfill:season-stats
+npm run refresh:league-averages
+npm run refresh:positions:dry
+npm run refresh:positions
+npm run fix:positions
 ```
 
 `npm run seed` is the same as:
@@ -66,6 +77,132 @@ npm run seed:legacy-points
 ```powershell
 node seed.js --mode=active
 ```
+
+Simple command guide:
+
+```text
+npm start
+Runs the Express API server once.
+
+npm run dev
+Runs the Express API server with Node watch mode, so it restarts after local code changes.
+
+npm run seed
+Refreshes current active NBA players. This is the default active-player seed command.
+
+npm run seed:active
+Same active-player refresh as npm run seed.
+
+npm run seed:active:resume
+Continues an active-player seed and skips players already saved in data/players_accolades.json.
+
+npm run seed:full
+Refreshes the all-time player dataset. This can take a long time.
+
+npm run seed:full:resume
+Continues a long all-time seed and skips players already saved.
+
+npm run seed:legacy-points
+Recalculates legacy_points from stored accolades without refetching NBA APIs.
+
+npm run seed:classic-points
+Recalculates Classic Mode team-era points from era-relative per-season stats.
+
+npm run backfill:season-stats
+Backfills PPG/RPG/APG/SPG/BPG into stored career_seasons from NBA Stats career totals.
+
+npm run refresh:league-averages
+Builds data/historical_league_averages.json from NBA Stats/Basketball Reference season data.
+
+npm run seed:goat-rankings
+Fetches or refreshes the cached Bleacher Report GOAT ranking scores in data/br_goat_rankings.json.
+
+npm run seed:position-bonus
+Applies position_bonus and final_score after legacy points and GOAT scores are available.
+
+npm run refresh:positions:dry
+Previews position updates without writing changes.
+
+npm run refresh:positions
+Updates player positions and primary_position from the local NBA API position cache.
+
+npm run fix:positions
+Applies manual position overrides from data/position_overrides.json.
+```
+
+Recommended seed pipeline:
+
+```powershell
+npm run refresh:positions:dry
+npm run refresh:positions
+npm run seed:active
+npm run seed:legacy-points
+npm run refresh:league-averages
+npm run backfill:season-stats -- --saveEvery=25
+npm run seed:classic-points -- --dryRun
+npm run seed:classic-points
+npm run seed:goat-rankings
+npm run seed:position-bonus
+```
+
+Step-by-step:
+
+1. Preview position changes with `npm run refresh:positions:dry`.
+   This shows what would change before touching `players_accolades.json`.
+
+2. Apply position updates with `npm run refresh:positions`.
+   This keeps `positions` and `primary_position` current.
+
+3. Refresh player data with `npm run seed:active` or `npm run seed:full`.
+   Use `seed:active` for current NBA players. Use `seed:full` only when you want the all-time dataset.
+
+4. Recalculate base scoring with `npm run seed:legacy-points`.
+   This updates `legacy_points` from the accolades already stored locally.
+
+5. Refresh league averages with `npm run refresh:league-averages`.
+   This builds `data/historical_league_averages.json` for the season climate baseline.
+
+6. Backfill stored career season stats with `npm run backfill:season-stats -- --saveEvery=25`.
+   This fills PPG/RPG/APG/SPG/BPG on `career_seasons` from NBA Stats career totals.
+
+7. Recalculate Classic Mode team-era points with `npm run seed:classic-points`.
+   This uses `data/historical_league_averages.json` and only overwrites each classic block's `points`.
+
+8. Refresh GOAT ranking data with `npm run seed:goat-rankings`.
+   This updates the cached media ranking file used for GOAT score overlays.
+
+9. Apply positional alignment scoring with `npm run seed:position-bonus`.
+   This writes `position_bonus` and recalculates `final_score = legacy_points + goat_ranking/goat_score + position_bonus`.
+
+## Running Scripts Safely
+
+Run only one script that writes `data/players_accolades.json` at a time. These commands all touch that file and should be run sequentially:
+
+```powershell
+npm run seed
+npm run seed:active
+npm run seed:full
+npm run seed:legacy-points
+npm run backfill:season-stats
+npm run seed:classic-points
+npm run seed:position-bonus
+npm run refresh:positions
+npm run fix:positions
+```
+
+Do not run `npm run backfill:season-stats` at the same time as `npm run seed:full` or `npm run seed:full:resume`. Both can checkpoint or rewrite `players_accolades.json`, and whichever write finishes last can overwrite the other script's changes.
+
+This pairing is safe because the scripts write different files, though slower delays are still friendlier to the remote data sources:
+
+```powershell
+# Terminal 1: writes data/players_accolades.json
+npm run backfill:season-stats -- --limit=250 --saveEvery=25 --delayMs=500
+
+# Terminal 2: writes data/historical_league_averages.json
+npm run refresh:league-averages -- --prefer=bref --delayMs=10000
+```
+
+If PowerShell blocks `npm.ps1`, use `npm.cmd` with the same arguments.
 
 ## Seed Modes
 
@@ -75,13 +212,13 @@ node seed.js --mode=active
 npm run seed:active
 ```
 
-`full` fetches all BALLDONTLIE players, resolves them to NBA Stats IDs, then refreshes awards/career data.
+`full` fetches the all-time NBA Stats player directory, then refreshes awards/career data.
 
 ```powershell
 npm run seed:full
 ```
 
-Full all-time seeding can take a long time because each player may require NBA Stats awards, career, and stat-title requests with delays.
+Full all-time seeding can take a long time because each player may require NBA Stats awards, career, and stat-title requests with delays. BALLDONTLIE is no longer the primary source; keep it only as a future fallback if NBA Stats/nba_api cannot resolve a player.
 
 ## Batching
 
@@ -195,7 +332,7 @@ Use this only when you intentionally want broad NBA API labels to replace existi
 npm run refresh:positions -- --force-broad
 ```
 
-Manual corrections live in `data/position_overrides.json`.
+Manual corrections live in `data/position_overrides.json`. These are still necessary because nba_api often returns broad historical labels such as `G`, `F`, or `F-G`; the override file keeps high-impact players in their true primary-slot order.
 
 ## Legacy Points
 
@@ -225,6 +362,8 @@ finals_mvp_count: 5
 dpoy_count: 5
 roy_won: 5
 championship_rings: 5
+most_improved: 2
+6moy: 2
 olympic_gold_medals: 3
 olympic_silver_medals: 1
 olympic_bronze_medals: 0.5
@@ -264,6 +403,79 @@ final_legacy_points = legacy_points + goat_score
 
 Normal `seed`, `seed:active`, and `seed:full` runs also apply legacy points before writing output.
 
+## Classic Points
+
+Each player also gets `classic_points_by_team_era`, derived from `career_seasons` and per-season `awards_raw`.
+
+This is for Classic Mode. It does not replace all-time `legacy_points`.
+
+Run the era-relative statistical recalculation after `career_seasons` include per-game stats and
+`data/historical_league_averages.json` is available:
+
+```powershell
+npm run refresh:league-averages
+npm run backfill:season-stats -- --saveEvery=25
+npm run seed:classic-points -- --dryRun
+npm run seed:classic-points
+```
+
+The league-average file is keyed by NBA season:
+
+```json
+{
+  "2011-12": { "PPG": 96.3, "RPG": 42.2, "APG": 21.0, "SPG": 7.7, "BPG": 5.1 },
+  "1961-62": { "PPG": 118.8, "RPG": 71.4, "APG": 23.9 }
+}
+```
+
+The weights live at the top of `eraRelativeClassicPoints.js`. If a league-average season has no
+`SPG`/`BPG`, the scorer drops defensive metrics and evenly redistributes the total stat weight across
+PPG/RPG/APG for that season. The command preserves the stored accolade and award arrays and only
+overwrites `classic_points_by_team_era[*].points`.
+
+Useful recovery commands for source limits:
+
+```powershell
+npm run refresh:league-averages -- --prefer=bref --delayMs=5000
+npm run refresh:league-averages -- --source=nba --startEndYear=1997 --endEndYear=2024
+npm run backfill:season-stats -- --offset=250 --limit=250 --saveEvery=25
+```
+
+Example behavior:
+
+```text
+LeBron James CLE 00's: counts only Cavaliers 2000s seasons and awards
+LeBron James MIA 10's: counts only Heat 2010s seasons and awards
+LeBron James LAL 20's: counts only Lakers 2020s seasons and awards
+```
+
+The stored shape is:
+
+```json
+{
+  "team": "CLE",
+  "era": "00's",
+  "points": 72.5,
+  "accolades": {
+    "mvp_count": 2,
+    "championship_rings": 0,
+    "seasons_played": 7
+  },
+  "award_rows": []
+}
+```
+
+Stat titles are backfilled into `awards_raw` from `data/stat_title_winners.json` so titles like scoring/assist/rebound/steal/block can be attached to the right team-era.
+
+Team codes are normalized to current NBA franchises before writing:
+
+```text
+SEA -> OKC
+NJN -> BKN
+MNL -> LAL
+PHW/SFW -> GSW
+```
+
 ## Environment Controls
 
 The main optional controls are in `.env.example`:
@@ -273,10 +485,6 @@ SEED_MODE=active
 SEED_OFFSET=0
 SEED_RESUME=false
 SEED_SAVE_EVERY=
-BALLDONTLIE_PER_PAGE=100
-BALLDONTLIE_MAX_PLAYERS=
-BALLDONTLIE_DELAY_MS=12500
-BALLDONTLIE_MAX_RETRIES=6
 NBA_STATS_DELAY_MS=1500
 NBA_STATS_MAX_RETRIES=5
 NBA_STATS_TIMEOUT_MS=30000

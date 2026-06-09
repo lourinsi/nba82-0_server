@@ -1,16 +1,25 @@
 const axios = require("axios");
 const fs = require("fs/promises");
 const path = require("path");
+const {
+  applyClassicPointsToPlayers,
+  isNbaFinalsMvpDescription,
+  isOfficialMvpVotingDescription,
+  STAT_TITLE_DESCRIPTIONS,
+} = require("./classicPoints");
 const { applyLegacyPoints } = require("./legacyPoints");
+const { normalizePlayerAccoladeRecords } = require("./playerAccoladeRecords");
+const { decadeLabelFromYear, eraSortValue, seasonEra } = require("./seasonEras");
+const { normalizePlayerTeams } = require("./teamFranchises");
 require("dotenv").config();
 
-const BALLDONTLIE_BASE_URL = "https://api.balldontlie.io/nba/v1";
 const NBA_STATS_AWARDS_URL = "https://stats.nba.com/stats/playerawards";
 const NBA_STATS_CAREER_URL = "https://stats.nba.com/stats/playercareerstats";
 const NBA_STATS_PLAYER_DIRECTORY_URL = "https://stats.nba.com/stats/commonallplayers";
 const NBA_STATS_PLAYER_INFO_URL = "https://stats.nba.com/stats/commonplayerinfo";
 const NBA_STATS_LEAGUE_LEADERS_URL = "https://stats.nba.com/stats/leagueleaders";
 const OUTPUT_PATH = path.join(__dirname, "data", "players_accolades.json");
+const MANUAL_ID_MAP_PATH = path.join(__dirname, "data", "nba_stats_id_map.json");
 const NBA_PLAYER_DIRECTORY_CACHE_PATH = path.join(__dirname, "data", "nba_stats_player_directory.json");
 const STAT_TITLE_CACHE_PATH = path.join(__dirname, "data", "stat_title_winners.json");
 
@@ -28,6 +37,7 @@ const POSITION_OVERRIDES = {
   "nba:23": ["PF", "C"],
   "bdl:552": ["PF", "C"],
   "name:dennis rodman": ["PF", "C"],
+  "nba:202710": ["SF", "SG"], // Jimmy Butler
 };
 
 const TEAM_NAME_TO_ABBREVIATION = {
@@ -71,9 +81,19 @@ const TEAM_NAME_TO_ABBREVIATION = {
   "Washington Wizards": "WAS",
 };
 
+const NAME_TO_NBA_ID = {
+  "jimmy butler": 202710,
+  "lebron james": 2544,
+  "kevin durant": 201142,
+  "stephen curry": 201939,
+  "luka doncic": 1629029,
+  "giannis antetokounmpo": 203507,
+  "shai gilgeous alexander": 1628983,
+};
+
 const NBA_STATS_HEADERS = {
   "User-Agent":
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
   Accept: "application/json, text/plain, */*",
   "Accept-Language": "en-US,en;q=0.9",
   Origin: "https://www.nba.com",
@@ -193,6 +213,8 @@ function createEmptyAccolades() {
     dpoy_count: 0,
     roy_won: false,
     championship_rings: 0,
+    most_improved: 0,
+    "6moy": 0,
     olympic_gold_medals: 0,
     olympic_silver_medals: 0,
     olympic_bronze_medals: 0,
@@ -240,6 +262,21 @@ function normalizeTeamNumber(value) {
   return normalized ? Number(normalized) : null;
 }
 
+function isOfficialMvpDescription(description) {
+  const normalized = normalizeText(description);
+
+  return (
+    normalized.includes("nba most valuable player") &&
+    !normalized.includes("finals") &&
+    !normalized.includes("all-star") &&
+    !normalized.includes("cup") &&
+    !normalized.includes("in-season tournament") &&
+    !normalized.includes("sporting news") &&
+    !normalized.includes("voting") &&
+    !normalized.includes("ladder")
+  );
+}
+
 function buildHeaderMapper(headers) {
   return (row) =>
     headers.reduce((record, header, index) => {
@@ -263,20 +300,6 @@ function uniqueObjects(values, keyForValue) {
   }
 
   return unique;
-}
-
-function seasonStartYear(season) {
-  const match = String(season || "").match(/\d{4}/);
-  return match ? Number(match[0]) : null;
-}
-
-function decadeLabelFromYear(year) {
-  if (!year || year < 1940) {
-    return null;
-  }
-
-  const decade = Math.floor((year % 100) / 10) * 10;
-  return `${String(decade).padStart(2, "0")}'s`;
 }
 
 function parsePositionGroup(position) {
@@ -503,6 +526,11 @@ function resolveNbaStatsId(player, manualIdMap, playerDirectory) {
   const lookupKey = nameKey(player);
   const manual = manualIdMap[player.id] || manualIdMap[lookupKey] || manualIdMap[normalizeText(lookupKey)];
 
+  // Check the hardcoded star map first to prevent missing awards for high-profile players
+  if (NAME_TO_NBA_ID[lookupKey]) {
+    return { id: NAME_TO_NBA_ID[lookupKey], source: "hardcoded" };
+  }
+
   if (manual) {
     return { id: Number(manual), source: "manual" };
   }
@@ -564,54 +592,16 @@ function resolveNbaStatsId(player, manualIdMap, playerDirectory) {
   };
 }
 
-async function fetchBallDontLiePlayers({ apiKey, perPage, limit, offset = 0, delayMs, retries }) {
-  if (!apiKey) {
-    throw new Error(
-      "BALLDONTLIE_API_KEY is required for live seeding. Add it to .env or your shell environment.",
-    );
-  }
-
-  const players = [];
-  let cursor;
-  let seen = 0;
-
-  while (true) {
-    const response = await getWithRetry({
-      label: `BALLDONTLIE players page cursor=${cursor || "start"}`,
-      retries,
-      delayMs,
-      retryStatuses: [429],
-      request: () =>
-        axios.get(`${BALLDONTLIE_BASE_URL}/players`, {
-          headers: { Authorization: apiKey },
-          params: { per_page: perPage, cursor },
-          timeout: 20000,
-        }),
-    });
-
-    for (const player of response.data.data) {
-      if (seen >= offset && (!limit || players.length < limit)) {
-        players.push(player);
-      }
-
-      seen += 1;
-    }
-
-    console.log(
-      `BALLDONTLIE page fetched ${response.data.data.length} players; seen ${seen}, selected ${players.length}${limit ? `/${limit}` : ""}.`,
-    );
-
-    if (limit && players.length >= limit) {
-      return players;
-    }
-
-    cursor = response.data.meta?.next_cursor;
-    if (!cursor) {
-      return players;
-    }
-
-    await sleep(delayMs);
-  }
+function directoryEntryToPlayer(entry) {
+  const { firstName, lastName } = splitName(entry.display_name);
+  return {
+    id: `nba-${entry.person_id}`,
+    nba_stats_id: entry.person_id,
+    first_name: firstName,
+    last_name: lastName,
+    active: rosterStatusIsActive(entry.roster_status),
+    team: entry.team_abbreviation ? { abbreviation: entry.team_abbreviation, id: entry.team_abbreviation } : null,
+  };
 }
 
 async function fetchNbaAwards(playerId, { retries, delayMs, timeoutMs }) {
@@ -735,7 +725,7 @@ async function getStatTitleWinners(season, category, cache, fetchOptions) {
   return cache.winners[season][category];
 }
 
-async function applyStatTitles(accolades, career, nbaStatsId, statTitleCache, fetchOptions) {
+async function applyStatTitles(accolades, career, nbaStatsId, statTitleCache, fetchOptions, awardRows = []) {
   if (!nbaStatsId || career.careerSeasons.length === 0) {
     return;
   }
@@ -748,6 +738,20 @@ async function applyStatTitles(accolades, career, nbaStatsId, statTitleCache, fe
 
       if (winners.some((winner) => winner.player_id === Number(nbaStatsId))) {
         accolades[config.accoladeKey] += 1;
+        const winner = winners.find((candidate) => candidate.player_id === Number(nbaStatsId));
+        const description = STAT_TITLE_DESCRIPTIONS[config.accoladeKey];
+        const alreadyRecorded = awardRows.some(
+          (award) => award.season === season && normalizeText(award.description) === normalizeText(description),
+        );
+
+        if (description && !alreadyRecorded) {
+          awardRows.push({
+            season,
+            team: winner?.team || null,
+            description,
+            all_nba_team_number: null,
+          });
+        }
       }
     }
   }
@@ -777,7 +781,7 @@ function countVotingPlacement({ accolades, description, teamNumber, season }) {
     return;
   }
 
-  if (description.includes("most valuable player") && description.includes("voting")) {
+  if (isOfficialMvpVotingDescription(description)) {
     if (placement <= 3) accolades.top_3_mvp += 1;
     if (placement <= 10) accolades.top_10_mvp += 1;
   }
@@ -817,7 +821,7 @@ function parseAwards(resultSet) {
       teams.add(team);
     }
 
-    const era = decadeLabelFromYear(seasonStartYear(season));
+    const era = seasonEra(season);
     if (team && era) {
       teamEras.push({ team, era });
     }
@@ -829,37 +833,43 @@ function parseAwards(resultSet) {
       all_nba_team_number: row.ALL_NBA_TEAM_NUMBER || null,
     });
 
-    if (description === "nba most valuable player") {
-      accolades.mvp_count += 1;
-      accolades.top_3_mvp += 1;
-      accolades.top_10_mvp += 1;
-    } else if (description === "nba finals most valuable player") {
-      accolades.finals_mvp_count += 1;
-    } else if (description === "nba all-star most valuable player") {
-      accolades.all_star_mvp_count += 1;
-    } else if (description === "nba defensive player of the year") {
+    if (description.includes("most valuable player") && !description.includes("voting") && !description.includes("ladder")) {
+      if (isNbaFinalsMvpDescription(description)) {
+        accolades.finals_mvp_count += 1;
+      } else if (description.includes("all-star")) {
+        accolades.all_star_mvp_count += 1;
+      } else if (isOfficialMvpDescription(description)) {
+        accolades.mvp_count += 1;
+        accolades.top_3_mvp += 1;
+        accolades.top_10_mvp += 1;
+      }
+    } else if (description.includes("defensive player of the year") && !description.includes("voting")) {
       accolades.dpoy_count += 1;
       accolades.top_3_dpoy += 1;
-    } else if (description === "nba rookie of the year") {
+    } else if (description.includes("most improved player")) {
+      accolades.most_improved += 1;
+    } else if (description.includes("sixth man of the year")) {
+      accolades["6moy"] += 1;
+    } else if (description.includes("rookie of the year")) {
       accolades.roy_won = true;
-    } else if (description === "nba champion") {
+    } else if (description.includes("nba champion")) {
       accolades.championship_rings += 1;
-    } else if (description === "olympic gold medal") {
+    } else if (description.includes("olympic gold medal")) {
       accolades.olympic_gold_medals += 1;
-    } else if (description === "olympic silver medal") {
+    } else if (description.includes("olympic silver medal")) {
       accolades.olympic_silver_medals += 1;
-    } else if (description === "olympic bronze medal") {
+    } else if (description.includes("olympic bronze medal")) {
       accolades.olympic_bronze_medals += 1;
-    } else if (description === "nba all-star") {
+    } else if (description.includes("nba all-star")) {
       accolades.all_star_selections += 1;
-    } else if (description === "all-nba") {
+    } else if (description.includes("all-nba")) {
       if (teamNumber === 1) accolades.all_nba_1st += 1;
       if (teamNumber === 2) accolades.all_nba_2nd += 1;
       if (teamNumber === 3) accolades.all_nba_3rd += 1;
-    } else if (description === "all-defensive team") {
+    } else if (description.includes("all-defensive team")) {
       if (teamNumber === 1) accolades.all_def_1st += 1;
       if (teamNumber === 2) accolades.all_def_2nd += 1;
-    } else if (description === "all-rookie team") {
+    } else if (description.includes("all-rookie team")) {
       if (teamNumber === 1) accolades.all_rookie_1st += 1;
       if (teamNumber === 2) accolades.all_rookie_2nd += 1;
     }
@@ -871,8 +881,7 @@ function parseAwards(resultSet) {
   accolades.seasons_played = seasons.size;
 
   const eras = Array.from(seasons)
-    .map(seasonStartYear)
-    .map(decadeLabelFromYear)
+    .map(seasonEra)
     .filter(Boolean);
 
   return {
@@ -884,6 +893,16 @@ function parseAwards(resultSet) {
     eras: Array.from(new Set(eras)).sort(),
     awardRows,
   };
+}
+
+function perGameFromTotals(row, totalKey, gamesPlayed) {
+  const total = Number(row[totalKey] || 0);
+
+  if (!Number.isFinite(total) || !gamesPlayed) {
+    return 0;
+  }
+
+  return total / gamesPlayed;
 }
 
 function parseCareerStats(resultSet) {
@@ -900,7 +919,7 @@ function parseCareerStats(resultSet) {
     const season = row.SEASON_ID ? String(row.SEASON_ID) : null;
     const team = row.TEAM_ABBREVIATION ? String(row.TEAM_ABBREVIATION) : null;
     const gamesPlayed = Number(row.GP || 0);
-    const era = decadeLabelFromYear(seasonStartYear(season));
+    const era = seasonEra(season);
 
     if (!season || !team || team === "TOT" || !era) {
       continue;
@@ -913,6 +932,11 @@ function parseCareerStats(resultSet) {
       team,
       era,
       games_played: gamesPlayed,
+      ppg: perGameFromTotals(row, "PTS", gamesPlayed),
+      rpg: perGameFromTotals(row, "REB", gamesPlayed),
+      apg: perGameFromTotals(row, "AST", gamesPlayed),
+      spg: perGameFromTotals(row, "STL", gamesPlayed),
+      bpg: perGameFromTotals(row, "BLK", gamesPlayed),
     });
     teamEras.push({ team, era });
   }
@@ -926,11 +950,6 @@ function parseCareerStats(resultSet) {
       `${a.team}:${a.era}`.localeCompare(`${b.team}:${b.era}`),
     ),
   };
-}
-
-function eraSortValue(era) {
-  const decade = Number(String(era).slice(0, 2));
-  return Number.isNaN(decade) ? 999 : decade;
 }
 
 function uniqueSortedBy(values, sortValue) {
@@ -959,12 +978,10 @@ function aggregatePlayer(player, awards, career, nbaStatsId) {
   }
 
   const positions = positionOverrideForPlayer(player, nbaStatsId) || parsePositionGroup(player.position);
-  const balldontlieId = player.balldontlie_id || (typeof player.id === "number" ? player.id : null);
-  const recordId = balldontlieId ? `bdl-${balldontlieId}` : `nba-${nbaStatsId || player.nba_stats_id || player.id}`;
+  const recordId = `nba-${nbaStatsId || player.nba_stats_id || String(player.id).replace("nba-", "")}`;
 
   return {
     id: recordId,
-    balldontlie_id: balldontlieId,
     nba_stats_id: nbaStatsId,
     first_name: player.first_name,
     last_name: player.last_name,
@@ -981,7 +998,6 @@ function aggregatePlayer(player, awards, career, nbaStatsId) {
     accolades: awards.accolades,
     awards_raw: awards.awardRows,
     source: {
-      balldontlie: balldontlieId ? `${BALLDONTLIE_BASE_URL}/players/${balldontlieId}` : null,
       nba_stats_awards: nbaStatsId ? `${NBA_STATS_AWARDS_URL}?PlayerID=${nbaStatsId}` : null,
       nba_stats_career: nbaStatsId ? `${NBA_STATS_CAREER_URL}?LeagueID=00&PerMode=Totals&PlayerID=${nbaStatsId}` : null,
     },
@@ -992,10 +1008,6 @@ function recordIdentityKey(player) {
   if (player.nba_stats_id) {
     return `nba:${Number(player.nba_stats_id)}`;
   }
-  if (player.balldontlie_id) {
-    return `bdl:${Number(player.balldontlie_id)}`;
-  }
-
   return `name:${normalizeName(player.name || `${player.first_name || ""} ${player.last_name || ""}`)}`;
 }
 
@@ -1003,14 +1015,8 @@ function seedPlayerIdentityKey(player) {
   if (player.nba_stats_id) {
     return `nba:${Number(player.nba_stats_id)}`;
   }
-  if (player.balldontlie_id) {
-    return `bdl:${Number(player.balldontlie_id)}`;
-  }
-  if (typeof player.id === "number") {
-    return `bdl:${player.id}`;
-  }
-  if (typeof player.id === "string" && player.id.startsWith("bdl-")) {
-    return player.id.replace("bdl-", "bdl:");
+  if (typeof player.id === "string" && player.id.startsWith("nba-")) {
+    return player.id.replace("nba-", "nba:");
   }
 
   return `name:${normalizeName(player.name || `${player.first_name || ""} ${player.last_name || ""}`)}`;
@@ -1022,11 +1028,8 @@ function recordIdentityKeys(player) {
   if (player.nba_stats_id) {
     keys.add(`nba:${Number(player.nba_stats_id)}`);
   }
-  if (player.balldontlie_id) {
-    keys.add(`bdl:${Number(player.balldontlie_id)}`);
-  }
-  if (typeof player.id === "string" && player.id.startsWith("bdl-")) {
-    keys.add(player.id.replace("bdl-", "bdl:"));
+  if (typeof player.id === "string" && player.id.startsWith("nba-")) {
+    keys.add(player.id.replace("nba-", "nba:"));
   }
 
   const name = player.name || `${player.first_name || ""} ${player.last_name || ""}`;
@@ -1053,8 +1056,9 @@ function filterResumePlayers(players, existingPlayers) {
   return { pending, skipped };
 }
 
-async function writePlayersOutput(players) {
-  const outputPlayers = applyLegacyPoints(players);
+async function writePlayersOutput(players, statTitleCache = null) {
+  const normalizedPlayers = normalizePlayerAccoladeRecords(players, { statTitleCache }).map(normalizePlayerTeams);
+  const outputPlayers = applyClassicPointsToPlayers(applyLegacyPoints(normalizedPlayers));
 
   await fs.mkdir(path.dirname(OUTPUT_PATH), { recursive: true });
   await fs.writeFile(OUTPUT_PATH, `${JSON.stringify(outputPlayers, null, 2)}\n`);
@@ -1063,23 +1067,21 @@ async function writePlayersOutput(players) {
 }
 
 function mergeUpdatedPlayers(existingPlayers, updatedPlayers) {
-  const updates = new Map(updatedPlayers.map((player) => [recordIdentityKey(player), player]));
+  const updates = new Map(updatedPlayers.map((player) => [player.id, player]));
   const used = new Set();
   const merged = existingPlayers.map((player) => {
-    const key = recordIdentityKey(player);
-    const update = updates.get(key);
+    const update = updates.get(player.id);
 
     if (!update) {
       return player;
     }
 
-    used.add(key);
+    used.add(player.id);
     return update;
   });
 
   for (const updatedPlayer of updatedPlayers) {
-    const key = recordIdentityKey(updatedPlayer);
-    if (!used.has(key)) {
+    if (!used.has(updatedPlayer.id)) {
       merged.push(updatedPlayer);
     }
   }
@@ -1100,8 +1102,7 @@ function existingRecordToSeedPlayer(record) {
   const fallbackName = splitName(record.name);
 
   return {
-    id: record.balldontlie_id || record.id,
-    balldontlie_id: record.balldontlie_id || null,
+    id: record.id,
     nba_stats_id: record.nba_stats_id || null,
     first_name: record.first_name || fallbackName.firstName,
     last_name: record.last_name || fallbackName.lastName,
@@ -1123,8 +1124,7 @@ function playerInfoToSeedPlayer(info, existingRecord) {
   const existingPosition = trustedExistingPositionString(existingRecord);
 
   return {
-    id: existingRecord?.balldontlie_id || `nba-${info.person_id}`,
-    balldontlie_id: existingRecord?.balldontlie_id || null,
+    id: existingRecord?.id || `nba-${info.person_id}`,
     nba_stats_id: info.person_id,
     first_name: info.first_name || existingRecord?.first_name || fallbackName.firstName,
     last_name: info.last_name || existingRecord?.last_name || fallbackName.lastName,
@@ -1303,12 +1303,20 @@ async function refreshSeedPlayer({
   const label = `${player.first_name} ${player.last_name}`.trim();
   let awards = parseAwards({ headers: [], rowSet: [] });
   let career = parseCareerStats({ headers: [], rowSet: [] });
+  let playerInfo = null;
   let awardRowCount = 0;
 
   if (!nbaStatsId) {
     console.warn(`[${index + 1}/${total}] ${label}: NBA Stats ID not found; skipping awards/career (${resolution.source}).`);
   } else {
     try {
+      playerInfo = await fetchNbaPlayerInfo(nbaStatsId, {
+        retries: nbaRetries,
+        delayMs: nbaDelayMs,
+        timeoutMs: nbaTimeoutMs,
+      });
+      await sleep(nbaDelayMs);
+
       const resultSet = await fetchNbaAwards(nbaStatsId, {
         retries: nbaRetries,
         delayMs: nbaDelayMs,
@@ -1318,6 +1326,25 @@ async function refreshSeedPlayer({
       awardRowCount = resultSet.rowSet?.length || 0;
     } catch (error) {
       console.warn(`[${index + 1}/${total}] ${label}: awards fetch failed (${safeErrorMessage(error)})`);
+    }
+
+    if (playerInfo) {
+      const infoActive = rosterStatusIsActive(playerInfo.roster_status);
+      player = {
+        ...player,
+        first_name: playerInfo.first_name || player.first_name,
+        last_name: playerInfo.last_name || player.last_name,
+        position: playerInfo.position || player.position,
+        draft_year: playerInfo.draft_year || player.draft_year,
+        active: infoActive,
+        team:
+          infoActive && playerInfo.team_abbreviation
+            ? {
+                abbreviation: playerInfo.team_abbreviation,
+                id: playerInfo.team_abbreviation,
+              }
+            : player.team,
+      };
     }
 
     try {
@@ -1337,13 +1364,13 @@ async function refreshSeedPlayer({
         retries: nbaRetries,
         delayMs: nbaDelayMs,
         timeoutMs: nbaTimeoutMs,
-      });
+      }, awards.awardRows);
     } catch (error) {
       console.warn(`[${index + 1}/${total}] ${label}: stat title fetch failed (${safeErrorMessage(error)})`);
     }
   }
 
-  const hydratedPlayer = applyDirectoryRosterStatus(player, nbaStatsId, playerDirectory);
+  const hydratedPlayer = playerInfo ? player : applyDirectoryRosterStatus(player, nbaStatsId, playerDirectory);
   const aggregated = aggregatePlayer(hydratedPlayer, awards, career, nbaStatsId);
   console.log(
     `[${index + 1}/${total}] ${label}: ${awardRowCount} award rows, ${career.careerSeasons.length} team seasons${nbaStatsId ? `, NBA ID ${nbaStatsId} (${resolution.source})` : ""}`,
@@ -1354,12 +1381,7 @@ async function refreshSeedPlayer({
 
 async function main() {
   const args = parseArgs(process.argv);
-  const apiKey = process.env.BALLDONTLIE_API_KEY;
-  const perPage = Number(args.perPage || process.env.BALLDONTLIE_PER_PAGE || 100);
-  const envLimit = process.env.BALLDONTLIE_MAX_PLAYERS
-    ? Number(process.env.BALLDONTLIE_MAX_PLAYERS)
-    : undefined;
-  const limit = args.limit ? Number(args.limit) : envLimit;
+  const limit = args.limit ? Number(args.limit) : undefined;
   const offset = positiveInteger(args.offset || process.env.SEED_OFFSET, 0);
   const resume = flagEnabled(args.resume) || flagEnabled(process.env.SEED_RESUME);
   const replace = flagEnabled(args.replace);
@@ -1368,14 +1390,12 @@ async function main() {
   const rawExistingPlayers = (await readJsonIfExists(OUTPUT_PATH)) || [];
   const requestedMode = String(args.mode || process.env.SEED_MODE || "smart").toLowerCase();
   const seedMode = requestedMode === "smart" ? (rawExistingPlayers.length ? "active" : "full") : requestedMode;
-  const nbaDelayMs = Number(args.delayMs || process.env.NBA_STATS_DELAY_MS || 1500);
+  const nbaDelayMs = Number(args.delayMs || process.env.NBA_STATS_DELAY_MS || 2000);
   const nbaRetries = Number(args.retries || process.env.NBA_STATS_MAX_RETRIES || 5);
   const nbaTimeoutMs = Number(args.timeoutMs || process.env.NBA_STATS_TIMEOUT_MS || 30000);
   const nbaDirectorySeason = args.directorySeason || process.env.NBA_STATS_DIRECTORY_SEASON || "2025-26";
   const refreshNbaDirectory =
     flagEnabled(args.refreshNbaDirectory) || flagEnabled(process.env.NBA_STATS_REFRESH_PLAYER_DIRECTORY);
-  const ballDontLieDelayMs = Number(args.bdlDelayMs || process.env.BALLDONTLIE_DELAY_MS || 12500);
-  const ballDontLieRetries = Number(args.bdlRetries || process.env.BALLDONTLIE_MAX_RETRIES || 6);
   const idMapPath = process.env.NBA_STATS_ID_MAP_PATH || "./data/nba_stats_id_map.json";
   const idMap = await loadIdMap(idMapPath);
   const statTitleCache = await loadStatTitleCache();
@@ -1399,16 +1419,9 @@ async function main() {
   let players;
 
   if (seedMode === "full") {
-    players = await fetchBallDontLiePlayers({
-      apiKey,
-      perPage,
-      limit,
-      offset,
-      delayMs: ballDontLieDelayMs,
-      retries: ballDontLieRetries,
-    });
+    players = sliceWindow(playerDirectory.players, offset, limit).map(directoryEntryToPlayer);
     console.log(
-      `Seed mode: full. Selected ${players.length} BALLDONTLIE players${offset ? ` from offset ${offset}` : ""}.`,
+      `Seed mode: full. Selected ${players.length} players from NBA directory${offset ? ` from offset ${offset}` : ""}.`,
     );
   } else {
     players = await buildActiveSeedPlayers({
@@ -1456,7 +1469,7 @@ async function main() {
     outputPlayers = mergeOutput ? mergeUpdatedPlayers(outputPlayers, [playerRecord]) : [...outputPlayers, playerRecord];
 
     if (saveEvery && (index + 1) % saveEvery === 0) {
-      await writePlayersOutput(outputPlayers);
+      await writePlayersOutput(outputPlayers, statTitleCache);
       console.log(`Checkpoint saved ${outputPlayers.length} players to ${OUTPUT_PATH}.`);
     }
 
@@ -1465,7 +1478,7 @@ async function main() {
     }
   }
 
-  outputPlayers = await writePlayersOutput(outputPlayers);
+  outputPlayers = await writePlayersOutput(outputPlayers, statTitleCache);
   await saveStatTitleCache(statTitleCache);
 
   console.log(

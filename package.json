@@ -14,6 +14,10 @@
     "seed:full:resume": "node seed.js --mode=full --resume",
     "seed:goat-rankings": "node seed-goat-rankings.js",
     "seed:legacy-points": "node seed-legacy-points.js",
+    "seed:classic-points": "node eraRelativeClassicPoints.js",
+    "seed:position-bonus": "node seed-position-bonus.js",
+    "backfill:season-stats": "node backfill-career-season-stats.js",
+    "refresh:league-averages": "node refresh-historical-league-averages.js",
     "refresh:positions": "python scripts/refresh_positions_nba_api.py",
     "refresh:positions:dry": "python scripts/refresh_positions_nba_api.py --dry-run",
     "fix:positions": "node fix-position-overrides.js"

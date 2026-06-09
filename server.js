@@ -2,7 +2,9 @@ const express = require("express");
 const cors = require("cors");
 const fs = require("fs/promises");
 const path = require("path");
+const { applyClassicPointsToPlayers } = require("./classicPoints");
 const { applyGoatRankingsToPlayers, loadCachedGoatRankings } = require("./mediaGoatRankings");
+const { normalizePlayerAccoladeRecords } = require("./playerAccoladeRecords");
 const { normalizePlayerTeams } = require("./teamFranchises");
 require("dotenv").config();
 
@@ -33,9 +35,10 @@ async function readPlayers() {
   const raw = await fs.readFile(DATA_PATH, "utf8");
   const players = JSON.parse(raw);
   const goatRankings = await loadCachedGoatRankings();
-  const normalizedPlayers = players.map(normalizePlayerTeams);
+  const normalizedPlayers = normalizePlayerAccoladeRecords(players).map(normalizePlayerTeams);
+  const classicPlayers = applyClassicPointsToPlayers(normalizedPlayers);
 
-  return applyGoatRankingsToPlayers(normalizedPlayers, goatRankings);
+  return applyGoatRankingsToPlayers(classicPlayers, goatRankings);
 }
 
 app.get("/api/health", (_req, res) => {

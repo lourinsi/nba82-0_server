@@ -63,7 +63,12 @@
           "season": { "type": "string" },
           "team": { "type": "string" },
           "era": { "type": "string", "pattern": "^[0-9]{2}'s$" },
-          "games_played": { "type": "integer", "minimum": 0 }
+          "games_played": { "type": "integer", "minimum": 0 },
+          "ppg": { "type": "number", "minimum": 0 },
+          "rpg": { "type": "number", "minimum": 0 },
+          "apg": { "type": "number", "minimum": 0 },
+          "spg": { "type": "number", "minimum": 0 },
+          "bpg": { "type": "number", "minimum": 0 }
         },
         "additionalProperties": false
       }
@@ -71,6 +76,38 @@
     "draft_year": { "type": ["integer", "null"] },
     "active": { "type": "boolean" },
     "legacy_points": { "type": "number", "minimum": 0 },
+    "position_bonus": { "type": "number", "minimum": 0 },
+    "final_score": { "type": "number", "minimum": 0 },
+    "classic_points_by_team_era": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["team", "era", "points", "accolades", "award_rows"],
+        "properties": {
+          "team": { "type": "string" },
+          "era": { "type": "string", "pattern": "^[0-9]{2}'s$" },
+          "points": { "type": "number", "minimum": 0 },
+          "accolades": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "award_rows": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "season": { "type": ["string", "null"] },
+                "team": { "type": ["string", "null"] },
+                "description": { "type": ["string", "null"] },
+                "all_nba_team_number": { "type": ["string", "null"] }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
     "accolades": {
       "type": "object",
       "required": [
@@ -79,6 +116,8 @@
         "dpoy_count",
         "roy_won",
         "championship_rings",
+        "most_improved",
+        "6moy",
         "olympic_gold_medals",
         "olympic_silver_medals",
         "olympic_bronze_medals",
@@ -105,6 +144,8 @@
         "dpoy_count": { "type": "integer", "minimum": 0 },
         "roy_won": { "type": "boolean" },
         "championship_rings": { "type": "integer", "minimum": 0 },
+        "most_improved": { "type": "integer", "minimum": 0 },
+        "6moy": { "type": "integer", "minimum": 0 },
         "olympic_gold_medals": { "type": "integer", "minimum": 0 },
         "olympic_silver_medals": { "type": "integer", "minimum": 0 },
         "olympic_bronze_medals": { "type": "integer", "minimum": 0 },

@@ -1,9 +1,111 @@
 [
   {
+    "name": "Magic Johnson",
+    "nba_stats_id": 77142,
+    "positions": ["PG", "SF", "SG"],
+    "reason": "Manual historical correction. NBA API reports broad Forward-Guard, but his primary role was point guard."
+  },
+  {
+    "name": "Michael Jordan",
+    "nba_stats_id": 893,
+    "positions": ["SG", "SF", "PG"],
+    "reason": "Manual historical correction. NBA API reports broad Guard."
+  },
+  {
+    "name": "Kobe Bryant",
+    "nba_stats_id": 977,
+    "positions": ["SG", "SF"],
+    "reason": "Manual historical correction. NBA API reports Forward-Guard."
+  },
+  {
+    "name": "LeBron James",
+    "nba_stats_id": 2544,
+    "positions": ["SF", "PF", "PG", "SG", "C"],
+    "reason": "Manual role correction for known primary and secondary lineup usage, plus full Basketball-Reference season eligibility."
+  },
+  {
+    "name": "Tim Duncan",
+    "nba_stats_id": 1495,
+    "positions": ["PF", "C"],
+    "reason": "Manual historical correction. NBA API reports Center-Forward, but his primary role was power forward."
+  },
+  {
     "name": "Dennis Rodman",
     "nba_stats_id": 23,
     "balldontlie_id": 552,
     "positions": ["PF", "C"],
     "reason": "Manual historical correction. NBA API reports broad Forward only."
+  },
+  {
+    "name": "Kevin Garnett",
+    "nba_stats_id": 708,
+    "positions": ["PF", "C", "SF"],
+    "reason": "Manual historical correction. NBA API reports broad Forward."
+  },
+  {
+    "name": "Dirk Nowitzki",
+    "nba_stats_id": 1717,
+    "positions": ["PF", "C"],
+    "reason": "Manual historical correction. NBA API reports broad Forward."
+  },
+  {
+    "name": "Charles Barkley",
+    "nba_stats_id": 787,
+    "positions": ["PF", "SF"],
+    "reason": "Manual historical correction. NBA API reports broad Forward."
+  },
+  {
+    "name": "Karl Malone",
+    "nba_stats_id": 252,
+    "positions": ["PF"],
+    "reason": "Manual historical correction. NBA API reports broad Forward."
+  },
+  {
+    "name": "Dwyane Wade",
+    "nba_stats_id": 2548,
+    "positions": ["SG", "PG"],
+    "reason": "Manual historical correction. NBA API reports broad Guard."
+  },
+  {
+    "name": "Allen Iverson",
+    "nba_stats_id": 947,
+    "positions": ["SG", "PG"],
+    "reason": "Manual historical correction. NBA API reports broad Guard."
+  },
+  {
+    "name": "Isiah Thomas",
+    "nba_stats_id": 78318,
+    "positions": ["PG"],
+    "reason": "Manual historical correction. NBA API reports broad Guard."
+  },
+  {
+    "name": "John Stockton",
+    "nba_stats_id": 304,
+    "positions": ["PG"],
+    "reason": "Manual historical correction. NBA API reports broad Guard."
+  },
+  {
+    "name": "Jerry West",
+    "nba_stats_id": 78497,
+    "positions": ["SG", "PG"],
+    "reason": "Manual historical correction. NBA API reports broad Guard."
+  },
+  {
+    "name": "Oscar Robertson",
+    "nba_stats_id": 600015,
+    "positions": ["PG", "SG"],
+    "reason": "Manual historical correction. NBA API reports broad Guard."
+  },
+  {
+    "name": "Scottie Pippen",
+    "nba_stats_id": 937,
+    "positions": ["SF", "PF", "PG"],
+    "reason": "Manual historical correction. NBA API reports Forward-Guard."
+  },
+  {
+    "name": "Kareem Abdul-Jabbar",
+    "nba_stats_id": 76003,
+    "positions": ["C"],
+    "reason": "Manual historical correction guardrail."
   }
 ]
