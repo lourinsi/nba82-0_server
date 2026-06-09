@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nba-82-0.local/schemas/player-accolade.schema.json",
+  "title": "PlayerAccolade",
+  "type": "object",
+  "required": [
+    "id",
+    "balldontlie_id",
+    "nba_stats_id",
+    "name",
+    "positions",
+    "primary_position",
+    "teams",
+    "eras",
+    "team_eras",
+    "accolades",
+    "legacy_points"
+  ],
+  "properties": {
+    "id": { "type": "string", "examples": ["bdl-2544"] },
+    "balldontlie_id": { "type": ["integer", "null"] },
+    "nba_stats_id": { "type": ["integer", "null"] },
+    "first_name": { "type": "string" },
+    "last_name": { "type": "string" },
+    "name": { "type": "string" },
+    "positions": {
+      "type": "array",
+      "items": { "enum": ["PG", "SG", "SF", "PF", "C"] },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "primary_position": { "enum": ["PG", "SG", "SF", "PF", "C"] },
+    "current_team": { "type": ["string", "null"] },
+    "teams": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "eras": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[0-9]{2}'s$" },
+      "uniqueItems": true
+    },
+    "team_eras": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["team", "era"],
+        "properties": {
+          "team": { "type": "string" },
+          "era": { "type": "string", "pattern": "^[0-9]{2}'s$" }
+        },
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "career_seasons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["season", "team", "era", "games_played"],
+        "properties": {
+          "season": { "type": "string" },
+          "team": { "type": "string" },
+          "era": { "type": "string", "pattern": "^[0-9]{2}'s$" },
+          "games_played": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "draft_year": { "type": ["integer", "null"] },
+    "active": { "type": "boolean" },
+    "legacy_points": { "type": "number", "minimum": 0 },
+    "accolades": {
+      "type": "object",
+      "required": [
+        "mvp_count",
+        "finals_mvp_count",
+        "dpoy_count",
+        "roy_won",
+        "championship_rings",
+        "olympic_gold_medals",
+        "olympic_silver_medals",
+        "olympic_bronze_medals",
+        "all_nba_1st",
+        "all_nba_2nd",
+        "all_nba_3rd",
+        "all_def_1st",
+        "all_def_2nd",
+        "all_rookie_1st",
+        "all_rookie_2nd",
+        "all_star_selections",
+        "all_star_mvp_count",
+        "seasons_played",
+        "scoring_titles",
+        "assist_titles",
+        "rebound_titles",
+        "steal_titles",
+        "block_titles",
+        "award_counts"
+      ],
+      "properties": {
+        "mvp_count": { "type": "integer", "minimum": 0 },
+        "finals_mvp_count": { "type": "integer", "minimum": 0 },
+        "dpoy_count": { "type": "integer", "minimum": 0 },
+        "roy_won": { "type": "boolean" },
+        "championship_rings": { "type": "integer", "minimum": 0 },
+        "olympic_gold_medals": { "type": "integer", "minimum": 0 },
+        "olympic_silver_medals": { "type": "integer", "minimum": 0 },
+        "olympic_bronze_medals": { "type": "integer", "minimum": 0 },
+        "top_3_mvp": { "type": "integer", "minimum": 0 },
+        "top_10_mvp": { "type": "integer", "minimum": 0 },
+        "top_3_dpoy": { "type": "integer", "minimum": 0 },
+        "all_nba_1st": { "type": "integer", "minimum": 0 },
+        "all_nba_2nd": { "type": "integer", "minimum": 0 },
+        "all_nba_3rd": { "type": "integer", "minimum": 0 },
+        "all_def_1st": { "type": "integer", "minimum": 0 },
+        "all_def_2nd": { "type": "integer", "minimum": 0 },
+        "all_rookie_1st": { "type": "integer", "minimum": 0 },
+        "all_rookie_2nd": { "type": "integer", "minimum": 0 },
+        "all_star_selections": { "type": "integer", "minimum": 0 },
+        "all_star_mvp_count": { "type": "integer", "minimum": 0 },
+        "seasons_played": { "type": "integer", "minimum": 0 },
+        "scoring_titles": { "type": "integer", "minimum": 0 },
+        "assist_titles": { "type": "integer", "minimum": 0 },
+        "rebound_titles": { "type": "integer", "minimum": 0 },
+        "steal_titles": { "type": "integer", "minimum": 0 },
+        "block_titles": { "type": "integer", "minimum": 0 },
+        "award_counts": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "awards_raw": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "season": { "type": ["string", "null"] },
+          "team": { "type": ["string", "null"] },
+          "description": { "type": ["string", "null"] },
+          "all_nba_team_number": { "type": ["string", "null"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "balldontlie": { "type": ["string", "null"] },
+        "nba_stats_awards": { "type": ["string", "null"] },
+        "nba_stats_career": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

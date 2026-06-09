@@ -1,0 +1,510 @@
+{
+  "source": {
+    "title": "B/R's Top 100 NBA Players of All Time, Ranked",
+    "url": "https://bleacherreport.com/articles/25223594-brs-top-100-nba-players-all-time-ranked",
+    "scoring": "Rank 1 = 100 points; each following rank subtracts 1 point; rank 100 = 1 point.",
+    "fetched_at": "2026-06-08T17:03:50.987Z"
+  },
+  "rankings": [
+    {
+      "rank": 1,
+      "player": "Michael Jordan",
+      "media_score": 100
+    },
+    {
+      "rank": 2,
+      "player": "LeBron James",
+      "media_score": 99
+    },
+    {
+      "rank": 3,
+      "player": "Kareem Abdul-Jabbar",
+      "media_score": 98
+    },
+    {
+      "rank": 4,
+      "player": "Magic Johnson",
+      "media_score": 97
+    },
+    {
+      "rank": 5,
+      "player": "Bill Russell",
+      "media_score": 96
+    },
+    {
+      "rank": 6,
+      "player": "Shaquille O'Neal",
+      "media_score": 95
+    },
+    {
+      "rank": 7,
+      "player": "Tim Duncan",
+      "media_score": 94
+    },
+    {
+      "rank": 8,
+      "player": "Larry Bird",
+      "media_score": 93
+    },
+    {
+      "rank": 9,
+      "player": "Wilt Chamberlain",
+      "media_score": 92
+    },
+    {
+      "rank": 10,
+      "player": "Stephen Curry",
+      "media_score": 91
+    },
+    {
+      "rank": 11,
+      "player": "Kobe Bryant",
+      "media_score": 90
+    },
+    {
+      "rank": 12,
+      "player": "Hakeem Olajuwon",
+      "media_score": 89
+    },
+    {
+      "rank": 13,
+      "player": "Kevin Durant",
+      "media_score": 88
+    },
+    {
+      "rank": 14,
+      "player": "Oscar Robertson",
+      "media_score": 87
+    },
+    {
+      "rank": 15,
+      "player": "Jerry West",
+      "media_score": 86
+    },
+    {
+      "rank": 16,
+      "player": "Kevin Garnett",
+      "media_score": 85
+    },
+    {
+      "rank": 17,
+      "player": "Nikola Jokić",
+      "media_score": 84
+    },
+    {
+      "rank": 18,
+      "player": "Dirk Nowitzki",
+      "media_score": 83
+    },
+    {
+      "rank": 19,
+      "player": "David Robinson",
+      "media_score": 82
+    },
+    {
+      "rank": 20,
+      "player": "Julius Erving",
+      "media_score": 81
+    },
+    {
+      "rank": 21,
+      "player": "Moses Malone",
+      "media_score": 80
+    },
+    {
+      "rank": 22,
+      "player": "Karl Malone",
+      "media_score": 79
+    },
+    {
+      "rank": 23,
+      "player": "Dwyane Wade",
+      "media_score": 78
+    },
+    {
+      "rank": 24,
+      "player": "Giannis Antetokounmpo",
+      "media_score": 77
+    },
+    {
+      "rank": 25,
+      "player": "Charles Barkley",
+      "media_score": 76
+    },
+    {
+      "rank": 26,
+      "player": "Elgin Baylor",
+      "media_score": 75
+    },
+    {
+      "rank": 27,
+      "player": "Isiah Thomas",
+      "media_score": 74
+    },
+    {
+      "rank": 28,
+      "player": "Scottie Pippen",
+      "media_score": 73
+    },
+    {
+      "rank": 29,
+      "player": "John Stockton",
+      "media_score": 72
+    },
+    {
+      "rank": 30,
+      "player": "Chris Paul",
+      "media_score": 71
+    },
+    {
+      "rank": 31,
+      "player": "John Havlicek",
+      "media_score": 70
+    },
+    {
+      "rank": 32,
+      "player": "Kawhi Leonard",
+      "media_score": 69
+    },
+    {
+      "rank": 33,
+      "player": "Jason Kidd",
+      "media_score": 68
+    },
+    {
+      "rank": 34,
+      "player": "James Harden",
+      "media_score": 67
+    },
+    {
+      "rank": 35,
+      "player": "Steve Nash",
+      "media_score": 66
+    },
+    {
+      "rank": 36,
+      "player": "Allen Iverson",
+      "media_score": 65
+    },
+    {
+      "rank": 37,
+      "player": "Bob Cousy",
+      "media_score": 64
+    },
+    {
+      "rank": 38,
+      "player": "Bob Pettit",
+      "media_score": 63
+    },
+    {
+      "rank": 39,
+      "player": "Clyde Drexler",
+      "media_score": 62
+    },
+    {
+      "rank": 40,
+      "player": "Patrick Ewing",
+      "media_score": 61
+    },
+    {
+      "rank": 41,
+      "player": "Rick Barry",
+      "media_score": 60
+    },
+    {
+      "rank": 42,
+      "player": "George Gervin",
+      "media_score": 59
+    },
+    {
+      "rank": 43,
+      "player": "Walt Frazier",
+      "media_score": 58
+    },
+    {
+      "rank": 44,
+      "player": "George Mikan",
+      "media_score": 57
+    },
+    {
+      "rank": 45,
+      "player": "Anthony Davis",
+      "media_score": 56
+    },
+    {
+      "rank": 46,
+      "player": "Kevin McHale",
+      "media_score": 55
+    },
+    {
+      "rank": 47,
+      "player": "Elvin Hayes",
+      "media_score": 54
+    },
+    {
+      "rank": 48,
+      "player": "Russell Westbrook",
+      "media_score": 53
+    },
+    {
+      "rank": 49,
+      "player": "Paul Pierce",
+      "media_score": 52
+    },
+    {
+      "rank": 50,
+      "player": "Dominique Wilkins",
+      "media_score": 51
+    },
+    {
+      "rank": 51,
+      "player": "Ray Allen",
+      "media_score": 50
+    },
+    {
+      "rank": 52,
+      "player": "Dwight Howard",
+      "media_score": 49
+    },
+    {
+      "rank": 53,
+      "player": "Gary Payton",
+      "media_score": 48
+    },
+    {
+      "rank": 54,
+      "player": "Reggie Miller",
+      "media_score": 47
+    },
+    {
+      "rank": 55,
+      "player": "Bill Walton",
+      "media_score": 46
+    },
+    {
+      "rank": 56,
+      "player": "Dolph Schayes",
+      "media_score": 45
+    },
+    {
+      "rank": 57,
+      "player": "Luka Dončić",
+      "media_score": 44
+    },
+    {
+      "rank": 58,
+      "player": "Willis Reed",
+      "media_score": 43
+    },
+    {
+      "rank": 59,
+      "player": "Tracy McGrady",
+      "media_score": 42
+    },
+    {
+      "rank": 60,
+      "player": "Carmelo Anthony",
+      "media_score": 41
+    },
+    {
+      "rank": 61,
+      "player": "Bob McAdoo",
+      "media_score": 40
+    },
+    {
+      "rank": 62,
+      "player": "Pau Gasol",
+      "media_score": 39
+    },
+    {
+      "rank": 63,
+      "player": "James Worthy",
+      "media_score": 38
+    },
+    {
+      "rank": 64,
+      "player": "Damian Lillard",
+      "media_score": 37
+    },
+    {
+      "rank": 65,
+      "player": "Vince Carter",
+      "media_score": 36
+    },
+    {
+      "rank": 66,
+      "player": "Joel Embiid",
+      "media_score": 35
+    },
+    {
+      "rank": 67,
+      "player": "Dennis Rodman",
+      "media_score": 34
+    },
+    {
+      "rank": 68,
+      "player": "Robert Parish",
+      "media_score": 33
+    },
+    {
+      "rank": 69,
+      "player": "Kyrie Irving",
+      "media_score": 32
+    },
+    {
+      "rank": 70,
+      "player": "Wes Unseld",
+      "media_score": 31
+    },
+    {
+      "rank": 71,
+      "player": "Chris Bosh",
+      "media_score": 30
+    },
+    {
+      "rank": 72,
+      "player": "Paul Arizin",
+      "media_score": 29
+    },
+    {
+      "rank": 73,
+      "player": "Hal Greer",
+      "media_score": 28
+    },
+    {
+      "rank": 74,
+      "player": "Dave Cowens",
+      "media_score": 27
+    },
+    {
+      "rank": 75,
+      "player": "Manu Ginóbili",
+      "media_score": 26
+    },
+    {
+      "rank": 76,
+      "player": "Alex English",
+      "media_score": 25
+    },
+    {
+      "rank": 77,
+      "player": "Pete Maravich",
+      "media_score": 24
+    },
+    {
+      "rank": 78,
+      "player": "Paul George",
+      "media_score": 23
+    },
+    {
+      "rank": 79,
+      "player": "Grant Hill",
+      "media_score": 22
+    },
+    {
+      "rank": 80,
+      "player": "Nate 'Tiny' Archibald",
+      "media_score": 21
+    },
+    {
+      "rank": 81,
+      "player": "Dikembe Mutombo",
+      "media_score": 20
+    },
+    {
+      "rank": 82,
+      "player": "Bob Lanier",
+      "media_score": 19
+    },
+    {
+      "rank": 83,
+      "player": "Jimmy Butler",
+      "media_score": 18
+    },
+    {
+      "rank": 84,
+      "player": "Adrian Dantley",
+      "media_score": 17
+    },
+    {
+      "rank": 85,
+      "player": "Sam Jones",
+      "media_score": 16
+    },
+    {
+      "rank": 86,
+      "player": "Tony Parker",
+      "media_score": 15
+    },
+    {
+      "rank": 87,
+      "player": "Alonzo Mourning",
+      "media_score": 14
+    },
+    {
+      "rank": 88,
+      "player": "Draymond Green",
+      "media_score": 13
+    },
+    {
+      "rank": 89,
+      "player": "Earl Monroe",
+      "media_score": 12
+    },
+    {
+      "rank": 90,
+      "player": "Chris Webber",
+      "media_score": 11
+    },
+    {
+      "rank": 91,
+      "player": "Chauncey Billups",
+      "media_score": 10
+    },
+    {
+      "rank": 92,
+      "player": "Lenny Wilkens",
+      "media_score": 9
+    },
+    {
+      "rank": 93,
+      "player": "Jayson Tatum",
+      "media_score": 8
+    },
+    {
+      "rank": 94,
+      "player": "Bill Sharman",
+      "media_score": 7
+    },
+    {
+      "rank": 95,
+      "player": "Dave DeBusschere",
+      "media_score": 6
+    },
+    {
+      "rank": 96,
+      "player": "Joe Dumars",
+      "media_score": 5
+    },
+    {
+      "rank": 97,
+      "player": "Bernard King",
+      "media_score": 4
+    },
+    {
+      "rank": 98,
+      "player": "Klay Thompson",
+      "media_score": 3
+    },
+    {
+      "rank": 99,
+      "player": "Dave Bing",
+      "media_score": 2
+    },
+    {
+      "rank": 100,
+      "player": "Artis Gilmore",
+      "media_score": 1
+    }
+  ]
+}

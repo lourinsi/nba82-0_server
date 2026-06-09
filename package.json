@@ -1,0 +1,27 @@
+{
+  "name": "nba_82-0_server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Backend API and data seeding utilities for NBA 82-0.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed": "node seed.js --mode=active",
+    "seed:active": "node seed.js --mode=active",
+    "seed:active:resume": "node seed.js --mode=active --resume",
+    "seed:full": "node seed.js --mode=full",
+    "seed:full:resume": "node seed.js --mode=full --resume",
+    "seed:goat-rankings": "node seed-goat-rankings.js",
+    "seed:legacy-points": "node seed-legacy-points.js",
+    "refresh:positions": "python scripts/refresh_positions_nba_api.py",
+    "refresh:positions:dry": "python scripts/refresh_positions_nba_api.py --dry-run",
+    "fix:positions": "node fix-position-overrides.js"
+  },
+  "dependencies": {
+    "axios": "^1.13.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1"
+  }
+}

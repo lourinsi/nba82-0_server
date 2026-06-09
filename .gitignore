@@ -1,0 +1,5 @@
+node_modules/
+.env
+*.log
+data/nba_stats_player_directory.json
+data/stat_title_winners.json

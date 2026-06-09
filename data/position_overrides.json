@@ -1,0 +1,9 @@
+[
+  {
+    "name": "Dennis Rodman",
+    "nba_stats_id": 23,
+    "balldontlie_id": 552,
+    "positions": ["PF", "C"],
+    "reason": "Manual historical correction. NBA API reports broad Forward only."
+  }
+]
