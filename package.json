@@ -13,6 +13,7 @@
     "seed:full": "node seed.js --mode=full",
     "seed:full:resume": "node seed.js --mode=full --resume",
     "seed:stats": "node seed-stats.js --mode=active --maxCacheAgeDays=1 --force --appendMissingSeasons",
+    "seed:bref-positions": "node seed-bref-positions.js",
     "seed:goat-rankings": "node seed-goat-rankings.js",
     "seed:legacy-points": "node seed-legacy-points.js",
     "seed:classic-points": "node eraRelativeClassicPoints.js",

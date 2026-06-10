@@ -131,6 +131,33 @@ function mergePositionsWithBrefRecord(fallbackPositions, brefRecord) {
   ]);
 }
 
+function positionsMatch(left = [], right = []) {
+  return (
+    Array.isArray(left) &&
+    Array.isArray(right) &&
+    left.length === right.length &&
+    left.every((position, index) => position === right[index])
+  );
+}
+
+function overwritePositionsWithBrefRecord(player, brefRecord) {
+  if (!brefRecord?.primaryPosition || !brefRecord.positions.length) {
+    return player;
+  }
+
+  const positions = uniquePositions([brefRecord.primaryPosition, ...brefRecord.positions]);
+
+  if (positionsMatch(player.positions, positions) && player.primary_position === positions[0]) {
+    return player;
+  }
+
+  return {
+    ...player,
+    positions,
+    primary_position: positions[0],
+  };
+}
+
 function mergeBrefPrimaryPosition(player, fallbackPositions, brefPositions) {
   const brefRecord = brefRecordForPlayer(player, lookupForBrefPositions(brefPositions));
   return mergePositionsWithBrefRecord(fallbackPositions, brefRecord);
@@ -154,7 +181,16 @@ function applyBrefPrimaryPositions(players, brefPositions) {
   });
 }
 
+function applyBrefPositionOverrides(players, brefPositions) {
+  const lookup = lookupForBrefPositions(brefPositions);
+
+  return players.map((player) => overwritePositionsWithBrefRecord(player, brefRecordForPlayer(player, lookup)));
+}
+
 module.exports = {
   applyBrefPrimaryPositions,
+  applyBrefPositionOverrides,
+  buildBrefPositionLookup,
   mergeBrefPrimaryPosition,
+  normalizeBrefRecord,
 };

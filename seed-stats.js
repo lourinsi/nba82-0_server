@@ -226,6 +226,24 @@ function parseCareerRows(resultSet) {
     .filter(Boolean);
 }
 
+function normalizeCareerRow(row) {
+  const season = row?.season ? String(row.season) : null;
+  const team = normalizedTeamKey(row?.team);
+
+  return {
+    ...row,
+    season: season || row?.season,
+    team: team || row?.team,
+    era: row?.era || seasonEra(season),
+  };
+}
+
+function normalizeCareerRows(rows = []) {
+  return rows
+    .map(normalizeCareerRow)
+    .filter((row) => row.season && row.team);
+}
+
 function careerRowsBySeasonTeam(rows) {
   return new Map(rows.map((row) => [`${row.season}:${row.team}`, row]));
 }
@@ -300,7 +318,8 @@ function sortCareerSeasons(seasons) {
 function updatePlayerCareerSeasons(player, careerRows, options = {}) {
   const force = Boolean(options.force);
   const appendMissingSeasons = Boolean(options.appendMissingSeasons);
-  const careerByKey = careerRowsBySeasonTeam(careerRows);
+  const normalizedCareerRows = normalizeCareerRows(careerRows);
+  const careerByKey = careerRowsBySeasonTeam(normalizedCareerRows);
   const issues = [];
   const existingKeys = new Set();
   let updatedSeasons = 0;
@@ -334,7 +353,7 @@ function updatePlayerCareerSeasons(player, careerRows, options = {}) {
   });
 
   if (appendMissingSeasons) {
-    for (const row of careerRows) {
+    for (const row of normalizedCareerRows) {
       const key = `${row.season}:${normalizedTeamKey(row.team)}`;
 
       if (existingKeys.has(key)) {

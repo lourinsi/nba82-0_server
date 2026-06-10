@@ -62,6 +62,7 @@ npm run seed:active:resume
 npm run seed:full
 npm run seed:full:resume
 npm run seed:stats
+npm run seed:bref-positions
 npm run seed:goat-rankings
 npm run seed:legacy-points
 npm run seed:classic-points
@@ -105,6 +106,9 @@ Continues a long all-time seed and skips players already saved.
 npm run seed:stats
 Refreshes active players' cached NBA Stats career seasons, appends new seasons, syncs active/current_team from the NBA Stats directory, and writes the updated player file.
 
+npm run seed:bref-positions
+Overwrites stored positions and primary_position from data/bref_positions.json for matching players.
+
 npm run seed:legacy-points
 Recalculates legacy_points from stored accolades without refetching NBA APIs.
 
@@ -136,6 +140,7 @@ Recommended seed pipeline:
 npm run refresh:positions:dry
 npm run refresh:positions
 npm run seed:active
+npm run seed:bref-positions
 npm run seed:legacy-points
 npm run refresh:league-averages
 npm run seed:stats
@@ -151,27 +156,30 @@ Step-by-step:
    This shows what would change before touching `players_accolades.json`.
 
 2. Apply position updates with `npm run refresh:positions`.
-   This keeps `positions` and `primary_position` current.
+   This keeps blank, unknown, and broad NBA API positions current.
 
 3. Refresh player data with `npm run seed:active` or `npm run seed:full`.
    Both commands merge into existing data by default. Use `seed:active` for current NBA players. Use `seed:full` when you want to refresh the all-time dataset from the start while preserving unprocessed records.
 
-4. Recalculate base scoring with `npm run seed:legacy-points`.
+4. Re-enforce Basketball Reference positions with `npm run seed:bref-positions`.
+   This overwrites matching players' `positions` and `primary_position` from `data/bref_positions.json` after player refreshes, so stale merged values are removed.
+
+5. Recalculate base scoring with `npm run seed:legacy-points`.
    This updates `legacy_points` from the accolades already stored locally.
 
-5. Refresh league averages with `npm run refresh:league-averages`.
+6. Refresh league averages with `npm run refresh:league-averages`.
    This builds `data/historical_league_averages.json` for the season climate baseline.
 
-6. Refresh active-player career season stats with `npm run seed:stats`.
+7. Refresh active-player career season stats with `npm run seed:stats`.
    This keeps current players' `career_seasons`, active status, and current team fresh from `data/nba_stats_player_directory.json` and `data/nba_stats_career_stats_cache.json`.
 
-7. Backfill any remaining stored career season stat gaps with `npm run backfill:season-stats -- --saveEvery=25`.
+8. Backfill any remaining stored career season stat gaps with `npm run backfill:season-stats -- --saveEvery=25`.
    This fills PPG/RPG/APG/SPG/BPG on `career_seasons` from NBA Stats career totals.
 
-8. Recalculate Classic Mode team-era points with `npm run seed:classic-points`.
+9. Recalculate Classic Mode team-era points with `npm run seed:classic-points`.
    This uses `data/historical_league_averages.json` and only overwrites each classic block's `points`.
 
-9. Refresh GOAT ranking data with `npm run seed:goat-rankings`.
+10. Refresh GOAT ranking data with `npm run seed:goat-rankings`.
    This updates the cached media ranking file used for GOAT score overlays.
 
 ## Running Scripts Safely
@@ -183,6 +191,7 @@ npm run seed
 npm run seed:active
 npm run seed:full
 npm run seed:stats
+npm run seed:bref-positions
 npm run seed:legacy-points
 npm run backfill:season-stats
 npm run seed:classic-points
@@ -190,7 +199,7 @@ npm run refresh:positions
 npm run fix:positions
 ```
 
-Do not run `npm run seed:stats`, `npm run backfill:season-stats`, or `npm run refresh:positions` at the same time as any other command that writes `players_accolades.json`. These commands all read the full file, update their own fields in memory, and write the full file back. Whichever write finishes last can overwrite the other command's changes.
+Do not run `npm run seed:stats`, `npm run seed:bref-positions`, `npm run backfill:season-stats`, or `npm run refresh:positions` at the same time as any other command that writes `players_accolades.json`. These commands all read the full file, update their own fields in memory, and write the full file back. Whichever write finishes last can overwrite the other command's changes.
 
 This pairing is safe because the scripts write different files, though slower delays are still friendlier to the remote data sources:
 
@@ -342,6 +351,20 @@ npm run refresh:positions -- --force-broad
 ```
 
 Manual corrections live in `data/position_overrides.json`. These are still necessary because nba_api often returns broad historical labels such as `G`, `F`, or `F-G`; the override file keeps high-impact players in their true primary-slot order.
+
+To make Basketball Reference the authority for matching player positions, run:
+
+```powershell
+npm run seed:bref-positions
+```
+
+Preview first with:
+
+```powershell
+npm run seed:bref-positions -- --dryRun
+```
+
+This reads `data/bref_positions.json` and overwrites each matching player's `positions` and `primary_position` in `players_accolades.json`. It does not merge with existing positions, so stale extras such as `["C", "SF", "PF"]` become the B-Ref ordered value, for example `["C", "PF"]`.
 
 ## Season Stats
 
