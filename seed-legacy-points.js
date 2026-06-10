@@ -1,13 +1,16 @@
 const fs = require("fs/promises");
 const path = require("path");
-const brefPositions = require("./data/bref_positions.json");
 const { applyBrefPrimaryPositions } = require("./brefPositions");
 const { applyClassicPointsToPlayers } = require("./classicPoints");
 const { applyLegacyPoints } = require("./legacyPoints");
-const { normalizePlayerAccoladeRecords } = require("./playerAccoladeRecords");
+const {
+  buildStatTitleWinnerLookup,
+  normalizePlayerAccoladeRecords,
+} = require("./playerAccoladeRecords");
 const { normalizePlayerTeams } = require("./teamFranchises");
 
 const OUTPUT_PATH = path.join(__dirname, "data", "players_accolades.json");
+const BREF_POSITIONS_PATH = path.join(__dirname, "data", "bref_positions.json");
 const STAT_TITLE_CACHE_PATH = path.join(__dirname, "data", "stat_title_winners.json");
 
 async function readJsonIfExists(filePath) {
@@ -22,24 +25,70 @@ async function readJsonIfExists(filePath) {
   }
 }
 
-async function main() {
-  console.log(`Recalculating legacy points for players in ${OUTPUT_PATH}...`);
-  const players = JSON.parse(await fs.readFile(OUTPUT_PATH, "utf8"));
-  const statTitleCache = await readJsonIfExists(STAT_TITLE_CACHE_PATH);
-  const normalizedPlayers = applyBrefPrimaryPositions(
-    normalizePlayerAccoladeRecords(players, { statTitleCache }).map(normalizePlayerTeams),
-    brefPositions,
+async function writeJsonAtomically(filePath, data) {
+  const directory = path.dirname(filePath);
+  const tempPath = path.join(
+    directory,
+    `.${path.basename(filePath)}.${process.pid}.${Date.now()}.tmp`,
   );
-  const outputPlayers = applyClassicPointsToPlayers(applyLegacyPoints(normalizedPlayers));
+
+  await fs.mkdir(directory, { recursive: true });
+  await fs.writeFile(tempPath, `${JSON.stringify(data, null, 2)}\n`, "utf8");
+  await fs.rename(tempPath, filePath);
+}
+
+function applyLegacyScoringPipeline(players, options = {}) {
+  const statTitleRowsByPlayerId =
+    options.statTitleRowsByPlayerId || buildStatTitleWinnerLookup(options.statTitleCache);
+  const normalizedPlayers = normalizePlayerAccoladeRecords(players, {
+    statTitleCache: options.statTitleCache,
+    statTitleRowsByPlayerId,
+  });
+  const positionedPlayers = options.brefPositions
+    ? applyBrefPrimaryPositions(normalizedPlayers, options.brefPositions)
+    : normalizedPlayers;
+  const teamNormalizedPlayers = positionedPlayers.map(normalizePlayerTeams);
+
+  return applyClassicPointsToPlayers(applyLegacyPoints(teamNormalizedPlayers));
+}
+
+async function main() {
+  console.time("legacy-points: total");
+  console.log(`Recalculating legacy points for players in ${OUTPUT_PATH}...`);
+
+  console.time("legacy-points: read");
+  const [players, brefPositions, statTitleCache] = await Promise.all([
+    JSON.parse(await fs.readFile(OUTPUT_PATH, "utf8")),
+    readJsonIfExists(BREF_POSITIONS_PATH),
+    readJsonIfExists(STAT_TITLE_CACHE_PATH),
+  ]);
+  console.timeEnd("legacy-points: read");
+
+  console.time("legacy-points: in-memory pipeline");
+  const outputPlayers = applyLegacyScoringPipeline(players, {
+    brefPositions,
+    statTitleCache,
+  });
+  console.timeEnd("legacy-points: in-memory pipeline");
+
   const totalLegacyPoints = outputPlayers.reduce((sum, player) => sum + Number(player.legacy_points || 0), 0);
 
-  await fs.writeFile(OUTPUT_PATH, `${JSON.stringify(outputPlayers, null, 2)}\n`);
+  console.time("legacy-points: write");
+  await writeJsonAtomically(OUTPUT_PATH, outputPlayers);
+  console.timeEnd("legacy-points: write");
 
   console.log(`Updated legacy_points for ${outputPlayers.length} players at ${OUTPUT_PATH}`);
   console.log(`Current dataset total legacy_points: ${Number(totalLegacyPoints.toFixed(2))}`);
+  console.timeEnd("legacy-points: total");
 }
 
-main().catch((error) => {
-  console.error(error?.stack || error?.message || String(error));
-  process.exitCode = 1;
-});
+if (require.main === module) {
+  main().catch((error) => {
+    console.error(error?.stack || error?.message || String(error));
+    process.exitCode = 1;
+  });
+}
+
+module.exports = {
+  applyLegacyScoringPipeline,
+};

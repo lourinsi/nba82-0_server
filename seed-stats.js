@@ -8,10 +8,13 @@ require("dotenv").config();
 
 const PLAYERS_PATH = path.join(__dirname, "data", "players_accolades.json");
 const CAREER_CACHE_PATH = path.join(__dirname, "data", "nba_stats_career_stats_cache.json");
+const PLAYER_DIRECTORY_PATH = path.join(__dirname, "data", "nba_stats_player_directory.json");
 const NBA_STATS_CAREER_URL = "https://stats.nba.com/stats/playercareerstats";
 const DEFENSIVE_STATS_START_END_YEAR = 1974;
 const BASE_STAT_KEYS = ["ppg", "rpg", "apg"];
 const DEFENSIVE_STAT_KEYS = ["spg", "bpg"];
+const ALL_STAT_KEYS = [...BASE_STAT_KEYS, ...DEFENSIVE_STAT_KEYS];
+const VALID_MODES = new Set(["missing", "active", "all"]);
 
 const NBA_STATS_HEADERS = {
   "User-Agent":
@@ -50,8 +53,30 @@ function positiveInteger(value, fallback = 0) {
   return Number.isFinite(numeric) && numeric > 0 ? Math.floor(numeric) : fallback;
 }
 
+function nonNegativeNumber(value, fallback = null) {
+  if (value === undefined || value === null || value === "") {
+    return fallback;
+  }
+
+  const numeric = Number(value);
+  return Number.isFinite(numeric) && numeric >= 0 ? numeric : fallback;
+}
+
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function waitForRateLimit(lastFetchAt, delayMs) {
+  if (!lastFetchAt || !delayMs) {
+    return;
+  }
+
+  const elapsedMs = Date.now() - lastFetchAt;
+  const waitMs = delayMs - elapsedMs;
+
+  if (waitMs > 0) {
+    await sleep(waitMs);
+  }
 }
 
 function retryAfterMs(headers, fallbackMs) {
@@ -228,7 +253,7 @@ async function fetchNbaCareerRows(nbaStatsId, options) {
 
 function statKeysForSeason(season) {
   const endYear = seasonEndYear(season);
-  return endYear >= DEFENSIVE_STATS_START_END_YEAR ? [...BASE_STAT_KEYS, ...DEFENSIVE_STAT_KEYS] : BASE_STAT_KEYS;
+  return endYear >= DEFENSIVE_STATS_START_END_YEAR ? ALL_STAT_KEYS : BASE_STAT_KEYS;
 }
 
 function seasonNeedsStats(season) {
@@ -260,18 +285,36 @@ function updateSeasonWithStats(season, stats, force) {
   return { changed, season: changed ? nextSeason : season };
 }
 
-function updatePlayerCareerSeasons(player, careerRows, force) {
+function careerSeasonSortValue(season) {
+  return seasonEndYear(season?.season) || 0;
+}
+
+function sortCareerSeasons(seasons) {
+  return [...seasons].sort(
+    (a, b) =>
+      careerSeasonSortValue(a) - careerSeasonSortValue(b) ||
+      String(a?.team || "").localeCompare(String(b?.team || "")),
+  );
+}
+
+function updatePlayerCareerSeasons(player, careerRows, options = {}) {
+  const force = Boolean(options.force);
+  const appendMissingSeasons = Boolean(options.appendMissingSeasons);
   const careerByKey = careerRowsBySeasonTeam(careerRows);
   const issues = [];
+  const existingKeys = new Set();
   let updatedSeasons = 0;
 
   const careerSeasons = (player.career_seasons || []).map((season) => {
+    const team = normalizedTeamKey(season?.team);
+    const key = `${season?.season}:${team}`;
+    existingKeys.add(key);
+
     if (!force && !seasonNeedsStats(season)) {
       return season;
     }
 
-    const team = normalizedTeamKey(season?.team);
-    const stats = careerByKey.get(`${season?.season}:${team}`);
+    const stats = careerByKey.get(key);
     const result = updateSeasonWithStats(season, stats, force);
 
     if (!stats) {
@@ -290,9 +333,26 @@ function updatePlayerCareerSeasons(player, careerRows, force) {
     return result.season;
   });
 
+  if (appendMissingSeasons) {
+    for (const row of careerRows) {
+      const key = `${row.season}:${normalizedTeamKey(row.team)}`;
+
+      if (existingKeys.has(key)) {
+        continue;
+      }
+
+      existingKeys.add(key);
+      careerSeasons.push(row);
+      updatedSeasons += 1;
+    }
+  }
+
   return {
     issues,
-    player: updatedSeasons ? { ...player, career_seasons: careerSeasons } : player,
+    changed: updatedSeasons > 0,
+    player: updatedSeasons
+      ? { ...player, career_seasons: appendMissingSeasons ? sortCareerSeasons(careerSeasons) : careerSeasons }
+      : player,
     updatedSeasons,
   };
 }
@@ -307,58 +367,197 @@ function cacheEntryLooksValid(entry) {
   return Array.isArray(entry?.seasons);
 }
 
+function cacheEntryAgeMs(entry, now = Date.now()) {
+  const fetchedAt = Date.parse(entry?.fetched_at || "");
+  return Number.isNaN(fetchedAt) ? Infinity : now - fetchedAt;
+}
+
+function cacheEntryIsStale(entry, maxCacheAgeMs, now = Date.now()) {
+  return maxCacheAgeMs !== null && cacheEntryAgeMs(entry, now) > maxCacheAgeMs;
+}
+
+function fetchReasonForCacheEntry(entry, options, now = Date.now()) {
+  if (options.refreshCache) {
+    return "refresh";
+  }
+  if (!cacheEntryLooksValid(entry)) {
+    return "missing-cache";
+  }
+  if (cacheEntryIsStale(entry, options.maxCacheAgeMs, now)) {
+    return "stale-cache";
+  }
+
+  return null;
+}
+
+function rosterStatusIsActive(status) {
+  const normalized = String(status || "").trim().toLowerCase();
+  return status === 1 || status === "1" || normalized === "active" || normalized === "true";
+}
+
+function buildDirectoryLookup(directory) {
+  const byNbaStatsId = new Map();
+  const activeNbaStatsIds = new Set();
+
+  for (const entry of directory?.players || []) {
+    const personId = Number(entry.person_id);
+
+    if (!personId) {
+      continue;
+    }
+
+    byNbaStatsId.set(personId, entry);
+    if (rosterStatusIsActive(entry.roster_status)) {
+      activeNbaStatsIds.add(personId);
+    }
+  }
+
+  return { activeNbaStatsIds, byNbaStatsId };
+}
+
+function playerLooksActive(player, directoryLookup) {
+  const nbaStatsId = Number(player.nba_stats_id || 0);
+
+  return (
+    (nbaStatsId && directoryLookup.activeNbaStatsIds.has(nbaStatsId)) ||
+    Boolean(player.active || player.current_team)
+  );
+}
+
+function playerMatchesMode(player, mode, directoryLookup) {
+  if (!Number(player.nba_stats_id) || !Array.isArray(player.career_seasons) || player.career_seasons.length === 0) {
+    return false;
+  }
+
+  if (mode === "active") {
+    return playerLooksActive(player, directoryLookup);
+  }
+
+  if (mode === "all") {
+    return true;
+  }
+
+  return player.career_seasons.some(seasonNeedsStats);
+}
+
+function syncRosterFromDirectory(player, directoryLookup) {
+  const entry = directoryLookup.byNbaStatsId.get(Number(player.nba_stats_id || 0));
+
+  if (!entry) {
+    return { changed: false, player };
+  }
+
+  const active = rosterStatusIsActive(entry.roster_status);
+  const currentTeam = active ? normalizedTeamKey(entry.team_abbreviation) : null;
+  const changed = player.active !== active || (player.current_team || null) !== (currentTeam || null);
+
+  return {
+    changed,
+    player: changed
+      ? {
+          ...player,
+          active,
+          current_team: currentTeam,
+        }
+      : player,
+  };
+}
+
+function mergeUpdatedPlayers(players, updatedById) {
+  if (!updatedById.size) {
+    return players;
+  }
+
+  return players.map((player) => updatedById.get(player.id) || player);
+}
+
 async function main() {
+  console.time("season-stats: total");
   const args = parseArgs(process.argv);
   const playersPath = path.resolve(process.cwd(), args.players || args.input || PLAYERS_PATH);
   const outputPath = path.resolve(process.cwd(), args.output || playersPath);
   const cachePath = path.resolve(process.cwd(), args.cache || CAREER_CACHE_PATH);
+  const directoryPath = path.resolve(process.cwd(), args.directory || PLAYER_DIRECTORY_PATH);
   const dryRun = flagEnabled(args.dryRun);
   const force = flagEnabled(args.force);
   const refreshCache = flagEnabled(args.refreshCache);
+  const appendMissingSeasons = flagEnabled(args.appendMissingSeasons);
+  const mode = String(args.mode || (flagEnabled(args.activeOnly) ? "active" : "missing")).toLowerCase();
+  const syncRoster = args.syncRoster === undefined ? mode === "active" : flagEnabled(args.syncRoster);
   const delayMs = positiveInteger(args.delayMs || process.env.NBA_STATS_DELAY_MS, 1500);
   const retries = positiveInteger(args.retries || process.env.NBA_STATS_MAX_RETRIES, 5);
   const timeoutMs = positiveInteger(args.timeoutMs || process.env.NBA_STATS_TIMEOUT_MS, 30000);
-  const saveEvery = positiveInteger(args.saveEvery, 25);
+  const saveEvery = positiveInteger(args.saveEvery || process.env.SEASON_STATS_SAVE_EVERY, 0);
+  const maxCacheAgeDays = nonNegativeNumber(args.maxCacheAgeDays ?? process.env.SEASON_STATS_MAX_CACHE_AGE_DAYS, null);
+  const maxCacheAgeMs = maxCacheAgeDays === null ? null : maxCacheAgeDays * 24 * 60 * 60 * 1000;
   const offset = positiveInteger(args.offset, 0);
   const limit = args.limit ? positiveInteger(args.limit) : null;
-  const players = await readJsonIfExists(playersPath);
-  const cache = (await readJsonIfExists(cachePath)) || { fetched_at: null, players: {} };
+
+  if (!VALID_MODES.has(mode)) {
+    throw new Error(`Unsupported season stat mode "${mode}". Use missing, active, or all.`);
+  }
+
+  console.time("season-stats: read");
+  const [players, rawCache, playerDirectory] = await Promise.all([
+    readJsonIfExists(playersPath),
+    readJsonIfExists(cachePath),
+    readJsonIfExists(directoryPath),
+  ]);
+  console.timeEnd("season-stats: read");
+
+  const cache = rawCache || { fetched_at: null, players: {} };
+  cache.players ||= {};
 
   if (!Array.isArray(players)) {
     throw new Error("Player storage must be a JSON array.");
   }
 
-  const candidates = players.filter(
-    (player) =>
-      Number(player.nba_stats_id) &&
-      Array.isArray(player.career_seasons) &&
-      player.career_seasons.length > 0 &&
-      (force || player.career_seasons.some(seasonNeedsStats)),
-  );
+  console.time("season-stats: select");
+  const directoryLookup = buildDirectoryLookup(playerDirectory);
+  const candidates = players.filter((player) => playerMatchesMode(player, mode, directoryLookup));
   const selected = sliceWindow(candidates, offset, limit);
-  const selectedIds = new Set(selected.map((player) => player.id));
+  console.timeEnd("season-stats: select");
+
   const updatedById = new Map();
   const issues = [];
   let fetched = 0;
   let cacheHits = 0;
   let changedPlayers = 0;
+  let rosterUpdatedPlayers = 0;
+  let staleFetches = 0;
   let updatedSeasons = 0;
+  let lastFetchAt = 0;
 
-  console.log(`Selected ${selected.length}/${candidates.length} players needing career-season stat backfill.`);
+  console.log(
+    `Selected ${selected.length}/${candidates.length} players for career-season stat backfill (mode=${mode}, saveEvery=${saveEvery || "final-only"}, maxCacheAgeDays=${maxCacheAgeDays ?? "none"}).`,
+  );
 
+  console.time("season-stats: process");
   for (const [index, player] of selected.entries()) {
     const nbaStatsId = Number(player.nba_stats_id);
-    let careerRows = cache.players[String(nbaStatsId)]?.seasons;
+    const cacheKey = String(nbaStatsId);
+    const cacheEntry = cache.players[cacheKey];
+    const fetchReason = fetchReasonForCacheEntry(cacheEntry, { maxCacheAgeMs, refreshCache });
+    let careerRows = cacheEntry?.seasons;
+    let source = "cache";
 
-    if (!cacheEntryLooksValid(cache.players[String(nbaStatsId)]) || refreshCache) {
+    if (fetchReason) {
+      await waitForRateLimit(lastFetchAt, delayMs);
+    }
+
+    if (fetchReason) {
       try {
         careerRows = await fetchNbaCareerRows(nbaStatsId, { delayMs, retries, timeoutMs });
-        cache.players[String(nbaStatsId)] = {
+        lastFetchAt = Date.now();
+        cache.players[cacheKey] = {
           fetched_at: new Date().toISOString(),
           seasons: careerRows,
         };
         fetched += 1;
+        staleFetches += fetchReason === "stale-cache" ? 1 : 0;
+        source = fetchReason;
       } catch (error) {
+        lastFetchAt = Date.now();
         issues.push({
           player: player.name || player.id || "Unknown player",
           season: null,
@@ -372,48 +571,44 @@ async function main() {
       cacheHits += 1;
     }
 
-    const result = updatePlayerCareerSeasons(player, careerRows, force);
+    const result = updatePlayerCareerSeasons(player, careerRows, { appendMissingSeasons, force });
+    const rosterResult = syncRoster ? syncRosterFromDirectory(result.player, directoryLookup) : { changed: false, player: result.player };
     issues.push(...result.issues);
 
-    if (result.updatedSeasons) {
+    if (result.changed || rosterResult.changed) {
       changedPlayers += 1;
       updatedSeasons += result.updatedSeasons;
-      updatedById.set(player.id, result.player);
+      rosterUpdatedPlayers += rosterResult.changed ? 1 : 0;
+      updatedById.set(player.id, rosterResult.player);
     }
 
     console.log(
-      `[${index + 1}/${selected.length}] ${player.name}: ${result.updatedSeasons} seasons updated (${cacheHits + fetched === index + 1 && cacheHits > 0 ? "cache/source mixed" : fetched > 0 && cacheHits === 0 ? "fetched" : "cache"})`,
+      `[${index + 1}/${selected.length}] ${player.name}: ${result.updatedSeasons} seasons updated${rosterResult.changed ? ", roster synced" : ""} (${source})`,
     );
 
     if (!dryRun && saveEvery && (index + 1) % saveEvery === 0) {
       await writeJsonAtomically(cachePath, { ...cache, fetched_at: new Date().toISOString() });
-      const checkpointPlayers = players.map((candidate) => updatedById.get(candidate.id) || candidate);
+      const checkpointPlayers = mergeUpdatedPlayers(players, updatedById);
       await writeJsonAtomically(outputPath, checkpointPlayers);
       console.log(`Checkpoint saved after ${index + 1} players.`);
     }
-
-    if (index < selected.length - 1 && fetched > 0) {
-      await sleep(delayMs);
-    }
   }
+  console.timeEnd("season-stats: process");
 
-  const outputPlayers = players.map((player) => {
-    if (!selectedIds.has(player.id)) {
-      return player;
-    }
-
-    return updatedById.get(player.id) || player;
-  });
+  const outputPlayers = mergeUpdatedPlayers(players, updatedById);
 
   if (dryRun) {
     console.log("Dry run enabled; no files were written.");
   } else {
+    console.time("season-stats: write");
     await writeJsonAtomically(cachePath, { ...cache, fetched_at: new Date().toISOString() });
     await writeJsonAtomically(outputPath, outputPlayers);
+    console.timeEnd("season-stats: write");
   }
 
-  console.log(`Fetched ${fetched} career stat payloads; used ${cacheHits} cache entries.`);
+  console.log(`Fetched ${fetched} career stat payloads (${staleFetches} stale refreshes); used ${cacheHits} cache entries.`);
   console.log(`Updated ${updatedSeasons} career season rows across ${changedPlayers} players.`);
+  console.log(`Synced active/current_team from directory for ${rosterUpdatedPlayers} players.`);
   if (issues.length) {
     console.warn(`Encountered ${issues.length} missing/failing season inputs.`);
     for (const issue of issues.slice(0, 20)) {
@@ -427,6 +622,7 @@ async function main() {
     console.log(`Updated player storage at ${outputPath}`);
     console.log(`Updated career stat cache at ${cachePath}`);
   }
+  console.timeEnd("season-stats: total");
 }
 
 main().catch((error) => {

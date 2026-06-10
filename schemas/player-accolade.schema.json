@@ -76,8 +76,6 @@
     "draft_year": { "type": ["integer", "null"] },
     "active": { "type": "boolean" },
     "legacy_points": { "type": "number", "minimum": 0 },
-    "position_bonus": { "type": "number", "minimum": 0 },
-    "final_score": { "type": "number", "minimum": 0 },
     "classic_points_by_team_era": {
       "type": "array",
       "items": {

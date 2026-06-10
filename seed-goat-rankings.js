@@ -2,7 +2,7 @@ const fs = require("fs/promises");
 const path = require("path");
 const {
   GOAT_RANKINGS_PATH,
-  applyGoatRankingsToPlayers,
+  applyGoatRankingsToPlayers: applyMediaGoatRankingsToPlayers,
   countMatchedGoatRankings,
   fetchBleacherReportGoatRankings,
   loadCachedGoatRankings,
@@ -22,9 +22,12 @@ function parseArgs(argv) {
   return args;
 }
 
-async function main() {
-  const args = parseArgs(process.argv);
-  const useCached = args.cached === true || args.cached === "true";
+function flagEnabled(value) {
+  return value === true || ["1", "true", "yes", "on"].includes(String(value || "").toLowerCase());
+}
+
+async function refreshMediaGoatRankings(args) {
+  const useCached = flagEnabled(args.cached);
   const rankings = useCached ? await loadCachedGoatRankings() : await fetchBleacherReportGoatRankings();
 
   if (!rankings.length) {
@@ -37,7 +40,7 @@ async function main() {
   }
 
   const players = JSON.parse(await fs.readFile(OUTPUT_PATH, "utf8"));
-  const rankedPlayers = applyGoatRankingsToPlayers(players, rankings);
+  const rankedPlayers = applyMediaGoatRankingsToPlayers(players, rankings);
   const matchedPlayerRecords = countMatchedGoatRankings(rankedPlayers);
   const matchedUniqueRanks = new Set(
     rankedPlayers.flatMap((player) => (player.goat_rank ? [player.goat_rank] : [])),
@@ -48,13 +51,25 @@ async function main() {
   );
 
   console.log(
-    `Matched GOAT rankings to ${matchedPlayerRecords} player records (${matchedUniqueRanks}/${rankings.length} unique rankings) in the current dataset.`,
+    `Matched media GOAT rankings to ${matchedPlayerRecords} player records (${matchedUniqueRanks}/${rankings.length} unique rankings) in the current dataset.`,
   );
-  console.log(`Current dataset GOAT score total: ${totalGoatScore}`);
-  console.log(`players_accolades.json was not modified. GOAT is applied as an API/frontend overlay.`);
+  console.log(`Current dataset media GOAT score total: ${totalGoatScore}`);
+  console.log("players_accolades.json was not modified. Media GOAT is applied as an API/frontend overlay.");
 }
 
-main().catch((error) => {
-  console.error(error?.stack || error?.message || String(error));
-  process.exitCode = 1;
-});
+async function main() {
+  const args = parseArgs(process.argv);
+
+  await refreshMediaGoatRankings(args);
+}
+
+if (require.main === module) {
+  main().catch((error) => {
+    console.error(error?.stack || error?.message || String(error));
+    process.exitCode = 1;
+  });
+}
+
+module.exports = {
+  refreshMediaGoatRankings,
+};

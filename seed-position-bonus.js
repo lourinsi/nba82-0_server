@@ -31,12 +31,10 @@ const DEFAULT_SLOT_KEYS = [
   "activeSlot",
 ];
 const DEFAULT_GOAT_SCORE_KEYS = [
-  "goat_ranking",
-  "goatRanking",
-  "goat_ranking_score",
-  "goatRankingScore",
   "goat_score",
   "goatScore",
+  "media_score",
+  "mediaScore",
 ];
 
 function parseArgs(argv) {
@@ -53,6 +51,10 @@ function parseArgs(argv) {
   }
 
   return args;
+}
+
+function flagEnabled(value) {
+  return value === true || ["1", "true", "yes", "on"].includes(String(value || "").toLowerCase());
 }
 
 function resolvePath(value, fallbackPath) {
@@ -91,7 +93,15 @@ function normalizePosition(value) {
 
 function positionFromBrefRecord(rawRecord) {
   if (Array.isArray(rawRecord)) {
-    return rawRecord.map(normalizePosition).find(Boolean) || null;
+    for (const value of rawRecord) {
+      const position = positionFromBrefRecord(value);
+
+      if (position) {
+        return position;
+      }
+    }
+
+    return null;
   }
 
   if (rawRecord && typeof rawRecord === "object") {
@@ -106,56 +116,161 @@ function positionFromBrefRecord(rawRecord) {
   return normalizePosition(rawRecord);
 }
 
-function buildBrefLookup(brefPositions) {
-  const exact = new Map();
-  const normalized = new Map();
-
-  for (const [name, rawRecord] of Object.entries(brefPositions || {})) {
-    const position = positionFromBrefRecord(rawRecord);
-
-    if (!position) {
-      continue;
-    }
-
-    exact.set(name, position);
-
-    const normalizedName = normalizeName(name);
-    if (normalizedName && !normalized.has(normalizedName)) {
-      normalized.set(normalizedName, position);
-    }
+function setIfMissing(map, key, value) {
+  if (key && !map.has(key)) {
+    map.set(key, value);
   }
-
-  return { exact, normalized };
 }
 
-function playerNameCandidates(player) {
-  return Array.from(
-    new Set([
-      player?.name,
-      `${player?.first_name || ""} ${player?.last_name || ""}`.trim(),
-    ].filter(Boolean)),
+function addIdKeys(lookup, value, position, prefix = null) {
+  if (value === undefined || value === null || value === "") {
+    return;
+  }
+
+  const raw = String(value);
+  setIfMissing(lookup.byId, raw, position);
+
+  const numeric = Number(value);
+  if (Number.isFinite(numeric)) {
+    setIfMissing(lookup.byId, String(numeric), position);
+
+    if (prefix) {
+      setIfMissing(lookup.byId, `${prefix}:${numeric}`, position);
+      setIfMissing(lookup.byId, `${prefix}-${numeric}`, position);
+    }
+  }
+}
+
+function nameFromBrefRecord(rawRecord) {
+  if (!rawRecord || typeof rawRecord !== "object" || Array.isArray(rawRecord)) {
+    return null;
+  }
+
+  return (
+    rawRecord.name ||
+    rawRecord.player ||
+    rawRecord.player_name ||
+    rawRecord.playerName ||
+    rawRecord.full_name ||
+    rawRecord.fullName ||
+    rawRecord.display_name ||
+    rawRecord.displayName ||
+    null
   );
 }
 
-function resolveTruePosition(player, brefLookup) {
-  for (const name of playerNameCandidates(player)) {
-    if (brefLookup.exact.has(name)) {
-      return {
-        position: brefLookup.exact.get(name),
-        source: "bref_positions.json",
-      };
+function addBrefLookupEntry(lookup, name, rawRecord) {
+  const position = positionFromBrefRecord(rawRecord);
+
+  if (!position) {
+    return;
+  }
+
+  if (name) {
+    setIfMissing(lookup.exact, String(name), position);
+    setIfMissing(lookup.normalized, normalizeName(name), position);
+  }
+
+  if (!rawRecord || typeof rawRecord !== "object" || Array.isArray(rawRecord)) {
+    return;
+  }
+
+  addIdKeys(lookup, rawRecord.id, position);
+  addIdKeys(lookup, rawRecord.nba_stats_id || rawRecord.nbaStatsId, position, "nba");
+  addIdKeys(lookup, rawRecord.person_id || rawRecord.personId || rawRecord.player_id || rawRecord.playerId, position, "nba");
+  addIdKeys(lookup, rawRecord.balldontlie_id || rawRecord.balldontlieId, position, "bdl");
+
+  const recordName = nameFromBrefRecord(rawRecord);
+  if (recordName && recordName !== name) {
+    setIfMissing(lookup.exact, String(recordName), position);
+    setIfMissing(lookup.normalized, normalizeName(recordName), position);
+  }
+}
+
+function buildBrefLookup(brefPositions) {
+  const lookup = {
+    byId: new Map(),
+    exact: new Map(),
+    normalized: new Map(),
+  };
+
+  if (Array.isArray(brefPositions)) {
+    for (const rawRecord of brefPositions) {
+      addBrefLookupEntry(lookup, nameFromBrefRecord(rawRecord), rawRecord);
+    }
+
+    return lookup;
+  }
+
+  for (const [name, rawRecord] of Object.entries(brefPositions || {})) {
+    addBrefLookupEntry(lookup, name, rawRecord);
+  }
+
+  return lookup;
+}
+
+function isBrefLookup(value) {
+  return value?.byId instanceof Map && value?.exact instanceof Map && value?.normalized instanceof Map;
+}
+
+function lookupPositionById(player, brefLookup) {
+  const candidates = [
+    player?.id,
+    player?.nba_stats_id ? `nba:${Number(player.nba_stats_id)}` : null,
+    player?.nba_stats_id ? `nba-${Number(player.nba_stats_id)}` : null,
+    player?.nba_stats_id ? Number(player.nba_stats_id) : null,
+    player?.balldontlie_id ? `bdl:${Number(player.balldontlie_id)}` : null,
+    player?.balldontlie_id ? `bdl-${Number(player.balldontlie_id)}` : null,
+    player?.balldontlie_id ? Number(player.balldontlie_id) : null,
+  ];
+
+  for (const candidate of candidates) {
+    if (candidate === undefined || candidate === null || candidate === "") {
+      continue;
+    }
+
+    const key = String(candidate);
+    if (brefLookup.byId.has(key)) {
+      return brefLookup.byId.get(key);
     }
   }
 
-  for (const name of playerNameCandidates(player)) {
-    const normalizedName = normalizeName(name);
+  return null;
+}
 
-    if (brefLookup.normalized.has(normalizedName)) {
-      return {
-        position: brefLookup.normalized.get(normalizedName),
-        source: "bref_positions.json",
-      };
-    }
+function lookupPositionByName(player, brefLookup) {
+  const name = player?.name;
+  const fullName = `${player?.first_name || ""} ${player?.last_name || ""}`.trim();
+
+  if (name && brefLookup.exact.has(name)) {
+    return brefLookup.exact.get(name);
+  }
+  if (fullName && fullName !== name && brefLookup.exact.has(fullName)) {
+    return brefLookup.exact.get(fullName);
+  }
+
+  const normalizedName = normalizeName(name);
+  if (normalizedName && brefLookup.normalized.has(normalizedName)) {
+    return brefLookup.normalized.get(normalizedName);
+  }
+
+  const normalizedFullName = normalizeName(fullName);
+  if (normalizedFullName && normalizedFullName !== normalizedName && brefLookup.normalized.has(normalizedFullName)) {
+    return brefLookup.normalized.get(normalizedFullName);
+  }
+
+  return null;
+}
+
+function resolveTruePosition(player, brefLookup) {
+  const lookup = isBrefLookup(brefLookup) ? brefLookup : buildBrefLookup(brefLookup);
+  const brefPosition = lookupPositionById(player, lookup) || lookupPositionByName(player, lookup);
+
+  if (brefPosition) {
+    return {
+      position: brefPosition,
+      source: "bref_positions.json",
+    };
   }
 
   const fallbackPosition =
@@ -179,23 +294,17 @@ function valueAtPath(source, keyPath) {
     .reduce((value, key) => (value && typeof value === "object" ? value[key] : undefined), source);
 }
 
-function candidateSlotValues(player, slotKeys) {
-  const values = [];
-
-  for (const key of slotKeys) {
-    const value = valueAtPath(player, key);
-
-    if (value !== undefined && value !== null && value !== "") {
-      values.push(value);
-    }
-  }
-
-  return values;
-}
-
 function positionFromSlotValue(value) {
   if (Array.isArray(value)) {
-    return value.map(positionFromSlotValue).find(Boolean) || null;
+    for (const entry of value) {
+      const position = positionFromSlotValue(entry);
+
+      if (position) {
+        return position;
+      }
+    }
+
+    return null;
   }
 
   if (value && typeof value === "object") {
@@ -213,7 +322,13 @@ function positionFromSlotValue(value) {
 }
 
 function resolveAssignedSlotPosition(player, slotKeys) {
-  for (const value of candidateSlotValues(player, slotKeys)) {
+  for (const key of slotKeys) {
+    const value = valueAtPath(player, key);
+
+    if (value === undefined || value === null || value === "") {
+      continue;
+    }
+
     const position = positionFromSlotValue(value);
 
     if (position) {
@@ -243,41 +358,86 @@ function resolveGoatScore(player, goatScoreKeys) {
 }
 
 function multiplierForLegacyPoints(legacyPoints) {
-  return legacyPoints < 100 ? 0.15 : 0.1;
+  return legacyPoints < 100 ? 1.15 : 1.1;
 }
 
-function calculatePositionBonus(legacyPoints, truePosition, assignedPosition) {
+function calculatePositionMultiplier(legacyPoints, truePosition, assignedPosition) {
   if (!truePosition || !assignedPosition || truePosition !== assignedPosition) {
-    return 0;
+    return 1;
   }
 
-  return legacyPoints * multiplierForLegacyPoints(legacyPoints);
+  return multiplierForLegacyPoints(legacyPoints);
+}
+
+function calculateProjectedScore(legacyPoints, goatScore, truePosition, assignedPosition) {
+  const baseScore = legacyPoints + goatScore;
+  const multiplier = calculatePositionMultiplier(legacyPoints, truePosition, assignedPosition);
+
+  return Number((baseScore * multiplier).toFixed(2));
+}
+
+function calculatePositionBonus(legacyPoints, goatScore, truePosition, assignedPosition) {
+  const baseScore = legacyPoints + goatScore;
+
+  return Number((calculateProjectedScore(legacyPoints, goatScore, truePosition, assignedPosition) - baseScore).toFixed(2));
+}
+
+function stripPersistedScoreFields(player) {
+  const {
+    final_legacy_points,
+    final_score,
+    goat_ranking,
+    goat_ranking_score,
+    position_bonus,
+    ...cleanPlayer
+  } = player;
+
+  return cleanPlayer;
 }
 
 function applyPositionBonusToPlayer(player, brefLookup, options = {}) {
   const slotKeys = options.slotKeys || DEFAULT_SLOT_KEYS;
   const goatScoreKeys = options.goatScoreKeys || DEFAULT_GOAT_SCORE_KEYS;
   const legacyPoints = numberValue(player.legacy_points);
-  const goatRanking = resolveGoatScore(player, goatScoreKeys);
+  const goatScore = resolveGoatScore(player, goatScoreKeys);
   const { position: truePosition, source: positionSource } = resolveTruePosition(player, brefLookup);
   const assignedPosition = resolveAssignedSlotPosition(player, slotKeys);
-  const positionBonus = calculatePositionBonus(legacyPoints, truePosition, assignedPosition);
+  const baseScore = legacyPoints + goatScore;
+  const positionMultiplier = calculatePositionMultiplier(legacyPoints, truePosition, assignedPosition);
+  const projectedScore = calculateProjectedScore(legacyPoints, goatScore, truePosition, assignedPosition);
 
   return {
-    player: {
-      ...player,
-      position_bonus: positionBonus,
-      final_score: legacyPoints + goatRanking + positionBonus,
-    },
+    player: stripPersistedScoreFields(player),
     meta: {
       assignedPosition,
-      goatRanking,
+      baseScore,
+      goatScore,
       legacyPoints,
-      positionBonus,
+      positionBonus: Number((projectedScore - baseScore).toFixed(2)),
+      positionMultiplier,
       positionSource,
+      projectedScore,
       truePosition,
     },
   };
+}
+
+function applyPositionBonusResults(players, brefPositions, options = {}) {
+  const brefLookup = isBrefLookup(brefPositions) ? brefPositions : buildBrefLookup(brefPositions);
+  const slotKeys = options.slotKeys || DEFAULT_SLOT_KEYS;
+  const goatScoreKeys = options.goatScoreKeys || DEFAULT_GOAT_SCORE_KEYS;
+
+  return players.map((player) =>
+    applyPositionBonusToPlayer(player, brefLookup, {
+      ...options,
+      goatScoreKeys,
+      slotKeys,
+    }),
+  );
+}
+
+function applyPositionBonusToPlayers(players, brefPositions, options = {}) {
+  return applyPositionBonusResults(players, brefPositions, options).map((result) => result.player);
 }
 
 function selectPlayerArray(root, preferredKey) {
@@ -346,7 +506,7 @@ async function writeJsonAtomically(filePath, data) {
 function summarizeResults(results) {
   return results.reduce(
     (summary, result) => {
-      if (result.meta.positionBonus > 0) {
+      if (result.meta.positionMultiplier > 1) {
         summary.matchedSlots += 1;
         summary.totalPositionBonus += result.meta.positionBonus;
       }
@@ -359,7 +519,7 @@ function summarizeResults(results) {
         summary.fallbackPositions += 1;
       }
 
-      summary.totalFinalScore += result.player.final_score;
+      summary.totalProjectedScore += result.meta.projectedScore;
 
       return summary;
     },
@@ -367,7 +527,7 @@ function summarizeResults(results) {
       fallbackPositions: 0,
       matchedSlots: 0,
       missingAssignedSlots: 0,
-      totalFinalScore: 0,
+      totalProjectedScore: 0,
       totalPositionBonus: 0,
     },
   );
@@ -380,39 +540,51 @@ async function main() {
   const outputPath = resolvePath(args.output, playersPath);
   const slotKeys = [...splitCsv(args.slotKeys || args.slotKey), ...DEFAULT_SLOT_KEYS];
   const goatScoreKeys = [...splitCsv(args.goatScoreKeys || args.goatScoreKey), ...DEFAULT_GOAT_SCORE_KEYS];
-  const dryRun = args.dryRun === true || args.dryRun === "true";
+  const dryRun = flagEnabled(args.dryRun);
 
+  console.time("position-bonus: total");
   console.log(`Loading players from ${playersPath}`);
   console.log(`Loading B-Ref positions from ${positionsPath}`);
 
+  console.time("position-bonus: read");
   const [playerStorage, brefPositions] = await Promise.all([
     readJson(playersPath, "Player storage"),
     readJson(positionsPath, "B-Ref positions"),
   ]);
+  console.timeEnd("position-bonus: read");
+
   const storage = selectPlayerArray(playerStorage, args.playersKey);
+
+  console.time("position-bonus: lookup");
   const brefLookup = buildBrefLookup(brefPositions);
-  const results = storage.players.map((player) =>
-    applyPositionBonusToPlayer(player, brefLookup, { goatScoreKeys, slotKeys }),
-  );
+  console.timeEnd("position-bonus: lookup");
+
+  console.time("position-bonus: map");
+  const results = applyPositionBonusResults(storage.players, brefLookup, { goatScoreKeys, slotKeys });
+  console.timeEnd("position-bonus: map");
+
   const outputStorage = storage.replace(results.map((result) => result.player));
   const summary = summarizeResults(results);
 
   if (dryRun) {
     console.log("Dry run enabled; no files were written.");
   } else {
+    console.time("position-bonus: write");
     await writeJsonAtomically(outputPath, outputStorage);
+    console.timeEnd("position-bonus: write");
   }
 
   console.log(`Processed ${results.length} players.`);
-  console.log(`Position bonuses applied to ${summary.matchedSlots} players.`);
+  console.log(`Position multipliers matched ${summary.matchedSlots} players.`);
   console.log(`Players without an assigned active slot: ${summary.missingAssignedSlots}.`);
   console.log(`Players using primary_position fallback: ${summary.fallbackPositions}.`);
-  console.log(`Total position_bonus: ${summary.totalPositionBonus}`);
-  console.log(`Total final_score: ${summary.totalFinalScore}`);
+  console.log(`Total projected position lift: ${summary.totalPositionBonus}`);
+  console.log(`Total projected score: ${summary.totalProjectedScore}`);
 
   if (!dryRun) {
     console.log(`Updated player storage at ${outputPath}`);
   }
+  console.timeEnd("position-bonus: total");
 }
 
 if (require.main === module) {
@@ -423,9 +595,13 @@ if (require.main === module) {
 }
 
 module.exports = {
+  applyPositionBonusResults,
   applyPositionBonusToPlayer,
+  applyPositionBonusToPlayers,
   buildBrefLookup,
   calculatePositionBonus,
+  calculatePositionMultiplier,
+  calculateProjectedScore,
   multiplierForLegacyPoints,
   normalizePosition,
   resolveAssignedSlotPosition,

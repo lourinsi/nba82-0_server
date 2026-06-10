@@ -13,9 +13,6 @@ const ACCOLADE_WEIGHTS = {
   rebound_titles: 1.5,
   steal_titles: 1,
   block_titles: 1,
-  // olympic_gold_medals: 3,
-  // olympic_silver_medals: 1,
-  // olympic_bronze_medals: 0.5,
   // no more olympics point value
   roy_won: 1.5,
   all_rookie_1st: 0.75,
@@ -26,6 +23,7 @@ const ACCOLADE_WEIGHTS = {
   most_improved: 1,
   seasons_played: 0.25,
 };
+const ACCOLADE_WEIGHT_ENTRIES = Object.entries(ACCOLADE_WEIGHTS);
 
 function numericAccoladeValue(value) {
   if (typeof value === "boolean") {
@@ -37,10 +35,11 @@ function numericAccoladeValue(value) {
 }
 
 function calculateLegacyPoints(accolades = {}) {
-  const total = Object.entries(ACCOLADE_WEIGHTS).reduce(
-    (sum, [key, weight]) => sum + numericAccoladeValue(accolades[key]) * weight,
-    0,
-  );
+  let total = 0;
+
+  for (const [key, weight] of ACCOLADE_WEIGHT_ENTRIES) {
+    total += numericAccoladeValue(accolades[key]) * weight;
+  }
 
   return Number(total.toFixed(2));
 }

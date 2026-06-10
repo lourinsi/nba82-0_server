@@ -136,13 +136,6 @@ function createGoatRankingLookup(rankings) {
   return lookup;
 }
 
-function finalLegacyPoints(player, goatScore = 0) {
-  const baseLegacyPoints = Number(player.legacy_points || 0);
-  const score = Number(goatScore || 0);
-
-  return Number((baseLegacyPoints + score).toFixed(2));
-}
-
 function applyGoatRankingsToPlayers(players, rankings = []) {
   const rankingLookup = createGoatRankingLookup(rankings);
 
@@ -152,9 +145,8 @@ function applyGoatRankingsToPlayers(players, rankings = []) {
 
     return {
       ...player,
-      goat_rank: ranking?.rank || 0,
+      goat_rank: ranking?.rank ?? null,
       goat_score: goatScore,
-      final_legacy_points: finalLegacyPoints(player, goatScore),
     };
   });
 }
@@ -169,7 +161,6 @@ module.exports = {
   GOAT_RANKING_SOURCE_URL,
   applyGoatRankingsToPlayers,
   countMatchedGoatRankings,
-  finalLegacyPoints,
   fetchBleacherReportGoatRankings,
   loadCachedGoatRankings,
   mediaScoreForRank,

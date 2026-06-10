@@ -58,10 +58,58 @@ function hasAwardRow(rows, candidate) {
   return rows.some((row) => awardRowKey(row) === key);
 }
 
-function derivedStatTitleRows(player, statTitleCache = null) {
+function buildStatTitleWinnerLookup(statTitleCache = null) {
+  const rowsByPlayerId = new Map();
+
+  if (!statTitleCache?.winners) {
+    return rowsByPlayerId;
+  }
+
+  for (const [season, categories] of Object.entries(statTitleCache.winners)) {
+    for (const [category, winners] of Object.entries(categories || {})) {
+      const accoladeKey = STAT_TITLE_CATEGORY_TO_ACCOLADE[category];
+      const description = accoladeKey ? STAT_TITLE_DESCRIPTIONS[accoladeKey] : null;
+
+      if (!description || !Array.isArray(winners)) {
+        continue;
+      }
+
+      for (const winner of winners) {
+        const playerId = Number(winner.player_id || 0);
+
+        if (!playerId) {
+          continue;
+        }
+
+        if (!rowsByPlayerId.has(playerId)) {
+          rowsByPlayerId.set(playerId, []);
+        }
+
+        rowsByPlayerId.get(playerId).push({
+          season,
+          team: winner.team || null,
+          description,
+          all_nba_team_number: null,
+        });
+      }
+    }
+  }
+
+  return rowsByPlayerId;
+}
+
+function derivedStatTitleRows(player, statTitleCache = null, statTitleRowsByPlayerId = null) {
   const nbaStatsId = Number(player.nba_stats_id || 0);
 
-  if (!nbaStatsId || !statTitleCache?.winners) {
+  if (!nbaStatsId) {
+    return [];
+  }
+
+  if (statTitleRowsByPlayerId) {
+    return statTitleRowsByPlayerId.get(nbaStatsId) || [];
+  }
+
+  if (!statTitleCache?.winners) {
     return [];
   }
 
@@ -141,7 +189,11 @@ function recalculateAccolades(player, awardRows) {
 
 function normalizePlayerAccoladeRecord(player, options = {}) {
   const baseAwardRows = uniqueAwardRows(player.awards_raw || []);
-  const statTitleRows = derivedStatTitleRows(player, options.statTitleCache).filter(
+  const statTitleRows = derivedStatTitleRows(
+    player,
+    options.statTitleCache,
+    options.statTitleRowsByPlayerId,
+  ).filter(
     (row) => !hasAwardRow(baseAwardRows, row),
   );
   const awardsRaw = uniqueAwardRows([...baseAwardRows, ...statTitleRows]);
@@ -153,17 +205,30 @@ function normalizePlayerAccoladeRecord(player, options = {}) {
 
   delete normalized.goat_rank;
   delete normalized.goat_score;
+  delete normalized.goat_ranking;
+  delete normalized.goat_ranking_score;
   delete normalized.media_score;
   delete normalized.final_legacy_points;
+  delete normalized.position_bonus;
+  delete normalized.final_score;
 
   return normalized;
 }
 
 function normalizePlayerAccoladeRecords(players, options = {}) {
-  return players.map((player) => normalizePlayerAccoladeRecord(player, options));
+  const statTitleRowsByPlayerId =
+    options.statTitleRowsByPlayerId || buildStatTitleWinnerLookup(options.statTitleCache);
+
+  return players.map((player) =>
+    normalizePlayerAccoladeRecord(player, {
+      ...options,
+      statTitleRowsByPlayerId,
+    }),
+  );
 }
 
 module.exports = {
+  buildStatTitleWinnerLookup,
   derivedStatTitleRows,
   normalizePlayerAccoladeRecord,
   normalizePlayerAccoladeRecords,

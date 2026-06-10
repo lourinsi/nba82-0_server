@@ -1,16 +1,14 @@
 const axios = require("axios");
 const fs = require("fs/promises");
 const path = require("path");
+const readline = require("readline/promises");
 const {
-  applyClassicPointsToPlayers,
   isNbaFinalsMvpDescription,
   isOfficialMvpVotingDescription,
   STAT_TITLE_DESCRIPTIONS,
 } = require("./classicPoints");
-const { applyLegacyPoints } = require("./legacyPoints");
-const { normalizePlayerAccoladeRecords } = require("./playerAccoladeRecords");
 const { decadeLabelFromYear, eraSortValue, seasonEra } = require("./seasonEras");
-const { normalizePlayerTeams } = require("./teamFranchises");
+const { applyLegacyScoringPipeline } = require("./seed-legacy-points");
 require("dotenv").config();
 
 const NBA_STATS_AWARDS_URL = "https://stats.nba.com/stats/playerawards";
@@ -19,6 +17,8 @@ const NBA_STATS_PLAYER_DIRECTORY_URL = "https://stats.nba.com/stats/commonallpla
 const NBA_STATS_PLAYER_INFO_URL = "https://stats.nba.com/stats/commonplayerinfo";
 const NBA_STATS_LEAGUE_LEADERS_URL = "https://stats.nba.com/stats/leagueleaders";
 const OUTPUT_PATH = path.join(__dirname, "data", "players_accolades.json");
+const BREF_POSITIONS_PATH = path.join(__dirname, "data", "bref_positions.json");
+const CAREER_STATS_CACHE_PATH = path.join(__dirname, "data", "nba_stats_career_stats_cache.json");
 const MANUAL_ID_MAP_PATH = path.join(__dirname, "data", "nba_stats_id_map.json");
 const NBA_PLAYER_DIRECTORY_CACHE_PATH = path.join(__dirname, "data", "nba_stats_player_directory.json");
 const STAT_TITLE_CACHE_PATH = path.join(__dirname, "data", "stat_title_winners.json");
@@ -130,6 +130,38 @@ function positiveInteger(value, fallback = 0) {
   const numeric = Number(value);
 
   return Number.isFinite(numeric) && numeric > 0 ? Math.floor(numeric) : fallback;
+}
+
+async function confirmOutputReplacement({ args, existingCount, outputCount, seedMode }) {
+  if (!existingCount) {
+    return true;
+  }
+
+  if (flagEnabled(args.yes) || flagEnabled(args.confirmReplace) || flagEnabled(process.env.SEED_CONFIRM_REPLACE)) {
+    return true;
+  }
+
+  const warning =
+    `This ${seedMode} seed will replace ${existingCount} existing player records with ${outputCount} refreshed records. ` +
+    "Any players not included in this run will be removed from players_accolades.json.";
+
+  if (!process.stdin.isTTY || !process.stdout.isTTY) {
+    throw new Error(
+      `${warning} Drop --replace to preserve existing records, or use --replace --yes to confirm replacement.`,
+    );
+  }
+
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  try {
+    const answer = await rl.question(`${warning}\nType yes to continue: `);
+    return answer.trim().toLowerCase() === "yes";
+  } finally {
+    rl.close();
+  }
 }
 
 function retryAfterMs(headers, fallbackMs) {
@@ -377,23 +409,52 @@ function positionOverrideForPlayer(player, nbaStatsId) {
   return null;
 }
 
-function loadIdMap(idMapPath) {
-  if (!idMapPath) {
-    return {};
-  }
-
-  return fs
-    .readFile(path.resolve(__dirname, idMapPath), "utf8")
-    .then(JSON.parse)
-    .catch(() => ({}));
-}
-
 async function readJsonIfExists(filePath) {
   try {
     return JSON.parse(await fs.readFile(filePath, "utf8"));
   } catch {
     return null;
   }
+}
+
+async function writeJsonAtomically(filePath, data) {
+  const directory = path.dirname(filePath);
+  const tempPath = path.join(
+    directory,
+    `.${path.basename(filePath)}.${process.pid}.${Date.now()}.tmp`,
+  );
+
+  await fs.mkdir(directory, { recursive: true });
+  await fs.writeFile(tempPath, `${JSON.stringify(data, null, 2)}\n`, "utf8");
+  await fs.rename(tempPath, filePath);
+}
+
+async function loadSeedInputs(idMapPath) {
+  const resolvedIdMapPath = path.resolve(__dirname, idMapPath || MANUAL_ID_MAP_PATH);
+  const [
+    rawExistingPlayers,
+    brefPositions,
+    careerStatsCache,
+    idMap,
+    statTitleCache,
+    playerDirectoryCache,
+  ] = await Promise.all([
+    readJsonIfExists(OUTPUT_PATH),
+    readJsonIfExists(BREF_POSITIONS_PATH),
+    readJsonIfExists(CAREER_STATS_CACHE_PATH),
+    readJsonIfExists(resolvedIdMapPath),
+    readJsonIfExists(STAT_TITLE_CACHE_PATH),
+    readJsonIfExists(NBA_PLAYER_DIRECTORY_CACHE_PATH),
+  ]);
+
+  return {
+    brefPositions: brefPositions || {},
+    careerStatsCache: careerStatsCache?.players ? careerStatsCache : { fetched_at: null, players: {} },
+    idMap: idMap || {},
+    playerDirectoryCache,
+    rawExistingPlayers: Array.isArray(rawExistingPlayers) ? rawExistingPlayers : [],
+    statTitleCache: statTitleCache?.winners ? statTitleCache : { fetched_at: null, winners: {} },
+  };
 }
 
 function sliceWindow(values, offset, limit) {
@@ -420,6 +481,7 @@ function parseNbaPlayerDirectory(resultSet) {
   const mapRow = buildHeaderMapper(headers);
   const players = [];
   const byName = new Map();
+  const byNbaStatsId = new Map();
 
   for (const rawRow of rows) {
     const row = mapRow(rawRow);
@@ -441,10 +503,14 @@ function parseNbaPlayerDirectory(resultSet) {
     const key = normalizeName(displayName);
 
     players.push(entry);
-    byName.set(key, [...(byName.get(key) || []), entry]);
+    byNbaStatsId.set(personId, entry);
+    if (!byName.has(key)) {
+      byName.set(key, []);
+    }
+    byName.get(key).push(entry);
   }
 
-  return { players, byName };
+  return { players, byName, byNbaStatsId };
 }
 
 function parseNbaPlayerInfo(resultSet) {
@@ -471,23 +537,20 @@ function parseNbaPlayerInfo(resultSet) {
   };
 }
 
-async function fetchNbaPlayerDirectory({ season, retries, delayMs, timeoutMs, refresh }) {
-  if (!refresh) {
-    const cached = await readJsonIfExists(NBA_PLAYER_DIRECTORY_CACHE_PATH);
-    if (cached?.players?.length) {
-      console.log(`Loaded ${cached.players.length} NBA Stats player directory rows from cache.`);
-      return parseNbaPlayerDirectory({
-        headers: ["PERSON_ID", "DISPLAY_FIRST_LAST", "FROM_YEAR", "TO_YEAR", "TEAM_ABBREVIATION", "ROSTERSTATUS"],
-        rowSet: cached.players.map((player) => [
-          player.person_id,
-          player.display_name,
-          player.from_year,
-          player.to_year,
-          player.team_abbreviation,
-          player.roster_status,
-        ]),
-      });
-    }
+async function fetchNbaPlayerDirectory({ season, retries, delayMs, timeoutMs, refresh, cachedDirectory }) {
+  if (!refresh && cachedDirectory?.players?.length) {
+    console.log(`Loaded ${cachedDirectory.players.length} NBA Stats player directory rows from cache.`);
+    return parseNbaPlayerDirectory({
+      headers: ["PERSON_ID", "DISPLAY_FIRST_LAST", "FROM_YEAR", "TO_YEAR", "TEAM_ABBREVIATION", "ROSTERSTATUS"],
+      rowSet: cachedDirectory.players.map((player) => [
+        player.person_id,
+        player.display_name,
+        player.from_year,
+        player.to_year,
+        player.team_abbreviation,
+        player.roster_status,
+      ]),
+    });
   }
 
   const response = await getWithRetry({
@@ -508,11 +571,11 @@ async function fetchNbaPlayerDirectory({ season, retries, delayMs, timeoutMs, re
   });
   const parsed = parseNbaPlayerDirectory(resultSetFromResponse(response.data, "CommonAllPlayers"));
 
-  await fs.mkdir(path.dirname(NBA_PLAYER_DIRECTORY_CACHE_PATH), { recursive: true });
-  await fs.writeFile(
-    NBA_PLAYER_DIRECTORY_CACHE_PATH,
-    `${JSON.stringify({ fetched_at: new Date().toISOString(), season, players: parsed.players }, null, 2)}\n`,
-  );
+  await writeJsonAtomically(NBA_PLAYER_DIRECTORY_CACHE_PATH, {
+    fetched_at: new Date().toISOString(),
+    season,
+    players: parsed.players,
+  });
   console.log(`Fetched ${parsed.players.length} NBA Stats player directory rows.`);
 
   return parsed;
@@ -663,18 +726,11 @@ async function fetchNbaPlayerInfo(playerId, { retries, delayMs, timeoutMs }) {
   return parseNbaPlayerInfo(resultSetFromResponse(response.data, "CommonPlayerInfo"));
 }
 
-async function loadStatTitleCache() {
-  const cached = await readJsonIfExists(STAT_TITLE_CACHE_PATH);
-
-  return cached?.winners ? cached : { fetched_at: null, winners: {} };
-}
-
 async function saveStatTitleCache(cache) {
-  await fs.mkdir(path.dirname(STAT_TITLE_CACHE_PATH), { recursive: true });
-  await fs.writeFile(
-    STAT_TITLE_CACHE_PATH,
-    `${JSON.stringify({ ...cache, fetched_at: new Date().toISOString() }, null, 2)}\n`,
-  );
+  await writeJsonAtomically(STAT_TITLE_CACHE_PATH, {
+    ...cache,
+    fetched_at: new Date().toISOString(),
+  });
 }
 
 async function fetchStatTitleWinners(season, category, { retries, delayMs, timeoutMs }) {
@@ -952,6 +1008,47 @@ function parseCareerStats(resultSet) {
   };
 }
 
+function careerStatsFromCachedSeasons(cachedSeasons = []) {
+  const seasons = new Set();
+  const teams = new Set();
+  const careerSeasons = [];
+  const teamEras = [];
+
+  for (const seasonRow of cachedSeasons) {
+    const season = seasonRow?.season ? String(seasonRow.season) : null;
+    const team = seasonRow?.team ? String(seasonRow.team) : null;
+    const era = seasonRow?.era || seasonEra(season);
+
+    if (!season || !team || team === "TOT" || !era) {
+      continue;
+    }
+
+    seasons.add(season);
+    teams.add(team);
+    careerSeasons.push({
+      ...seasonRow,
+      season,
+      team,
+      era,
+    });
+    teamEras.push({ team, era });
+  }
+
+  return {
+    seasonsPlayed: seasons.size,
+    teams: Array.from(teams).sort(),
+    eras: uniqueSortedBy(Array.from(new Set(careerSeasons.map((season) => season.era))), eraSortValue),
+    careerSeasons: uniqueObjects(careerSeasons, (season) => `${season.season}:${season.team}`),
+    teamEras: uniqueObjects(teamEras, (teamEra) => `${teamEra.team}:${teamEra.era}`).sort((a, b) =>
+      `${a.team}:${a.era}`.localeCompare(`${b.team}:${b.era}`),
+    ),
+  };
+}
+
+function cachedCareerEntryLooksValid(entry) {
+  return Array.isArray(entry?.seasons);
+}
+
 function uniqueSortedBy(values, sortValue) {
   return values.sort((a, b) => sortValue(a) - sortValue(b));
 }
@@ -1056,14 +1153,29 @@ function filterResumePlayers(players, existingPlayers) {
   return { pending, skipped };
 }
 
-async function writePlayersOutput(players, statTitleCache = null) {
-  const normalizedPlayers = normalizePlayerAccoladeRecords(players, { statTitleCache }).map(normalizePlayerTeams);
-  const outputPlayers = applyClassicPointsToPlayers(applyLegacyPoints(normalizedPlayers));
+function timedStep(label, callback) {
+  console.time(label);
 
-  await fs.mkdir(path.dirname(OUTPUT_PATH), { recursive: true });
-  await fs.writeFile(OUTPUT_PATH, `${JSON.stringify(outputPlayers, null, 2)}\n`);
+  try {
+    return callback();
+  } finally {
+    console.timeEnd(label);
+  }
+}
 
-  return outputPlayers;
+function buildPlayersOutput(players, { brefPositions, statTitleCache }, labelPrefix = "seed: pipeline") {
+  return timedStep(`${labelPrefix}: legacy/classic`, () =>
+    applyLegacyScoringPipeline(players, {
+      brefPositions,
+      statTitleCache,
+    }),
+  );
+}
+
+async function writePlayersOutput(players) {
+  await writeJsonAtomically(OUTPUT_PATH, players);
+
+  return players;
 }
 
 function mergeUpdatedPlayers(existingPlayers, updatedPlayers) {
@@ -1160,7 +1272,7 @@ function directoryEntryForNbaStatsId(nbaStatsId, playerDirectory) {
     return null;
   }
 
-  return playerDirectory.players.find((player) => player.person_id === Number(nbaStatsId)) || null;
+  return playerDirectory.byNbaStatsId?.get(Number(nbaStatsId)) || null;
 }
 
 function recordLooksActive(record, playerDirectory) {
@@ -1294,6 +1406,8 @@ async function refreshSeedPlayer({
   idMap,
   playerDirectory,
   statTitleCache,
+  careerStatsCache,
+  hydratePlayerInfo,
   nbaRetries,
   nbaDelayMs,
   nbaTimeoutMs,
@@ -1305,18 +1419,25 @@ async function refreshSeedPlayer({
   let career = parseCareerStats({ headers: [], rowSet: [] });
   let playerInfo = null;
   let awardRowCount = 0;
+  let careerSource = "empty";
 
   if (!nbaStatsId) {
     console.warn(`[${index + 1}/${total}] ${label}: NBA Stats ID not found; skipping awards/career (${resolution.source}).`);
   } else {
-    try {
-      playerInfo = await fetchNbaPlayerInfo(nbaStatsId, {
-        retries: nbaRetries,
-        delayMs: nbaDelayMs,
-        timeoutMs: nbaTimeoutMs,
-      });
-      await sleep(nbaDelayMs);
+    if (hydratePlayerInfo) {
+      try {
+        playerInfo = await fetchNbaPlayerInfo(nbaStatsId, {
+          retries: nbaRetries,
+          delayMs: nbaDelayMs,
+          timeoutMs: nbaTimeoutMs,
+        });
+        await sleep(nbaDelayMs);
+      } catch (error) {
+        console.warn(`[${index + 1}/${total}] ${label}: player info fetch failed (${safeErrorMessage(error)})`);
+      }
+    }
 
+    try {
       const resultSet = await fetchNbaAwards(nbaStatsId, {
         retries: nbaRetries,
         delayMs: nbaDelayMs,
@@ -1347,16 +1468,32 @@ async function refreshSeedPlayer({
       };
     }
 
-    try {
-      await sleep(nbaDelayMs);
-      const careerSet = await fetchNbaCareerStats(nbaStatsId, {
-        retries: nbaRetries,
-        delayMs: nbaDelayMs,
-        timeoutMs: nbaTimeoutMs,
-      });
-      career = parseCareerStats(careerSet);
-    } catch (error) {
-      console.warn(`[${index + 1}/${total}] ${label}: career fetch failed (${safeErrorMessage(error)})`);
+    const careerCacheKey = String(nbaStatsId);
+    const cachedCareerEntry = careerStatsCache?.players?.[careerCacheKey];
+
+    if (cachedCareerEntryLooksValid(cachedCareerEntry)) {
+      career = careerStatsFromCachedSeasons(cachedCareerEntry.seasons);
+      careerSource = "cache";
+    } else {
+      try {
+        await sleep(nbaDelayMs);
+        const careerSet = await fetchNbaCareerStats(nbaStatsId, {
+          retries: nbaRetries,
+          delayMs: nbaDelayMs,
+          timeoutMs: nbaTimeoutMs,
+        });
+        career = parseCareerStats(careerSet);
+        careerSource = "fetched";
+
+        if (careerStatsCache?.players) {
+          careerStatsCache.players[careerCacheKey] = {
+            fetched_at: new Date().toISOString(),
+            seasons: career.careerSeasons,
+          };
+        }
+      } catch (error) {
+        console.warn(`[${index + 1}/${total}] ${label}: career fetch failed (${safeErrorMessage(error)})`);
+      }
     }
 
     try {
@@ -1373,23 +1510,21 @@ async function refreshSeedPlayer({
   const hydratedPlayer = playerInfo ? player : applyDirectoryRosterStatus(player, nbaStatsId, playerDirectory);
   const aggregated = aggregatePlayer(hydratedPlayer, awards, career, nbaStatsId);
   console.log(
-    `[${index + 1}/${total}] ${label}: ${awardRowCount} award rows, ${career.careerSeasons.length} team seasons${nbaStatsId ? `, NBA ID ${nbaStatsId} (${resolution.source})` : ""}`,
+    `[${index + 1}/${total}] ${label}: ${awardRowCount} award rows, ${career.careerSeasons.length} team seasons${careerSource !== "empty" ? ` (${careerSource})` : ""}${nbaStatsId ? `, NBA ID ${nbaStatsId} (${resolution.source})` : ""}`,
   );
 
   return { aggregated, nbaStatsId };
 }
 
 async function main() {
+  console.time("seed: total");
   const args = parseArgs(process.argv);
   const limit = args.limit ? Number(args.limit) : undefined;
   const offset = positiveInteger(args.offset || process.env.SEED_OFFSET, 0);
   const resume = flagEnabled(args.resume) || flagEnabled(process.env.SEED_RESUME);
   const replace = flagEnabled(args.replace);
-  const mergeOutput = !replace && (resume || flagEnabled(args.merge) || Boolean(limit) || offset > 0);
-  const saveEvery = positiveInteger(args.saveEvery || process.env.SEED_SAVE_EVERY, mergeOutput ? 10 : 0);
-  const rawExistingPlayers = (await readJsonIfExists(OUTPUT_PATH)) || [];
+  const saveEvery = positiveInteger(args.saveEvery || process.env.SEED_SAVE_EVERY, 0);
   const requestedMode = String(args.mode || process.env.SEED_MODE || "smart").toLowerCase();
-  const seedMode = requestedMode === "smart" ? (rawExistingPlayers.length ? "active" : "full") : requestedMode;
   const nbaDelayMs = Number(args.delayMs || process.env.NBA_STATS_DELAY_MS || 2000);
   const nbaRetries = Number(args.retries || process.env.NBA_STATS_MAX_RETRIES || 5);
   const nbaTimeoutMs = Number(args.timeoutMs || process.env.NBA_STATS_TIMEOUT_MS || 30000);
@@ -1397,27 +1532,51 @@ async function main() {
   const refreshNbaDirectory =
     flagEnabled(args.refreshNbaDirectory) || flagEnabled(process.env.NBA_STATS_REFRESH_PLAYER_DIRECTORY);
   const idMapPath = process.env.NBA_STATS_ID_MAP_PATH || "./data/nba_stats_id_map.json";
-  const idMap = await loadIdMap(idMapPath);
-  const statTitleCache = await loadStatTitleCache();
+
+  console.time("seed: load inputs");
+  const {
+    brefPositions,
+    careerStatsCache,
+    idMap,
+    playerDirectoryCache,
+    rawExistingPlayers,
+    statTitleCache,
+  } = await loadSeedInputs(idMapPath);
+  console.timeEnd("seed: load inputs");
+
+  const seedMode = requestedMode === "smart" ? (rawExistingPlayers.length ? "active" : "full") : requestedMode;
+  const hydratePlayerInfo =
+    args.hydratePlayerInfo === undefined && process.env.SEED_HYDRATE_PLAYER_INFO === undefined
+      ? false
+      : flagEnabled(args.hydratePlayerInfo || process.env.SEED_HYDRATE_PLAYER_INFO);
 
   if (!["active", "full"].includes(seedMode)) {
     throw new Error(`Unsupported SEED_MODE "${seedMode}". Use smart, active, or full.`);
   }
 
+  const mergeOutput = !replace;
+
+  console.time("seed: player directory");
   const playerDirectory = await fetchNbaPlayerDirectory({
     season: nbaDirectorySeason,
     retries: nbaRetries,
     delayMs: nbaDelayMs,
     timeoutMs: nbaTimeoutMs,
     refresh: refreshNbaDirectory,
+    cachedDirectory: playerDirectoryCache,
   }).catch((error) => {
     console.warn(`NBA Stats player directory unavailable (${safeErrorMessage(error)}). Manual ID map only.`);
-    return { players: [], byName: new Map() };
+    return { players: [], byName: new Map(), byNbaStatsId: new Map() };
   });
+  console.timeEnd("seed: player directory");
+
+  console.time("seed: normalize existing roster");
   const existingPlayers = normalizeExistingRosterStatus(rawExistingPlayers, playerDirectory);
+  console.timeEnd("seed: normalize existing roster");
 
   let players;
 
+  console.time("seed: build seed players");
   if (seedMode === "full") {
     players = sliceWindow(playerDirectory.players, offset, limit).map(directoryEntryToPlayer);
     console.log(
@@ -1438,6 +1597,7 @@ async function main() {
       `Seed mode: active. Fetched ${players.length} active players${existingPlayers.length ? ` with ${existingPlayers.length} existing records available for metadata fallback` : ""}.`,
     );
   }
+  console.timeEnd("seed: build seed players");
 
   if (resume) {
     const resumeFilter = filterResumePlayers(players, existingPlayers);
@@ -1447,12 +1607,28 @@ async function main() {
 
   if (limit || offset || resume || mergeOutput) {
     console.log(
-      `Batch settings: limit=${limit || "none"}, offset=${offset}, resume=${resume ? "on" : "off"}, output=${mergeOutput ? "merge" : "replace"}, saveEvery=${saveEvery || "final-only"}.`,
+      `Batch settings: limit=${limit || "none"}, offset=${offset}, resume=${resume ? "on" : "off"}, output=${mergeOutput ? "merge" : "replace"}, saveEvery=${saveEvery || "final-only"}, hydratePlayerInfo=${hydratePlayerInfo ? "on" : "off"}.`,
     );
   }
 
-  let outputPlayers = mergeOutput ? existingPlayers : [];
+  if (!mergeOutput) {
+    const confirmed = await confirmOutputReplacement({
+      args,
+      existingCount: existingPlayers.length,
+      outputCount: players.length,
+      seedMode,
+    });
 
+    if (!confirmed) {
+      console.log("Seed canceled. Drop --replace to preserve existing records.");
+      process.exitCode = 1;
+      return;
+    }
+  }
+
+  const updatedPlayers = [];
+
+  console.time("seed: refresh players");
   for (const [index, player] of players.entries()) {
     const { aggregated: playerRecord, nbaStatsId } = await refreshSeedPlayer({
       player,
@@ -1461,25 +1637,60 @@ async function main() {
       idMap,
       playerDirectory,
       statTitleCache,
+      careerStatsCache,
+      hydratePlayerInfo,
       nbaRetries,
       nbaDelayMs,
       nbaTimeoutMs,
     });
 
-    outputPlayers = mergeOutput ? mergeUpdatedPlayers(outputPlayers, [playerRecord]) : [...outputPlayers, playerRecord];
+    updatedPlayers.push(playerRecord);
 
     if (saveEvery && (index + 1) % saveEvery === 0) {
-      await writePlayersOutput(outputPlayers, statTitleCache);
-      console.log(`Checkpoint saved ${outputPlayers.length} players to ${OUTPUT_PATH}.`);
+      const checkpointBasePlayers = mergeOutput
+        ? mergeUpdatedPlayers(existingPlayers, updatedPlayers)
+        : updatedPlayers;
+      const checkpointPlayers = buildPlayersOutput(
+        checkpointBasePlayers,
+        { brefPositions, statTitleCache },
+        `seed: checkpoint ${index + 1}`,
+      );
+
+      console.time(`seed: checkpoint ${index + 1}: write`);
+      await writePlayersOutput(checkpointPlayers);
+      await writeJsonAtomically(CAREER_STATS_CACHE_PATH, {
+        ...careerStatsCache,
+        fetched_at: new Date().toISOString(),
+      });
+      console.timeEnd(`seed: checkpoint ${index + 1}: write`);
+      console.log(`Checkpoint saved ${checkpointPlayers.length} players to ${OUTPUT_PATH}.`);
     }
 
     if (nbaStatsId && index < players.length - 1) {
       await sleep(nbaDelayMs);
     }
   }
+  console.timeEnd("seed: refresh players");
 
-  outputPlayers = await writePlayersOutput(outputPlayers, statTitleCache);
+  const baseOutputPlayers = mergeOutput
+    ? mergeUpdatedPlayers(existingPlayers, updatedPlayers)
+    : updatedPlayers;
+  const outputPlayers = buildPlayersOutput(baseOutputPlayers, { brefPositions, statTitleCache }, "seed: final pipeline");
+
+  console.time("seed: write output");
+  await writePlayersOutput(outputPlayers);
+  console.timeEnd("seed: write output");
+
+  console.time("seed: save stat title cache");
   await saveStatTitleCache(statTitleCache);
+  console.timeEnd("seed: save stat title cache");
+
+  console.time("seed: save career cache");
+  await writeJsonAtomically(CAREER_STATS_CACHE_PATH, {
+    ...careerStatsCache,
+    fetched_at: new Date().toISOString(),
+  });
+  console.timeEnd("seed: save career cache");
 
   console.log(
     `Wrote ${outputPlayers.length} players to ${OUTPUT_PATH}`,
@@ -1487,6 +1698,7 @@ async function main() {
   console.log(
     "Unmatched/ambiguous players can be fixed with NBA_STATS_ID_MAP_PATH manual overrides.",
   );
+  console.timeEnd("seed: total");
 }
 
 main().catch((error) => {
