@@ -25,6 +25,11 @@ PORT=4000
 FRONTEND_ORIGIN=http://localhost:3000,http://127.0.0.1:3000
 ```
 
+In development, the API also accepts browser requests from localhost on any port.
+This covers Next.js falling back to ports such as `3001` or `3002` when `3000`
+is already in use. In production, use `FRONTEND_ORIGIN` for the explicit
+allowed origin list.
+
 Do not commit `.env`.
 
 ## Run The API

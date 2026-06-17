@@ -12,15 +12,36 @@ const app = express();
 const PORT = Number(process.env.PORT || 4000);
 const DATA_PATH = path.join(__dirname, "data", "players_accolades.json");
 const DEFAULT_FRONTEND_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"];
+const LOCAL_DEV_HOSTNAMES = new Set(["localhost", "127.0.0.1", "::1", "[::1]"]);
 const allowedOrigins = (process.env.FRONTEND_ORIGIN || DEFAULT_FRONTEND_ORIGINS.join(","))
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
 
+function isLocalDevOrigin(origin) {
+  if (process.env.NODE_ENV === "production") {
+    return false;
+  }
+
+  try {
+    const parsedOrigin = new URL(origin);
+    return (
+      (parsedOrigin.protocol === "http:" || parsedOrigin.protocol === "https:") &&
+      LOCAL_DEV_HOSTNAMES.has(parsedOrigin.hostname)
+    );
+  } catch {
+    return false;
+  }
+}
+
+function isAllowedOrigin(origin) {
+  return allowedOrigins.includes(origin) || isLocalDevOrigin(origin);
+}
+
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || isAllowedOrigin(origin)) {
         callback(null, true);
         return;
       }
