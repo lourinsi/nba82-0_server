@@ -1,11 +1,11 @@
 const ACCOLADE_WEIGHTS = {
-  mvp_count: 9,
-  finals_mvp_count: 8,
+  mvp_count: 8,
+  finals_mvp_count: 7,
   all_nba_1st: 7,
-  all_nba_2nd: 6,
-  all_nba_3rd: 5,
-  championship_rings: 3,
-  dpoy_count: 3,
+  all_nba_2nd: 5.5,
+  all_nba_3rd: 4,
+  championship_rings: 2.5,
+  dpoy_count: 2.5,
   all_def_1st: 2,
   all_def_2nd: 1.5,
   scoring_titles: 3,
@@ -14,14 +14,14 @@ const ACCOLADE_WEIGHTS = {
   steal_titles: 1.5,
   block_titles: 1.5,
   // no more olympics point value
-  all_star_mvp_count: 2,
-  all_star_selections: 1.5,
-  "6moy": 1.5,
-  most_improved: 1.5,
-  roy_won: 1.5,
+  all_star_mvp_count: 1,
+  all_star_selections: 1,
+  "6moy": 1,
+  most_improved: 1,
+  roy_won: 1,
   all_rookie_1st: 1,
   all_rookie_2nd: 0.75,
-  seasons_played: 0.5,
+  seasons_played: 0.25,
 };
 const ACCOLADE_WEIGHT_ENTRIES = Object.entries(ACCOLADE_WEIGHTS);
 
@@ -35,13 +35,16 @@ function numericAccoladeValue(value) {
 }
 
 function calculateLegacyPoints(accolades = {}) {
-  let total = 0;
+  let basePoints = 0;
 
   for (const [key, weight] of ACCOLADE_WEIGHT_ENTRIES) {
-    total += numericAccoladeValue(accolades[key]) * weight;
+    basePoints += numericAccoladeValue(accolades[key]) * weight;
   }
 
-  return Number(total.toFixed(2));
+  const seasonsPlayed = Math.max(numericAccoladeValue(accolades.seasons_played), 1);
+  const densityBonus = (basePoints / seasonsPlayed) * 2.5;
+
+  return Number((basePoints + densityBonus).toFixed(2));
 }
 
 function applyLegacyPoints(players) {
