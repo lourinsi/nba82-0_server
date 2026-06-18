@@ -67,6 +67,8 @@ npm run seed:active:resume
 npm run seed:full
 npm run seed:full:resume
 npm run seed:stats
+npm run seed:games-started
+npm run seed:games_started
 npm run seed:bref-positions
 npm run seed:goat-rankings
 npm run seed:legacy-points
@@ -111,6 +113,12 @@ Continues a long all-time seed and skips players already saved.
 npm run seed:stats
 Refreshes active players' cached NBA Stats career seasons, appends new seasons, syncs active/current_team from the NBA Stats directory, and writes the updated player file.
 
+npm run seed:games-started
+Backfills career games started from NBA Stats career totals into `career_seasons[*].games_started` and `accolades.games_started`, then updates `legacy_points`. When NBA Stats has no `GS` value, the seeder counts that season's `GP` as starts. Explicit `GS=0` only falls back to `GP` before 1970-71.
+
+npm run seed:games_started
+Alias for npm run seed:games-started.
+
 npm run seed:bref-positions
 Overwrites stored positions and primary_position from data/bref_positions.json for matching players.
 
@@ -146,6 +154,7 @@ npm run refresh:positions:dry
 npm run refresh:positions
 npm run seed:active
 npm run seed:bref-positions
+npm run seed:games-started -- --saveEvery=25
 npm run seed:legacy-points
 npm run refresh:league-averages
 npm run seed:stats
@@ -169,22 +178,25 @@ Step-by-step:
 4. Re-enforce Basketball Reference positions with `npm run seed:bref-positions`.
    This overwrites matching players' `positions` and `primary_position` from `data/bref_positions.json` after player refreshes, so stale merged values are removed.
 
-5. Recalculate base scoring with `npm run seed:legacy-points`.
+5. Backfill games started with `npm run seed:games-started`.
+   This uses NBA Stats career totals (`GS`) and stores both per-season `games_started` and aggregate `accolades.games_started`. If a season has no `GS`, its `GP` is counted as `games_started`. Explicit `GS=0` only falls back to `GP` before 1970-71.
+
+6. Recalculate base scoring with `npm run seed:legacy-points`.
    This updates `legacy_points` from the accolades already stored locally.
 
-6. Refresh league averages with `npm run refresh:league-averages`.
+7. Refresh league averages with `npm run refresh:league-averages`.
    This builds `data/historical_league_averages.json` for the season climate baseline.
 
-7. Refresh active-player career season stats with `npm run seed:stats`.
+8. Refresh active-player career season stats with `npm run seed:stats`.
    This keeps current players' `career_seasons`, active status, and current team fresh from `data/nba_stats_player_directory.json` and `data/nba_stats_career_stats_cache.json`.
 
-8. Backfill any remaining stored career season stat gaps with `npm run backfill:season-stats -- --saveEvery=25`.
+9. Backfill any remaining stored career season stat gaps with `npm run backfill:season-stats -- --saveEvery=25`.
    This fills PPG/RPG/APG/SPG/BPG on `career_seasons` from NBA Stats career totals.
 
-9. Recalculate Classic Mode team-era points with `npm run seed:classic-points`.
+10. Recalculate Classic Mode team-era points with `npm run seed:classic-points`.
    This uses `data/historical_league_averages.json` and only overwrites each classic block's `points`.
 
-10. Refresh GOAT ranking data with `npm run seed:goat-rankings`.
+11. Refresh GOAT ranking data with `npm run seed:goat-rankings`.
    This updates the cached media ranking file used for GOAT score overlays.
 
 ## Running Scripts Safely
@@ -196,6 +208,7 @@ npm run seed
 npm run seed:active
 npm run seed:full
 npm run seed:stats
+npm run seed:games-started
 npm run seed:bref-positions
 npm run seed:legacy-points
 npm run backfill:season-stats
@@ -204,7 +217,7 @@ npm run refresh:positions
 npm run fix:positions
 ```
 
-Do not run `npm run seed:stats`, `npm run seed:bref-positions`, `npm run backfill:season-stats`, or `npm run refresh:positions` at the same time as any other command that writes `players_accolades.json`. These commands all read the full file, update their own fields in memory, and write the full file back. Whichever write finishes last can overwrite the other command's changes.
+Do not run `npm run seed:stats`, `npm run seed:games-started`, `npm run seed:bref-positions`, `npm run backfill:season-stats`, or `npm run refresh:positions` at the same time as any other command that writes `players_accolades.json`. These commands all read the full file, update their own fields in memory, and write the full file back. Whichever write finishes last can overwrite the other command's changes.
 
 This pairing is safe because the scripts write different files, though slower delays are still friendlier to the remote data sources:
 
@@ -385,7 +398,7 @@ This runs the normalized stats seeder file, `seed-stats.js`:
 node seed-stats.js --mode=active --maxCacheAgeDays=1 --force --appendMissingSeasons
 ```
 
-It reads `data/players_accolades.json`, `data/nba_stats_career_stats_cache.json`, and `data/nba_stats_player_directory.json` once, uses cached career rows when fresh, fetches only missing or stale NBA Stats career payloads, then writes the updated cache and player file at the end. In active mode it also syncs `active` and `current_team` from the player directory.
+It reads `data/players_accolades.json`, `data/nba_stats_career_stats_cache.json`, and `data/nba_stats_player_directory.json` once, uses cached career rows when fresh, fetches only missing or stale NBA Stats career payloads, then writes the updated cache and player file at the end. In active mode it also syncs `active` and `current_team` from the player directory. Refreshed career rows include `games_started` from NBA Stats `GS`.
 
 Useful examples:
 
@@ -394,6 +407,8 @@ npm run seed:stats -- --dryRun
 npm run seed:stats -- --limit=50
 npm run seed:stats -- --maxCacheAgeDays=7
 npm run seed:stats -- --refreshCache --delayMs=2000
+npm run seed:games-started -- --dryRun --limit=25
+npm run seed:games-started -- --mode=all --saveEvery=25
 npm run backfill:season-stats -- --mode=missing --saveEvery=25
 npm run backfill:season-stats -- --mode=all --maxCacheAgeDays=30 --dryRun
 ```
@@ -401,16 +416,23 @@ npm run backfill:season-stats -- --mode=all --maxCacheAgeDays=30 --dryRun
 Modes:
 
 ```text
-missing: only players with missing PPG/RPG/APG/SPG/BPG in stored career_seasons
+missing: only players with missing games started or PPG/RPG/APG/SPG/BPG in stored career_seasons
 active: current players from nba_stats_player_directory.json plus active/current_team sync
 all: every stored player with career_seasons
 ```
 
-Important: do not run `seed:stats` at the same time as `refresh:positions`, `seed`, `seed:full`, `seed:legacy-points`, `seed:classic-points`, or `backfill:season-stats`. They can update different fields, but they still rewrite the same whole `players_accolades.json` file.
+Important: do not run `seed:stats` or `seed:games-started` at the same time as `refresh:positions`, `seed`, `seed:full`, `seed:legacy-points`, `seed:classic-points`, or `backfill:season-stats`. They can update different fields, but they still rewrite the same whole `players_accolades.json` file.
 
 ## Legacy Points
 
-Each player gets a top-level `legacy_points` field calculated from stored `accolades`.
+Each player gets a top-level `legacy_points` field calculated from stored `accolades`. The base score is the sum of weighted accolades, including career `games_started` at `0.01` points per start.
+
+```text
+seasons = max(seasons_played, 1)
+uShapeModifier = (3.2 / seasons^1.35) + (0.0027 * seasons)
+densityBonus = basePoints * uShapeModifier * 4.0
+legacy_points = round(basePoints + densityBonus, 2)
+```
 
 Recalculate points without refetching APIs:
 
@@ -431,28 +453,29 @@ The weights live in `legacyPoints.js`.
 Current weighted fields:
 
 ```text
-mvp_count: 10
-finals_mvp_count: 6
-championship_rings: 2
-all_nba_1st: 6
-all_nba_2nd: 4.5
-all_nba_3rd: 3
-dpoy_count: 2
-all_def_1st: 1
-all_def_2nd: 0.75
-scoring_titles: 2
-assist_titles: 2
-rebound_titles: 1.5
-steal_titles: 1
-block_titles: 1
-roy_won: 1.5
-all_rookie_1st: 0.75
-all_rookie_2nd: 0.5
+mvp_count: 8
+finals_mvp_count: 7
+all_nba_1st: 7
+all_nba_2nd: 5.5
+all_nba_3rd: 4
+championship_rings: 2.5
+dpoy_count: 2.5
+all_def_1st: 2
+all_def_2nd: 1.5
+scoring_titles: 3
+assist_titles: 3
+rebound_titles: 2
+steal_titles: 1.5
+block_titles: 1.5
+all_star_mvp_count: 1
 all_star_selections: 1
-all_star_mvp_count: 1.5
 6moy: 1
 most_improved: 1
+roy_won: 1
+all_rookie_1st: 1
+all_rookie_2nd: 0.75
 seasons_played: 0.25
+games_started: 0.01
 ```
 
 The API overlays GOAT data from Bleacher Report's "B/R's Top 100 NBA Players of All Time, Ranked":

@@ -40,6 +40,7 @@ function createEmptyClassicAccolades() {
     rebound_titles: 0,
     steal_titles: 0,
     block_titles: 0,
+    games_started: 0,
     award_counts: {},
   };
 }
@@ -54,6 +55,11 @@ function normalizeText(value) {
 function normalizeTeamNumber(value) {
   const normalized = String(value || "").trim();
   return normalized ? Number(normalized) : null;
+}
+
+function nonNegativeInteger(value) {
+  const numeric = Number(value);
+  return Number.isFinite(numeric) && numeric > 0 ? Math.floor(numeric) : 0;
 }
 
 function isOfficialMvpDescription(description) {
@@ -228,6 +234,7 @@ function addSeasonContext(records, season) {
   const record = getOrCreateScopedRecord(records, team, era);
   const key = `${season?.season || ""}:${team}`;
   record.season_keys.add(key);
+  record.accolades.games_started += nonNegativeInteger(season?.games_started);
 }
 
 function addAwardContext(records, award) {

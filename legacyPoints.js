@@ -22,6 +22,7 @@ const ACCOLADE_WEIGHTS = {
   all_rookie_1st: 1,
   all_rookie_2nd: 0.75,
   seasons_played: 0.25,
+  games_started: 0.01,
 };
 const ACCOLADE_WEIGHT_ENTRIES = Object.entries(ACCOLADE_WEIGHTS);
 
@@ -41,8 +42,9 @@ function calculateLegacyPoints(accolades = {}) {
     basePoints += numericAccoladeValue(accolades[key]) * weight;
   }
 
-  const seasonsPlayed = Math.max(numericAccoladeValue(accolades.seasons_played), 1);
-  const densityBonus = (basePoints / seasonsPlayed) * 2.5;
+  const seasons = Math.max(numericAccoladeValue(accolades.seasons_played), 1);
+  const uShapeModifier = (3.2 / Math.pow(seasons, 1.35)) + (0.0027 * seasons);
+  const densityBonus = basePoints * uShapeModifier * 4.0;
 
   return Number((basePoints + densityBonus).toFixed(2));
 }

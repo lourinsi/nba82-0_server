@@ -16,6 +16,7 @@ const NBA_STATS_CAREER_URL = "https://stats.nba.com/stats/playercareerstats";
 const NBA_STATS_PLAYER_DIRECTORY_URL = "https://stats.nba.com/stats/commonallplayers";
 const NBA_STATS_PLAYER_INFO_URL = "https://stats.nba.com/stats/commonplayerinfo";
 const NBA_STATS_LEAGUE_LEADERS_URL = "https://stats.nba.com/stats/leagueleaders";
+const GAMES_STARTED_TRACKED_START_END_YEAR = 1971;
 const OUTPUT_PATH = path.join(__dirname, "data", "players_accolades.json");
 const BREF_POSITIONS_PATH = path.join(__dirname, "data", "bref_positions.json");
 const CAREER_STATS_CACHE_PATH = path.join(__dirname, "data", "nba_stats_career_stats_cache.json");
@@ -268,6 +269,7 @@ function createEmptyAccolades() {
     rebound_titles: 0,
     steal_titles: 0,
     block_titles: 0,
+    games_started: 0,
     award_counts: {},
   };
 }
@@ -961,6 +963,23 @@ function perGameFromTotals(row, totalKey, gamesPlayed) {
   return total / gamesPlayed;
 }
 
+function gamesStartedFromCareerRow(row, gamesPlayed, season) {
+  if (Object.prototype.hasOwnProperty.call(row, "GS")) {
+    const gamesStarted = positiveInteger(row.GS, 0);
+
+    if (gamesStarted > 0) {
+      return gamesStarted;
+    }
+
+    if (row.GS === 0 || row.GS === "0") {
+      const endYear = seasonEndYear(season);
+      return endYear && endYear >= GAMES_STARTED_TRACKED_START_END_YEAR ? 0 : gamesPlayed;
+    }
+  }
+
+  return gamesPlayed;
+}
+
 function parseCareerStats(resultSet) {
   const headers = resultSet.headers || [];
   const rows = resultSet.rowSet || [];
@@ -988,6 +1007,7 @@ function parseCareerStats(resultSet) {
       team,
       era,
       games_played: gamesPlayed,
+      games_started: gamesStartedFromCareerRow(row, gamesPlayed, season),
       ppg: perGameFromTotals(row, "PTS", gamesPlayed),
       rpg: perGameFromTotals(row, "REB", gamesPlayed),
       apg: perGameFromTotals(row, "AST", gamesPlayed),
@@ -1045,8 +1065,15 @@ function careerStatsFromCachedSeasons(cachedSeasons = []) {
   };
 }
 
+function gamesStartedFromCareerSeasons(careerSeasons = []) {
+  return careerSeasons.reduce((sum, season) => sum + positiveInteger(season?.games_started, 0), 0);
+}
+
 function cachedCareerEntryLooksValid(entry) {
-  return Array.isArray(entry?.seasons);
+  return (
+    Array.isArray(entry?.seasons) &&
+    entry.seasons.every((season) => Object.prototype.hasOwnProperty.call(season, "games_started"))
+  );
 }
 
 function uniqueSortedBy(values, sortValue) {
@@ -1073,6 +1100,7 @@ function aggregatePlayer(player, awards, career, nbaStatsId) {
   if (career.seasonsPlayed > 0) {
     awards.accolades.seasons_played = career.seasonsPlayed;
   }
+  awards.accolades.games_started = gamesStartedFromCareerSeasons(career.careerSeasons);
 
   const positions = positionOverrideForPlayer(player, nbaStatsId) || parsePositionGroup(player.position);
   const recordId = `nba-${nbaStatsId || player.nba_stats_id || String(player.id).replace("nba-", "")}`;

@@ -3,6 +3,7 @@ const cors = require("cors");
 const fs = require("fs/promises");
 const path = require("path");
 const { applyClassicPointsToPlayers } = require("./classicPoints");
+const { applyLegacyPoints } = require("./legacyPoints");
 const { applyGoatRankingsToPlayers, loadCachedGoatRankings } = require("./mediaGoatRankings");
 const { normalizePlayerAccoladeRecords } = require("./playerAccoladeRecords");
 const { normalizePlayerTeams } = require("./teamFranchises");
@@ -57,7 +58,8 @@ async function readPlayers() {
   const players = JSON.parse(raw);
   const goatRankings = await loadCachedGoatRankings();
   const normalizedPlayers = normalizePlayerAccoladeRecords(players).map(normalizePlayerTeams);
-  const classicPlayers = applyClassicPointsToPlayers(normalizedPlayers);
+  const scoredPlayers = applyLegacyPoints(normalizedPlayers);
+  const classicPlayers = applyClassicPointsToPlayers(scoredPlayers);
 
   return applyGoatRankingsToPlayers(classicPlayers, goatRankings);
 }
