@@ -4,7 +4,7 @@ const path = require("path");
 const { writeJsonAtomically } = require("./eraRelativeClassicPoints");
 const { calculateLegacyPoints } = require("./legacyPoints");
 const { seasonEndYear, seasonEra } = require("./seasonEras");
-const { normalizeTeamCode } = require("./teamFranchises");
+const { normalizeTeamCodeForSeason } = require("./teamFranchises");
 require("dotenv").config();
 
 const PLAYERS_PATH = path.join(__dirname, "data", "players_accolades.json");
@@ -169,8 +169,8 @@ function rowObjectsFromResultSet(resultSet) {
   );
 }
 
-function normalizedTeamKey(team) {
-  return normalizeTeamCode(team) || String(team || "").trim().toUpperCase() || null;
+function normalizedTeamKey(team, season) {
+  return normalizeTeamCodeForSeason(team, season) || String(team || "").trim().toUpperCase() || null;
 }
 
 function numberOrNull(value) {
@@ -217,7 +217,7 @@ function parseCareerRows(resultSet) {
   return rowObjectsFromResultSet(resultSet)
     .map((row) => {
       const season = row.SEASON_ID ? String(row.SEASON_ID) : null;
-      const team = normalizedTeamKey(row.TEAM_ABBREVIATION);
+      const team = normalizedTeamKey(row.TEAM_ABBREVIATION, season);
       const gamesPlayed = positiveInteger(row.GP, 0);
       const endYear = seasonEndYear(season);
 
@@ -302,7 +302,7 @@ function fetchReasonForCacheEntry(entry, options, now = Date.now()) {
 }
 
 function careerRowsBySeasonTeam(rows) {
-  return new Map(rows.map((row) => [`${row.season}:${normalizedTeamKey(row.team)}`, row]));
+  return new Map(rows.map((row) => [`${row.season}:${normalizedTeamKey(row.team, row.season)}`, row]));
 }
 
 function gamesStartedFromCareerRows(rows = []) {
@@ -357,7 +357,7 @@ function updatePlayerGamesStarted(player, careerRows) {
   let updatedSeasonRows = 0;
 
   const careerSeasons = (player.career_seasons || []).map((season) => {
-    const key = `${season?.season}:${normalizedTeamKey(season?.team)}`;
+    const key = `${season?.season}:${normalizedTeamKey(season?.team, season?.season)}`;
     const stats = careerByKey.get(key);
 
     if (!stats || !Object.prototype.hasOwnProperty.call(stats, "games_started")) {

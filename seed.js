@@ -9,6 +9,7 @@ const {
 } = require("./classicPoints");
 const { decadeLabelFromYear, eraSortValue, seasonEra } = require("./seasonEras");
 const { applyLegacyScoringPipeline } = require("./seed-legacy-points");
+const { normalizeTeamCodeForSeason, normalizeTeamName } = require("./teamFranchises");
 require("dotenv").config();
 
 const NBA_STATS_AWARDS_URL = "https://stats.nba.com/stats/playerawards";
@@ -866,7 +867,7 @@ function parseAwards(resultSet) {
     const rawDescription = row.DESCRIPTION || null;
     const teamNumber = normalizeTeamNumber(row.ALL_NBA_TEAM_NUMBER);
     const season = row.SEASON ? String(row.SEASON) : null;
-    const team = TEAM_NAME_TO_ABBREVIATION[row.TEAM] || null;
+    const team = normalizeTeamName(row.TEAM, season);
 
     if (rawDescription) {
       accolades.award_counts[rawDescription] = (accolades.award_counts[rawDescription] || 0) + 1;
@@ -992,7 +993,7 @@ function parseCareerStats(resultSet) {
   for (const rawRow of rows) {
     const row = mapRow(rawRow);
     const season = row.SEASON_ID ? String(row.SEASON_ID) : null;
-    const team = row.TEAM_ABBREVIATION ? String(row.TEAM_ABBREVIATION) : null;
+    const team = normalizeTeamCodeForSeason(row.TEAM_ABBREVIATION, season);
     const gamesPlayed = Number(row.GP || 0);
     const era = seasonEra(season);
 
@@ -1036,7 +1037,7 @@ function careerStatsFromCachedSeasons(cachedSeasons = []) {
 
   for (const seasonRow of cachedSeasons) {
     const season = seasonRow?.season ? String(seasonRow.season) : null;
-    const team = seasonRow?.team ? String(seasonRow.team) : null;
+    const team = normalizeTeamCodeForSeason(seasonRow?.team, season);
     const era = seasonRow?.era || seasonEra(season);
 
     if (!season || !team || team === "TOT" || !era) {
@@ -1081,7 +1082,7 @@ function uniqueSortedBy(values, sortValue) {
 }
 
 function aggregatePlayer(player, awards, career, nbaStatsId) {
-  const currentTeam = player.team?.abbreviation || null;
+  const currentTeam = normalizeTeamCodeForSeason(player.team?.abbreviation, null);
   const allTeams = new Set(career.teams.length ? career.teams : awards.teams);
   const allEras = career.eras.length ? career.eras : awards.eras;
   const teamEras = career.teamEras.length ? career.teamEras : awards.teamEras;

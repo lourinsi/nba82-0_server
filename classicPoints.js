@@ -1,5 +1,5 @@
 const { calculateLegacyPoints } = require("./legacyPoints");
-const { normalizeTeamCode, normalizeTeamName } = require("./teamFranchises");
+const { normalizeTeamCodeForSeason, normalizeTeamName } = require("./teamFranchises");
 const { decadeLabelFromYear, eraSortValue, seasonEndYear, seasonEra } = require("./seasonEras");
 
 const STAT_TITLE_DESCRIPTIONS = {
@@ -184,9 +184,9 @@ function applyAwardToAccolades(accolades, award) {
   }
 }
 
-function teamCodesFromAwardTeam(team) {
+function teamCodesFromAwardTeam(team, season) {
   const rawTeam = String(team || "").trim();
-  const direct = normalizeTeamName(rawTeam);
+  const direct = normalizeTeamName(rawTeam, season);
 
   if (direct) {
     return [direct];
@@ -196,7 +196,7 @@ function teamCodesFromAwardTeam(team) {
     new Set(
       rawTeam
         .split(/\s*-\s*/)
-        .map((part) => normalizeTeamName(part))
+        .map((part) => normalizeTeamName(part, season))
         .filter(Boolean),
     ),
   );
@@ -224,7 +224,7 @@ function getOrCreateScopedRecord(records, team, era) {
 }
 
 function addSeasonContext(records, season) {
-  const team = normalizeTeamCode(season?.team);
+  const team = normalizeTeamCodeForSeason(season?.team, season?.season);
   const era = seasonEra(season?.season) || season?.era;
 
   if (!team || !era) {
@@ -239,7 +239,7 @@ function addSeasonContext(records, season) {
 
 function addAwardContext(records, award) {
   const era = seasonEra(award?.season);
-  const teams = teamCodesFromAwardTeam(award?.team);
+  const teams = teamCodesFromAwardTeam(award?.team, award?.season);
 
   if (!era || teams.length === 0) {
     return;

@@ -2,7 +2,7 @@ const fs = require("fs/promises");
 const path = require("path");
 const { applyBrefPrimaryPositions } = require("./brefPositions");
 const { applyClassicPointsToPlayers } = require("./classicPoints");
-const { applyLegacyPoints } = require("./legacyPoints");
+const { LEGACY_ENGINE_FACTORS, applyLegacyPoints } = require("./legacyPoints");
 const {
   buildStatTitleWinnerLookup,
   normalizePlayerAccoladeRecords,
@@ -55,6 +55,7 @@ function applyLegacyScoringPipeline(players, options = {}) {
 async function main() {
   console.time("legacy-points: total");
   console.log(`Recalculating legacy points for players in ${OUTPUT_PATH}...`);
+  console.log(`Using legacy engine factors: ${JSON.stringify(LEGACY_ENGINE_FACTORS)}`);
 
   console.time("legacy-points: read");
   const [players, brefPositions, statTitleCache] = await Promise.all([

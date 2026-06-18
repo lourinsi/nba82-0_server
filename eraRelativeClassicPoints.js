@@ -1,7 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 const { seasonEra } = require("./seasonEras");
-const { normalizeTeamCode } = require("./teamFranchises");
+const { normalizeTeamCodeForEra, normalizeTeamCodeForSeason } = require("./teamFranchises");
 
 const PLAYERS_PATH = path.join(__dirname, "data", "players_accolades.json");
 const LEAGUE_AVERAGES_PATH = path.join(__dirname, "data", "historical_league_averages.json");
@@ -178,8 +178,8 @@ function metricWeightsForSeason(leagueAverage, weights = WEIGHTS) {
 }
 
 function seasonMatchesBlock(season, block) {
-  const seasonTeam = normalizeTeamCode(season?.team);
-  const blockTeam = normalizeTeamCode(block?.team);
+  const seasonTeam = normalizeTeamCodeForSeason(season?.team, season?.season);
+  const blockTeam = normalizeTeamCodeForEra(block?.team, block?.era);
   const seasonBlockEra = season?.era || seasonEra(season?.season);
 
   return Boolean(seasonTeam && blockTeam && seasonTeam === blockTeam && seasonBlockEra === block?.era);

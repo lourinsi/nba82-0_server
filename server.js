@@ -2,8 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const fs = require("fs/promises");
 const path = require("path");
-const { applyClassicPointsToPlayers } = require("./classicPoints");
-const { applyLegacyPoints } = require("./legacyPoints");
+const { ACCOLADE_WEIGHTS, LEGACY_ENGINE_FACTORS } = require("./legacyPoints");
 const { applyGoatRankingsToPlayers, loadCachedGoatRankings } = require("./mediaGoatRankings");
 const { normalizePlayerAccoladeRecords } = require("./playerAccoladeRecords");
 const { normalizePlayerTeams } = require("./teamFranchises");
@@ -58,10 +57,8 @@ async function readPlayers() {
   const players = JSON.parse(raw);
   const goatRankings = await loadCachedGoatRankings();
   const normalizedPlayers = normalizePlayerAccoladeRecords(players).map(normalizePlayerTeams);
-  const scoredPlayers = applyLegacyPoints(normalizedPlayers);
-  const classicPlayers = applyClassicPointsToPlayers(scoredPlayers);
 
-  return applyGoatRankingsToPlayers(classicPlayers, goatRankings);
+  return applyGoatRankingsToPlayers(normalizedPlayers, goatRankings);
 }
 
 app.get("/api/health", (_req, res) => {
@@ -76,6 +73,14 @@ app.get("/api/players", async (_req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+app.get("/api/legacy-engine-config", (_req, res) => {
+  res.set("Cache-Control", "no-store");
+  res.json({
+    accoladeWeights: ACCOLADE_WEIGHTS,
+    legacyEngineFactors: LEGACY_ENGINE_FACTORS,
+  });
 });
 
 app.use((error, _req, res, _next) => {

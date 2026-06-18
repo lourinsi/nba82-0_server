@@ -2,7 +2,7 @@ const axios = require("axios");
 const fs = require("fs/promises");
 const path = require("path");
 const { seasonEndYear, seasonEra } = require("./seasonEras");
-const { normalizeTeamCode } = require("./teamFranchises");
+const { normalizeTeamCodeForSeason } = require("./teamFranchises");
 const { writeJsonAtomically } = require("./eraRelativeClassicPoints");
 const { calculateLegacyPoints } = require("./legacyPoints");
 require("dotenv").config();
@@ -173,8 +173,8 @@ function rowObjectsFromResultSet(resultSet) {
   );
 }
 
-function normalizedTeamKey(team) {
-  return normalizeTeamCode(team) || String(team || "").trim().toUpperCase() || null;
+function normalizedTeamKey(team, season) {
+  return normalizeTeamCodeForSeason(team, season) || String(team || "").trim().toUpperCase() || null;
 }
 
 function numberOrNull(value) {
@@ -217,7 +217,7 @@ function parseCareerRows(resultSet) {
   return rowObjectsFromResultSet(resultSet)
     .map((row) => {
       const season = row.SEASON_ID ? String(row.SEASON_ID) : null;
-      const team = normalizedTeamKey(row.TEAM_ABBREVIATION);
+      const team = normalizedTeamKey(row.TEAM_ABBREVIATION, season);
       const gamesPlayed = positiveInteger(row.GP, 0);
       const endYear = seasonEndYear(season);
 
@@ -248,7 +248,7 @@ function parseCareerRows(resultSet) {
 
 function normalizeCareerRow(row) {
   const season = row?.season ? String(row.season) : null;
-  const team = normalizedTeamKey(row?.team);
+  const team = normalizedTeamKey(row?.team, season);
 
   return {
     ...row,
@@ -364,7 +364,7 @@ function updatePlayerCareerSeasons(player, careerRows, options = {}) {
   let updatedSeasons = 0;
 
   const careerSeasons = (player.career_seasons || []).map((season) => {
-    const team = normalizedTeamKey(season?.team);
+    const team = normalizedTeamKey(season?.team, season?.season);
     const key = `${season?.season}:${team}`;
     existingKeys.add(key);
 
@@ -393,7 +393,7 @@ function updatePlayerCareerSeasons(player, careerRows, options = {}) {
 
   if (appendMissingSeasons) {
     for (const row of normalizedCareerRows) {
-      const key = `${row.season}:${normalizedTeamKey(row.team)}`;
+      const key = `${row.season}:${normalizedTeamKey(row.team, row.season)}`;
 
       if (existingKeys.has(key)) {
         continue;

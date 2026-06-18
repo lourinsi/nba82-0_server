@@ -429,9 +429,18 @@ Each player gets a top-level `legacy_points` field calculated from stored `accol
 
 ```text
 seasons = max(seasons_played, 1)
-uShapeModifier = (3.2 / seasons^1.35) + (0.0027 * seasons)
-densityBonus = basePoints * uShapeModifier * 4.0
+uShapeModifier = (descentNumerator / seasons^descentExponent) + (ascentMultiplier * seasons)
+densityBonus = basePoints * uShapeModifier * densityBonusMultiplier
 legacy_points = round(basePoints + densityBonus, 2)
+```
+
+The shared U-shape constants live in `legacyPoints.js` as `LEGACY_ENGINE_FACTORS`:
+
+```text
+descentNumerator: 3.2
+descentExponent: 1.35
+ascentMultiplier: 0.0027
+densityBonusMultiplier: 4
 ```
 
 Recalculate points without refetching APIs:
@@ -439,6 +448,8 @@ Recalculate points without refetching APIs:
 ```powershell
 npm run seed:legacy-points
 ```
+
+After changing `LEGACY_ENGINE_FACTORS`, run this script so `data/players_accolades.json` stores updated `legacy_points`. The API serves those stored scores instead of recalculating top-level legacy points on every request.
 
 Fetch/cache the Bleacher Report GOAT Top 100 media score without refetching NBA APIs:
 

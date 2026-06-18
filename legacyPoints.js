@@ -25,6 +25,12 @@ const ACCOLADE_WEIGHTS = {
   games_started: 0.01,
 };
 const ACCOLADE_WEIGHT_ENTRIES = Object.entries(ACCOLADE_WEIGHTS);
+const LEGACY_ENGINE_FACTORS = {
+  descentExponent: 0.2,
+  descentNumerator: 3.2,
+  ascentMultiplier: 0.0035,
+  densityBonusMultiplier: 0.1,
+};
 
 function numericAccoladeValue(value) {
   if (typeof value === "boolean") {
@@ -35,18 +41,41 @@ function numericAccoladeValue(value) {
   return Number.isFinite(numeric) ? numeric : 0;
 }
 
-function calculateLegacyPoints(accolades = {}) {
+function calculateLegacyScoreBreakdown(accolades = {}, engineFactors = LEGACY_ENGINE_FACTORS) {
   let basePoints = 0;
 
   for (const [key, weight] of ACCOLADE_WEIGHT_ENTRIES) {
     basePoints += numericAccoladeValue(accolades[key]) * weight;
   }
 
+  const {
+    descentNumerator,
+    descentExponent,
+    ascentMultiplier,
+    densityBonusMultiplier,
+  } = engineFactors;
   const seasons = Math.max(numericAccoladeValue(accolades.seasons_played), 1);
-  const uShapeModifier = (3.2 / Math.pow(seasons, 1.35)) + (0.0027 * seasons);
-  const densityBonus = basePoints * uShapeModifier * 4.0;
+  const descent = descentNumerator / Math.pow(seasons, descentExponent);
+  const ascent = ascentMultiplier * seasons;
+  const uShapeModifier = descent + ascent;
+  const densityBonus = basePoints * uShapeModifier * densityBonusMultiplier;
+  const totalLegacyScore = basePoints + densityBonus;
 
-  return Number((basePoints + densityBonus).toFixed(2));
+  return {
+    basePoints,
+    seasons,
+    descent,
+    ascent,
+    uShapeModifier,
+    densityBonus,
+    totalLegacyScore,
+  };
+}
+
+function calculateLegacyPoints(accolades = {}) {
+  const { totalLegacyScore } = calculateLegacyScoreBreakdown(accolades);
+
+  return Number(totalLegacyScore.toFixed(2));
 }
 
 function applyLegacyPoints(players) {
@@ -58,6 +87,8 @@ function applyLegacyPoints(players) {
 
 module.exports = {
   ACCOLADE_WEIGHTS,
+  LEGACY_ENGINE_FACTORS,
   applyLegacyPoints,
+  calculateLegacyScoreBreakdown,
   calculateLegacyPoints,
 };

@@ -1327,7 +1327,7 @@
       "PF",
       "C"
     ],
-    "primary_position": "C"
+    "primary_position": "PF"
   },
   "Anthony Edwards": {
     "positions": [
@@ -24826,7 +24826,8 @@
   },
   "Scottie Pippen": {
     "positions": [
-      "SF"
+      "SF",
+      "PF"
     ],
     "primary_position": "SF"
   },
@@ -25611,7 +25612,8 @@
   },
   "Stephen Curry": {
     "positions": [
-      "PG"
+      "PG",
+      "SG"
     ],
     "primary_position": "PG"
   },
