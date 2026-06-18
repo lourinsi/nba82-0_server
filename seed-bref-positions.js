@@ -1,6 +1,6 @@
 const fs = require("fs/promises");
 const path = require("path");
-const { applyBrefPositionOverrides } = require("./brefPositions");
+const { applyBrefPositionOverrides, summarizeBrefPositionMatches } = require("./brefPositions");
 
 const PLAYERS_PATH = path.join(__dirname, "data", "players_accolades.json");
 const BREF_POSITIONS_PATH = path.join(__dirname, "data", "bref_positions.json");
@@ -107,6 +107,7 @@ async function main() {
   console.timeEnd("bref-positions: apply");
 
   const summary = summarizeChanges(players, outputPlayers);
+  const matchSummary = summarizeBrefPositionMatches(players, brefPositions);
 
   if (dryRun) {
     console.log("Dry run enabled; no files were written.");
@@ -117,8 +118,10 @@ async function main() {
   }
 
   console.log(`Processed ${outputPlayers.length} players.`);
+  console.log(`Matched ${matchSummary.matched} players to B-Ref positions.`);
+  console.log(`Players missing from B-Ref lookup: ${matchSummary.missing}.`);
   console.log(`Overwrote positions from B-Ref for ${summary.changed} players.`);
-  console.log(`Players already matching or missing from B-Ref: ${summary.unchanged}.`);
+  console.log(`Players already matching or not matched: ${summary.unchanged}.`);
 
   if (!dryRun) {
     console.log(`Updated player storage at ${outputPath}`);

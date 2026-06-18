@@ -1,6 +1,6 @@
 const fs = require("fs/promises");
 const path = require("path");
-const { seasonEra } = require("./seasonEras");
+const { seasonEndYear, seasonEra } = require("./seasonEras");
 const { normalizeTeamCodeForEra, normalizeTeamCodeForSeason } = require("./teamFranchises");
 
 const PLAYERS_PATH = path.join(__dirname, "data", "players_accolades.json");
@@ -9,7 +9,7 @@ const LEAGUE_AVERAGES_PATH = path.join(__dirname, "data", "historical_league_ave
 // Tune these values to rebalance the box-score signal across eras. The scorer
 // compares each stat to that exact season's league climate before scaling.
 const WEIGHTS = { ppg: 1.0, rpg: 0.8, apg: 0.8, spg: 0.5, bpg: 0.5 };
-const STINT_SCALING_FACTOR = 5;
+const STINT_SCALING_FACTOR = 200;
 
 const BASE_METRICS = ["ppg", "rpg", "apg"];
 const DEFENSIVE_METRICS = ["spg", "bpg"];
@@ -157,6 +157,16 @@ function leagueAverageForSeason(leagueAverages, season) {
     }
   }
 
+  const requestedEndYear = seasonEndYear(season);
+  const earliestKey = Object.keys(leagueAverages || {})
+    .filter((key) => seasonEndYear(key))
+    .sort((a, b) => seasonEndYear(a) - seasonEndYear(b))[0];
+  const earliestEndYear = seasonEndYear(earliestKey);
+
+  if (requestedEndYear && earliestKey && earliestEndYear && requestedEndYear < earliestEndYear) {
+    return { key: earliestKey, average: leagueAverages[earliestKey], fallback: "earliest_available" };
+  }
+
   return { key: null, average: null };
 }
 
@@ -175,6 +185,48 @@ function metricWeightsForSeason(leagueAverage, weights = WEIGHTS) {
   }
 
   return Object.fromEntries(ALL_METRICS.map((metric) => [metric, Number(weights[metric] || 0)]));
+}
+
+function roundedStat(value) {
+  return value === null ? null : Number(value.toFixed(1));
+}
+
+function buildStintStatLine(seasons) {
+  const totals = Object.fromEntries(ALL_METRICS.map((metric) => [metric, { value: 0, games: 0, samples: 0 }]));
+
+  for (const season of seasons) {
+    const gamesPlayed = firstPositiveNumericValue(season, GAMES_KEYS);
+
+    for (const metric of ALL_METRICS) {
+      const value = playerMetricValue(season, metric);
+
+      if (value === null) {
+        continue;
+      }
+
+      if (gamesPlayed) {
+        totals[metric].value += value * gamesPlayed;
+        totals[metric].games += gamesPlayed;
+      } else {
+        totals[metric].value += value;
+        totals[metric].samples += 1;
+      }
+    }
+  }
+
+  return Object.fromEntries(
+    ALL_METRICS.map((metric) => {
+      const total = totals[metric];
+      const value =
+        total.games > 0
+          ? total.value / total.games
+          : total.samples > 0
+            ? total.value / total.samples
+            : null;
+
+      return [metric, roundedStat(value)];
+    }),
+  );
 }
 
 function seasonMatchesBlock(season, block) {
@@ -256,11 +308,15 @@ function calculateClassicPointsForBlock(player, block, leagueAverages, options =
     });
   }
 
+  const averageIndex = scoredSeasons > 0 ? indexTotal / scoredSeasons : 0;
+  const points = averageIndex * Number(options.scalingFactor || STINT_SCALING_FACTOR);
   return {
     issues,
+    averageIndex,
     matchingSeasons: matchingSeasons.length,
-    points: indexTotal * Number(options.scalingFactor || STINT_SCALING_FACTOR),
+    points,
     scoredSeasons,
+    stats: buildStintStatLine(matchingSeasons),
   };
 }
 
@@ -287,11 +343,18 @@ function updatePlayerClassicPoints(player, leagueAverages, options = {}) {
     }
 
     updatedBlocks += 1;
-    changed = changed || block.points !== result.points;
+    changed =
+      changed ||
+      block.points !== result.points ||
+      block.engine_adjusted_points !== undefined ||
+      JSON.stringify(block.stats || {}) !== JSON.stringify(result.stats || {});
+
+    const { engine_adjusted_points: _engineAdjustedPoints, ...blockWithoutEngineAdjustedPoints } = block;
 
     return {
-      ...block,
+      ...blockWithoutEngineAdjustedPoints,
       points: result.points,
+      stats: result.stats,
     };
   });
 

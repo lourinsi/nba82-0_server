@@ -3,17 +3,20 @@
 Basketball-Reference season URLs use the season end year:
 https://www.basketball-reference.com/leagues/NBA_2026_per_game.html
 
-The output is a name -> position record dictionary with both the best primary
-slot and every traditional position seen in B-Ref season rows, for example:
+The output is a B-Ref player id -> position record dictionary with the source
+display name, best primary slot, every traditional position seen in B-Ref
+season rows, and non-TOT season/team rows for safer downstream matching, for
+example:
 
 {
-  "LeBron James": {
+  "jamesle01": {
+    "name": "LeBron James",
+    "bref_id": "jamesle01",
     "primary_position": "SF",
-    "positions": ["SG", "SF", "PF", "PG", "C"]
-  },
-  "Kevin Durant": {
-    "primary_position": "SF",
-    "positions": ["SG", "SF", "PF"]
+    "positions": ["SG", "SF", "PF", "PG", "C"],
+    "seasons": [
+      { "season": "2003-04", "team": "CLE", "games_played": 79 }
+    ]
   }
 }
 """
@@ -54,9 +57,18 @@ HEADERS = {
 }
 
 
-class PositionRecord(TypedDict):
+class SeasonRecord(TypedDict):
+    season: str
+    team: str
+    games_played: int
+
+
+class PositionRecord(TypedDict, total=False):
+    name: str
+    bref_id: str | None
     primary_position: str
     positions: List[str]
+    seasons: List[SeasonRecord]
 
 
 def configure_stdout() -> None:
@@ -107,9 +119,23 @@ def primary_position(value: str) -> str | None:
     return positions[0] if positions else None
 
 
+def is_aggregate_team(value: str) -> bool:
+    team = str(value or "").upper()
+    return team == "TOT" or bool(re.fullmatch(r"\d+TM", team))
+
+
 def cell_text(row, data_stat: str) -> str:
     cell = row.find(["td", "th"], attrs={"data-stat": data_stat})
     return cell.get_text(" ", strip=True) if cell else ""
+
+
+def cell_text_any(row, data_stats: List[str]) -> str:
+    for data_stat in data_stats:
+        value = cell_text(row, data_stat)
+        if value:
+            return value
+
+    return ""
 
 
 def numeric_cell(row, data_stat: str) -> float | None:
@@ -124,10 +150,19 @@ def numeric_cell(row, data_stat: str) -> float | None:
         return None
 
 
+def numeric_cell_any(row, data_stats: List[str]) -> float | None:
+    for data_stat in data_stats:
+        value = numeric_cell(row, data_stat)
+        if value is not None:
+            return value
+
+    return None
+
+
 def position_weight(row) -> float:
     """Approximate season minutes for choosing a career primary position."""
 
-    games = numeric_cell(row, "g")
+    games = numeric_cell_any(row, ["g", "games"])
     minutes_per_game = numeric_cell(row, "mp_per_g")
 
     if games is not None and minutes_per_game is not None:
@@ -176,7 +211,7 @@ def fetch_year_html(session: requests.Session, year: int, timeout: int, retries:
         try:
             response = session.get(url, headers=HEADERS, timeout=timeout)
             response.raise_for_status()
-            return response.text
+            return response.content.decode("utf-8", errors="replace")
         except requests.RequestException as exc:
             last_error = exc
             status = getattr(exc.response, "status_code", None)
@@ -194,6 +229,20 @@ def fetch_year_html(session: requests.Session, year: int, timeout: int, retries:
 
 def best_primary_position(positions: List[str], weights: Dict[str, float]) -> str:
     return sorted(positions, key=lambda position: (-weights.get(position, 0), positions.index(position)))[0]
+
+
+def season_label(end_year: int) -> str:
+    return f"{end_year - 1}-{str(end_year)[-2:]}"
+
+
+def bref_player_id(player_cell) -> str | None:
+    link = player_cell.find("a", href=True)
+
+    if not link:
+        return None
+
+    match = re.search(r"/players/[a-z]/([^/.]+)\.html", link["href"])
+    return match.group(1) if match else None
 
 
 def scrape_positions(
@@ -224,6 +273,7 @@ def scrape_positions(
                         continue
 
                     name = clean_player_name(player_cell.get_text(" ", strip=True))
+                    player_id = bref_player_id(player_cell)
                     row_positions = parse_positions(position_cell.get_text(" ", strip=True))
 
                     if not name or not row_positions:
@@ -231,39 +281,59 @@ def scrape_positions(
 
                     parsed_rows.append(
                         {
+                            "key": player_id or f"name:{name}",
+                            "bref_id": player_id,
                             "name": name,
+                            "season": season_label(year),
                             "positions": row_positions,
                             "primary": row_positions[0],
-                            "team": cell_text(row, "team_id").upper(),
+                            "team": cell_text_any(row, ["team_id", "team_name_abbr"]).upper(),
+                            "games_played": int(numeric_cell_any(row, ["g", "games"]) or 0),
                             "weight": position_weight(row),
                         }
                     )
 
-                names_with_totals = {entry["name"] for entry in parsed_rows if entry["team"] == "TOT"}
+                player_seasons_with_totals = {
+                    (entry["key"], entry["season"]) for entry in parsed_rows if is_aggregate_team(entry["team"])
+                }
 
                 for entry in parsed_rows:
-                    name = entry["name"]
+                    key = entry["key"]
 
-                    if name not in position_records:
-                        position_records[name] = {
+                    if key not in position_records:
+                        position_records[key] = {
+                            "name": entry["name"],
+                            "bref_id": entry["bref_id"],
                             "primary_position": entry["primary"],
                             "positions": [],
+                            "seasons": [],
                         }
-                        position_weights[name] = {}
+                        position_weights[key] = {}
                         added += 1
 
-                    record = position_records[name]
+                    record = position_records[key]
                     for position in entry["positions"]:
                         if position not in record["positions"]:
                             record["positions"].append(position)
 
+                    if not is_aggregate_team(entry["team"]):
+                        season_row = {
+                            "season": entry["season"],
+                            "team": entry["team"],
+                            "games_played": entry["games_played"],
+                        }
+                        season_key = f"{season_row['season']}:{season_row['team']}"
+
+                        if not any(f"{row['season']}:{row['team']}" == season_key for row in record["seasons"]):
+                            record["seasons"].append(season_row)
+
                     # For traded players, B-Ref includes a TOT row plus team
                     # splits. Use only the aggregate row for primary weighting
                     # so mid-season moves do not double-count minutes.
-                    if name in names_with_totals and entry["team"] != "TOT":
+                    if (key, entry["season"]) in player_seasons_with_totals and not is_aggregate_team(entry["team"]):
                         continue
 
-                    weights = position_weights[name]
+                    weights = position_weights[key]
                     weights[entry["primary"]] = weights.get(entry["primary"], 0.0) + entry["weight"]
 
                 print(f"{year}: added {added} new player position records ({len(position_records)} total).")
@@ -271,15 +341,21 @@ def scrape_positions(
             if index < (end_year - start_year + 1):
                 time.sleep(sleep_seconds)
 
-    for name, record in position_records.items():
-        record["primary_position"] = best_primary_position(record["positions"], position_weights.get(name, {}))
+    for key, record in position_records.items():
+        record["primary_position"] = best_primary_position(record["positions"], position_weights.get(key, {}))
 
     return position_records
 
 
 def write_positions(output_path: Path, positions: Dict[str, PositionRecord]) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(json.dumps(positions, indent=2, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
+    ordered_positions = dict(
+        sorted(positions.items(), key=lambda item: (item[1].get("name", ""), item[0]))
+    )
+    output_path.write_text(
+        json.dumps(ordered_positions, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
 
 
 def parse_args() -> argparse.Namespace:
