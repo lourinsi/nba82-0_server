@@ -2,7 +2,7 @@
 
 Backend API and data seeding tools for the 82-0 accolade workspace.
 
-This server stores live player accolade data in `data/players_accolades.json`, serves it through Express, and includes scripts for fetching NBA data, resuming long seed runs, recalculating `legacy_points`, and deriving team-era Classic scores. During the B-Ref transition, the B-Ref seed writes a side-by-side file at `data/players_accolades_bref.json`.
+This server serves live player accolade data from `data/players_accolades_bref.json` by default and includes scripts for fetching NBA data, resuming long seed runs, recalculating `legacy_points`, and deriving team-era Classic scores. The older NBA Stats fallback dataset remains at `data/players_accolades.json`.
 
 ## Setup
 
@@ -23,6 +23,7 @@ Defaults are already usable locally:
 ```env
 PORT=4000
 FRONTEND_ORIGIN=http://localhost:3000,http://127.0.0.1:3000
+PLAYER_DATA_PATH=./data/players_accolades_bref.json
 ```
 
 In development, the API also accepts browser requests from localhost on any port.
@@ -52,7 +53,7 @@ Default API endpoint:
 http://localhost:4000/api/players
 ```
 
-The server reads `data/players_accolades.json` fresh on each request, so seed updates are reflected without restarting the server.
+The server reads `data/players_accolades_bref.json` fresh on each request, so seed updates are reflected without restarting the server. Set `PLAYER_DATA_PATH` to point the API at another player JSON during local checks.
 
 ## Seed Scripts
 
@@ -457,7 +458,7 @@ Recalculate points without refetching APIs:
 npm run seed:legacy-points
 ```
 
-After changing `LEGACY_ENGINE_FACTORS`, run this script so `data/players_accolades.json` stores updated `legacy_points`. The API serves those stored scores instead of recalculating top-level legacy points on every request.
+After changing `LEGACY_ENGINE_FACTORS`, run this script so `data/players_accolades_bref.json` stores updated `legacy_points` and regenerated Classic team-era blocks. The API serves those stored scores instead of recalculating top-level legacy points on every request.
 
 Fetch/cache the Bleacher Report GOAT Top 100 media score without refetching NBA APIs:
 
@@ -533,7 +534,7 @@ Each player also gets `classic_points_by_team_era`, derived from `career_seasons
 This is for Classic Mode. It does not replace all-time `legacy_points`.
 
 Run the era-relative statistical recalculation after `career_seasons` include per-game stats and
-`data/historical_league_averages.json` is available:
+`data/historical_league_averages.json` is available. By default, this updates `data/players_accolades_bref.json`:
 
 ```powershell
 npm run refresh:league-averages

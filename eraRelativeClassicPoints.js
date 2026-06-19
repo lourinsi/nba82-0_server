@@ -3,23 +3,28 @@ const path = require("path");
 const { seasonEndYear, seasonEra } = require("./seasonEras");
 const { normalizeTeamCodeForEra, normalizeTeamCodeForSeason } = require("./teamFranchises");
 
-const PLAYERS_PATH = path.join(__dirname, "data", "players_accolades.json");
+const PLAYERS_PATH = path.join(__dirname, "data", "players_accolades_bref.json");
 const LEAGUE_AVERAGES_PATH = path.join(__dirname, "data", "historical_league_averages.json");
 
 // Tune these values to rebalance the box-score signal across eras. The scorer
 // compares each stat to that exact season's league climate before scaling.
-const WEIGHTS = { ppg: 1.0, rpg: 0.8, apg: 0.8, spg: 0.5, bpg: 0.5 };
-const STINT_SCALING_FACTOR = 200;
+const WEIGHTS = { ppg: 0.8, rpg: 0.55, apg: 0.55, spg: 0.25, bpg: 0.25, ts_impact: 1.0, ws_impact: 1.5 };
+const STINT_SCALING_FACTOR = 250;
+const ALL_TIME_TS_BASELINE = 0.54;
+const TS_BLEND_WEIGHTS = { era: 0.25, absolute: 0.5 };
 
 const BASE_METRICS = ["ppg", "rpg", "apg"];
 const DEFENSIVE_METRICS = ["spg", "bpg"];
-const ALL_METRICS = [...BASE_METRICS, ...DEFENSIVE_METRICS];
+const VOLUME_METRICS = [...BASE_METRICS, ...DEFENSIVE_METRICS];
+const EFFICIENCY_METRICS = ["ts_pct", "ws_48"];
+const ALL_METRICS = [...VOLUME_METRICS, ...EFFICIENCY_METRICS];
 const LEAGUE_AVERAGE_KEYS = {
   ppg: ["PPG", "ppg"],
   rpg: ["RPG", "rpg"],
   apg: ["APG", "apg"],
   spg: ["SPG", "spg"],
   bpg: ["BPG", "bpg"],
+  ts_pct: ["TS_PCT", "ts_pct", "TS%", "true_shooting_pct", "trueShootingPct"],
 };
 const PLAYER_DIRECT_STAT_KEYS = {
   ppg: ["ppg", "PPG", "points_per_game", "pointsPerGame", "pts_per_game", "ptsPerGame"],
@@ -27,6 +32,8 @@ const PLAYER_DIRECT_STAT_KEYS = {
   apg: ["apg", "APG", "assists_per_game", "assistsPerGame", "ast_per_game", "astPerGame"],
   spg: ["spg", "SPG", "steals_per_game", "stealsPerGame", "stl_per_game", "stlPerGame"],
   bpg: ["bpg", "BPG", "blocks_per_game", "blocksPerGame", "blk_per_game", "blkPerGame"],
+  ts_pct: ["ts_pct", "TS_PCT", "tsPct", "true_shooting_pct", "trueShootingPct", "true_shooting_percentage"],
+  ws_48: ["ws_48", "WS_48", "ws_per_48", "WS_PER_48", "wsPer48", "win_shares_per_48", "winSharesPer48"],
 };
 const PLAYER_TOTAL_STAT_KEYS = {
   ppg: ["pts", "PTS", "points", "total_points"],
@@ -66,6 +73,10 @@ function resolvePath(value, fallbackPath) {
 }
 
 function numericValue(value) {
+  if (value === null || value === undefined || value === "") {
+    return null;
+  }
+
   const numeric = Number(value);
   return Number.isFinite(numeric) ? numeric : null;
 }
@@ -75,12 +86,12 @@ function positiveNumericValue(value) {
   return numeric !== null && numeric > 0 ? numeric : null;
 }
 
-function firstNumericValue(source, keys) {
+function firstNumericValue(source, keys = []) {
   if (!source || typeof source !== "object") {
     return null;
   }
 
-  for (const key of keys) {
+  for (const key of keys || []) {
     if (Object.prototype.hasOwnProperty.call(source, key)) {
       const numeric = numericValue(source[key]);
 
@@ -105,7 +116,13 @@ function playerMetricValue(season, metric) {
     return direct;
   }
 
-  const total = firstNumericValue(season, PLAYER_TOTAL_STAT_KEYS[metric]);
+  const totalKeys = PLAYER_TOTAL_STAT_KEYS[metric] || [];
+
+  if (!totalKeys.length) {
+    return null;
+  }
+
+  const total = firstNumericValue(season, totalKeys);
   const gamesPlayed = firstPositiveNumericValue(season, GAMES_KEYS);
 
   if (total === null || !gamesPlayed) {
@@ -176,7 +193,7 @@ function hasDefensiveLeagueAverages(leagueAverage) {
 
 function metricWeightsForSeason(leagueAverage, weights = WEIGHTS) {
   if (!hasDefensiveLeagueAverages(leagueAverage)) {
-    const totalWeight = ALL_METRICS.reduce((sum, metric) => sum + Number(weights[metric] || 0), 0);
+    const totalWeight = VOLUME_METRICS.reduce((sum, metric) => sum + Number(weights[metric] || 0), 0);
     const balancedWeight = totalWeight / BASE_METRICS.length;
 
     // Pre-1974 league baselines omit steals/blocks. Keep era comparisons fair by
@@ -184,11 +201,16 @@ function metricWeightsForSeason(leagueAverage, weights = WEIGHTS) {
     return Object.fromEntries(BASE_METRICS.map((metric) => [metric, balancedWeight]));
   }
 
-  return Object.fromEntries(ALL_METRICS.map((metric) => [metric, Number(weights[metric] || 0)]));
+  return Object.fromEntries(VOLUME_METRICS.map((metric) => [metric, Number(weights[metric] || 0)]));
 }
 
-function roundedStat(value) {
-  return value === null ? null : Number(value.toFixed(1));
+function roundedStat(value, metric) {
+  if (value === null) {
+    return null;
+  }
+
+  const decimals = EFFICIENCY_METRICS.includes(metric) ? 3 : 1;
+  return Number(value.toFixed(decimals));
 }
 
 function buildStintStatLine(seasons) {
@@ -224,7 +246,7 @@ function buildStintStatLine(seasons) {
             ? total.value / total.samples
             : null;
 
-      return [metric, roundedStat(value)];
+      return [metric, roundedStat(value, metric)];
     }),
   );
 }
@@ -238,10 +260,16 @@ function seasonMatchesBlock(season, block) {
 }
 
 function scoreSeasonAgainstLeague(season, leagueAverages, options = {}) {
-  const weights = metricWeightsForSeason(leagueAverages, options.weights || WEIGHTS);
-  let index = 0;
+  const configuredWeights = options.weights || WEIGHTS;
+  const weights = metricWeightsForSeason(leagueAverages, configuredWeights);
+  let baseVolumeIndex = 0;
 
-  for (const [metric, weight] of Object.entries(weights)) {
+  for (const metric of VOLUME_METRICS) {
+    if (!Object.prototype.hasOwnProperty.call(weights, metric)) {
+      continue;
+    }
+
+    const weight = weights[metric];
     const playerValue = playerMetricValue(season, metric);
     const leagueValue = leagueMetricValue(leagueAverages, metric);
 
@@ -252,10 +280,35 @@ function scoreSeasonAgainstLeague(season, leagueAverages, options = {}) {
       };
     }
 
-    index += (playerValue / leagueValue) * weight;
+    baseVolumeIndex += (playerValue / leagueValue) * weight;
   }
 
-  return { ok: true, index };
+  let efficiencyModifier = 1;
+  const playerTs = playerMetricValue(season, "ts_pct");
+  const leagueTs = leagueMetricValue(leagueAverages, "ts_pct");
+
+  if (playerTs !== null && leagueTs !== null) {
+    const eraRelativeTs = playerTs / leagueTs;
+    const absoluteRelativeTs = playerTs / ALL_TIME_TS_BASELINE;
+    const blendedTsRatio =
+      eraRelativeTs * TS_BLEND_WEIGHTS.era + absoluteRelativeTs * TS_BLEND_WEIGHTS.absolute;
+
+    if (Number.isFinite(blendedTsRatio)) {
+      efficiencyModifier += (blendedTsRatio - 1) * Number(configuredWeights.ts_impact ?? WEIGHTS.ts_impact);
+    }
+  }
+
+  const playerWs48 = playerMetricValue(season, "ws_48");
+
+  if (playerWs48 !== null) {
+    const wsBonus = playerWs48 - 0.1;
+
+    if (Number.isFinite(wsBonus)) {
+      efficiencyModifier += wsBonus * Number(configuredWeights.ws_impact ?? WEIGHTS.ws_impact);
+    }
+  }
+
+  return { ok: true, index: baseVolumeIndex * efficiencyModifier };
 }
 
 function calculateClassicPointsForBlock(player, block, leagueAverages, options = {}) {
@@ -496,9 +549,13 @@ if (require.main === module) {
 }
 
 module.exports = {
+  ALL_METRICS,
+  ALL_TIME_TS_BASELINE,
+  EFFICIENCY_METRICS,
   LEAGUE_AVERAGES_PATH,
   PLAYERS_PATH,
   STINT_SCALING_FACTOR,
+  TS_BLEND_WEIGHTS,
   WEIGHTS,
   calculateClassicPointsForBlock,
   leagueAverageForSeason,

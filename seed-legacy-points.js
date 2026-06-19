@@ -1,6 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 const { applyBrefPrimaryPositions } = require("./brefPositions");
+const { applyClassicPointsToPlayers } = require("./classicPoints");
 const { LEGACY_ENGINE_FACTORS, applyLegacyPoints } = require("./legacyPoints");
 const {
   buildStatTitleWinnerLookup,
@@ -8,7 +9,7 @@ const {
 } = require("./playerAccoladeRecords");
 const { normalizePlayerTeams } = require("./teamFranchises");
 
-const OUTPUT_PATH = path.join(__dirname, "data", "players_accolades.json");
+const OUTPUT_PATH = path.join(__dirname, "data", "players_accolades_bref.json");
 const BREF_POSITIONS_PATH = path.join(__dirname, "data", "bref_positions.json");
 const STAT_TITLE_CACHE_PATH = path.join(__dirname, "data", "stat_title_winners.json");
 
@@ -47,8 +48,9 @@ function applyLegacyScoringPipeline(players, options = {}) {
     ? applyBrefPrimaryPositions(normalizedPlayers, options.brefPositions)
     : normalizedPlayers;
   const teamNormalizedPlayers = positionedPlayers.map(normalizePlayerTeams);
+  const classicPlayers = applyClassicPointsToPlayers(teamNormalizedPlayers);
 
-  return applyLegacyPoints(teamNormalizedPlayers);
+  return applyLegacyPoints(classicPlayers);
 }
 
 async function main() {
