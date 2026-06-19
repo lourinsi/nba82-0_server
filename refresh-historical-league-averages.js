@@ -172,8 +172,80 @@ function averageRows(rows, key, options = {}) {
   return roundStat(values.reduce((sum, value) => sum + value, 0) / values.length);
 }
 
+function sumRows(rows, key, options = {}) {
+  const values = rows
+    .map((row) => Number(row[key]))
+    .filter((value) => Number.isFinite(value) && (options.allowZero ? value >= 0 : value > 0));
+
+  if (!values.length) {
+    return null;
+  }
+
+  return values.reduce((sum, value) => sum + value, 0);
+}
+
+function weightedSumRows(rows, valueKey, weightKey) {
+  let total = 0;
+  let used = 0;
+
+  for (const row of rows) {
+    const value = Number(row[valueKey]);
+    const weight = Number(row[weightKey]);
+
+    if (!Number.isFinite(value) || value < 0 || !Number.isFinite(weight) || weight <= 0) {
+      continue;
+    }
+
+    total += value * weight;
+    used += 1;
+  }
+
+  return used ? total : null;
+}
+
+function trueShootingPct(points, fieldGoalAttempts, freeThrowAttempts) {
+  const pts = Number(points);
+  const fga = Number(fieldGoalAttempts);
+  const fta = Number(freeThrowAttempts);
+  const denominator = 2 * (fga + 0.44 * fta);
+
+  if (!Number.isFinite(pts) || !Number.isFinite(fga) || !Number.isFinite(fta) || denominator <= 0) {
+    return null;
+  }
+
+  return roundStat(pts / denominator);
+}
+
+function trueShootingFromTeamRows(rows) {
+  const points = weightedSumRows(rows, "PTS", "GP") ?? sumRows(rows, "PTS");
+  const fieldGoalAttempts = weightedSumRows(rows, "FGA", "GP") ?? sumRows(rows, "FGA");
+  const freeThrowAttempts = weightedSumRows(rows, "FTA", "GP") ?? sumRows(rows, "FTA", { allowZero: true });
+
+  return trueShootingPct(points, fieldGoalAttempts, freeThrowAttempts);
+}
+
+function trueShootingFromGameRows(rows) {
+  return trueShootingPct(
+    sumRows(rows, "PTS"),
+    sumRows(rows, "FGA"),
+    sumRows(rows, "FTA", { allowZero: true }),
+  );
+}
+
 function compactAverage(record) {
   return Object.fromEntries(Object.entries(record).filter(([, value]) => value !== null && value !== undefined));
+}
+
+function hasRequiredAverageFields(average) {
+  return Boolean(average?.PPG && average?.RPG && average?.APG && average?.TS_PCT);
+}
+
+function hasCoreAverageFields(average) {
+  return Boolean(average?.PPG && average?.RPG && average?.APG);
+}
+
+function hasAnyAverageFields(average) {
+  return hasCoreAverageFields(average) || Boolean(Number(average?.TS_PCT) > 0);
 }
 
 async function fetchNbaStatsLeagueAverage(season, timeoutMs) {
@@ -200,6 +272,7 @@ async function fetchNbaStatsLeagueAverage(season, timeoutMs) {
     APG: averageRows(rows, "AST"),
     SPG: endYear >= DEFENSIVE_STATS_START_END_YEAR ? averageRows(rows, "STL") : null,
     BPG: endYear >= DEFENSIVE_STATS_START_END_YEAR ? averageRows(rows, "BLK") : null,
+    TS_PCT: trueShootingFromTeamRows(rows),
   });
 }
 
@@ -221,6 +294,7 @@ async function fetchNbaStatsGameLogAverage(season, timeoutMs) {
     APG: averageRows(rows, "AST"),
     SPG: averageRows(rows, "STL", { allowZero: true }),
     BPG: averageRows(rows, "BLK", { allowZero: true }),
+    TS_PCT: trueShootingFromGameRows(rows),
   });
 }
 
@@ -229,8 +303,28 @@ function tableHtmlById(html, tableId) {
   return html.match(pattern)?.[0] || null;
 }
 
+function stripHtml(value) {
+  return String(value || "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function tableRowsHtml(tableHtml) {
+  return Array.from(String(tableHtml || "").matchAll(/<tr\b[\s\S]*?<\/tr>/gi)).map((match) => match[0]);
+}
+
 function leagueAverageRowHtml(tableHtml) {
-  return tableHtml?.match(/<tfoot>[\s\S]*?<tr[\s\S]*?League Average[\s\S]*?<\/tr>[\s\S]*?<\/tfoot>/i)?.[0] || null;
+  const footerHtml = tableHtml?.match(/<tfoot>[\s\S]*?<\/tfoot>/i)?.[0] || "";
+  const footerRow = tableRowsHtml(footerHtml).find((rowHtml) => /League Average/i.test(stripHtml(rowHtml)));
+
+  if (footerRow) {
+    return footerRow;
+  }
+
+  return tableRowsHtml(tableHtml).find((rowHtml) => /League Average/i.test(stripHtml(rowHtml))) || null;
 }
 
 function dataStatValue(rowHtml, statKey) {
@@ -241,10 +335,29 @@ function dataStatValue(rowHtml, statKey) {
     return null;
   }
 
-  const text = rawValue.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, "").trim();
+  const text = stripHtml(rawValue);
   const numeric = Number(text);
 
   return Number.isFinite(numeric) && numeric > 0 ? numeric : null;
+}
+
+function brefTableRows(tableHtml) {
+  return tableRowsHtml(tableHtml).filter(
+    (rowHtml) => !/League Average/i.test(stripHtml(rowHtml)) && dataStatValue(rowHtml, "g"),
+  );
+}
+
+function brefTeamRows(tableHtml) {
+  return brefTableRows(tableHtml).map((rowHtml) => ({
+    GP: dataStatValue(rowHtml, "g"),
+    PTS: dataStatValue(rowHtml, "pts"),
+    REB: dataStatValue(rowHtml, "trb"),
+    AST: dataStatValue(rowHtml, "ast"),
+    STL: dataStatValue(rowHtml, "stl"),
+    BLK: dataStatValue(rowHtml, "blk"),
+    FGA: dataStatValue(rowHtml, "fga"),
+    FTA: dataStatValue(rowHtml, "fta"),
+  }));
 }
 
 async function fetchBrefLeagueAverage(season, timeoutMs) {
@@ -258,18 +371,38 @@ async function fetchBrefLeagueAverage(season, timeoutMs) {
     headers: BREF_HEADERS,
     timeout: timeoutMs,
   });
-  const rowHtml = leagueAverageRowHtml(tableHtmlById(response.data, "per_game-team"));
+  const perGameTableHtml = tableHtmlById(response.data, "per_game-team");
+  const rowHtml = leagueAverageRowHtml(perGameTableHtml);
+  const advancedRowHtml = leagueAverageRowHtml(tableHtmlById(response.data, "advanced-team"));
+  const teamRows = rowHtml ? [] : brefTeamRows(perGameTableHtml);
 
-  if (!rowHtml) {
+  if (!rowHtml && !teamRows.length && !advancedRowHtml) {
     return null;
   }
 
   return compactAverage({
-    PPG: roundStat(dataStatValue(rowHtml, "pts")),
-    RPG: roundStat(dataStatValue(rowHtml, "trb")),
-    APG: roundStat(dataStatValue(rowHtml, "ast")),
-    SPG: endYear >= DEFENSIVE_STATS_START_END_YEAR ? roundStat(dataStatValue(rowHtml, "stl")) : null,
-    BPG: endYear >= DEFENSIVE_STATS_START_END_YEAR ? roundStat(dataStatValue(rowHtml, "blk")) : null,
+    PPG: rowHtml ? roundStat(dataStatValue(rowHtml, "pts")) : averageRows(teamRows, "PTS"),
+    RPG: rowHtml ? roundStat(dataStatValue(rowHtml, "trb")) : averageRows(teamRows, "REB"),
+    APG: rowHtml ? roundStat(dataStatValue(rowHtml, "ast")) : averageRows(teamRows, "AST"),
+    SPG: endYear >= DEFENSIVE_STATS_START_END_YEAR
+      ? rowHtml
+        ? roundStat(dataStatValue(rowHtml, "stl"))
+        : averageRows(teamRows, "STL", { allowZero: true })
+      : null,
+    BPG: endYear >= DEFENSIVE_STATS_START_END_YEAR
+      ? rowHtml
+        ? roundStat(dataStatValue(rowHtml, "blk"))
+        : averageRows(teamRows, "BLK", { allowZero: true })
+      : null,
+    TS_PCT:
+      roundStat(dataStatValue(advancedRowHtml, "ts_pct")) ||
+      (rowHtml
+        ? trueShootingPct(
+            dataStatValue(rowHtml, "pts"),
+            dataStatValue(rowHtml, "fga"),
+            dataStatValue(rowHtml, "fta"),
+          )
+        : trueShootingFromTeamRows(teamRows)),
   });
 }
 
@@ -280,7 +413,7 @@ async function fetchLeagueAverage(season, options) {
     try {
       const average = await fetchNbaStatsLeagueAverage(season, options.timeoutMs);
 
-      if (average?.PPG && average?.RPG && average?.APG) {
+      if (hasAnyAverageFields(average)) {
         return { average, source: "nba_stats" };
       }
     } catch (error) {
@@ -299,7 +432,7 @@ async function fetchLeagueAverage(season, options) {
   try {
     const average = await fetchBrefLeagueAverage(season, options.timeoutMs);
 
-    if (average?.PPG && average?.RPG && average?.APG) {
+    if (hasAnyAverageFields(average)) {
       return { average, source: "basketball_reference" };
     }
   } catch (error) {
@@ -317,6 +450,41 @@ function sortedAverages(output) {
   return Object.fromEntries(
     Object.entries(output).sort((a, b) => seasonEndYear(a[0]) - seasonEndYear(b[0])),
   );
+}
+
+function fillEarlyMissingTrueShooting(output, seasonKeys = Object.keys(output)) {
+  const entriesWithTs = Object.entries(output)
+    .map(([season, average]) => ({
+      season,
+      endYear: seasonEndYear(season),
+      tsPct: Number(average?.TS_PCT),
+    }))
+    .filter((entry) => entry.endYear && Number.isFinite(entry.tsPct) && entry.tsPct > 0)
+    .sort((a, b) => a.endYear - b.endYear);
+
+  if (!entriesWithTs.length) {
+    return 0;
+  }
+
+  const earliest = entriesWithTs[0];
+  let filled = 0;
+
+  for (const season of seasonKeys) {
+    const average = output[season] || {};
+    const endYear = seasonEndYear(season);
+
+    if (!endYear || endYear >= earliest.endYear || Number.isFinite(Number(average?.TS_PCT))) {
+      continue;
+    }
+
+    output[season] = {
+      ...average,
+      TS_PCT: earliest.tsPct,
+    };
+    filled += 1;
+  }
+
+  return filled;
 }
 
 async function main() {
@@ -350,7 +518,7 @@ async function main() {
   console.log(`Preparing league averages for ${seasons.length} seasons.`);
 
   for (const [index, season] of seasons.entries()) {
-    if (!refresh && output[season]) {
+    if (!refresh && hasRequiredAverageFields(output[season])) {
       skipped += 1;
       continue;
     }
@@ -376,6 +544,12 @@ async function main() {
     }
   }
 
+  const filledEarlyTs = fillEarlyMissingTrueShooting(output, seasons);
+
+  if (filledEarlyTs) {
+    console.log(`Filled TS_PCT for ${filledEarlyTs} early seasons using the earliest available league TS%.`);
+  }
+
   if (dryRun) {
     console.log("Dry run enabled; no files were written.");
   } else {
@@ -391,7 +565,23 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error(error?.stack || error?.message || String(error));
-  process.exitCode = 1;
-});
+if (require.main === module) {
+  main().catch((error) => {
+    console.error(error?.stack || error?.message || String(error));
+    process.exitCode = 1;
+  });
+}
+
+module.exports = {
+  fetchBrefLeagueAverage,
+  fetchLeagueAverage,
+  fetchNbaStatsGameLogAverage,
+  fetchNbaStatsLeagueAverage,
+  fillEarlyMissingTrueShooting,
+  hasAnyAverageFields,
+  hasCoreAverageFields,
+  hasRequiredAverageFields,
+  trueShootingFromGameRows,
+  trueShootingFromTeamRows,
+  trueShootingPct,
+};

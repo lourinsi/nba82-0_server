@@ -7,7 +7,10 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "seed": "node seed.js --mode=active",
+    "seed": "node seed.js --mode=bref --replace --yes",
+    "seed:bref": "node seed.js --mode=bref --replace --yes",
+    "seed:bref:dry": "node seed.js --mode=bref --replace --yes --dryRun --skipFetch",
+    "seed:bref:refresh": "node seed.js --mode=bref --replace --yes --refreshPerGame --refreshAdvanced",
     "seed:active": "node seed.js --mode=active",
     "seed:active:resume": "node seed.js --mode=active --resume",
     "seed:full": "node seed.js --mode=full",

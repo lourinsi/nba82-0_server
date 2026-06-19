@@ -9,6 +9,11 @@ const PLAYERS_PATH = path.join(__dirname, "data", "players_accolades.json");
 const ADVANCED_CACHE_PATH = path.join(__dirname, "data", "bref_advanced_stats_cache.json");
 const BREF_ADVANCED_URL_TEMPLATE = "https://www.basketball-reference.com/leagues/NBA_{year}_advanced.html";
 const ADVANCED_STAT_KEYS = ["ts_pct", "ws_per_48"];
+const DEFAULT_ADVANCED_STAT_VALUES = {
+  ts_pct: 0.5,
+  ws_per_48: 0.1,
+};
+const WRITE_RETRY_DELAYS_MS = [250, 500, 1000, 2000, 4000];
 const VALID_MODES = new Set(["missing", "active", "all"]);
 
 const BREF_HEADERS = {
@@ -136,7 +141,28 @@ async function writeJsonAtomically(filePath, data) {
 
   await fs.mkdir(directory, { recursive: true });
   await fs.writeFile(tempPath, `${JSON.stringify(data, null, 2)}\n`, "utf8");
-  await fs.rename(tempPath, filePath);
+
+  for (let attempt = 0; attempt <= WRITE_RETRY_DELAYS_MS.length; attempt += 1) {
+    try {
+      await fs.rename(tempPath, filePath);
+      return;
+    } catch (error) {
+      const retryable = ["EACCES", "EBUSY", "EPERM"].includes(error.code);
+
+      if (!retryable || attempt >= WRITE_RETRY_DELAYS_MS.length) {
+        try {
+          await fs.unlink(tempPath);
+        } catch {
+          // Best effort cleanup. The original rename error is more useful.
+        }
+        throw error;
+      }
+
+      const delayMs = WRITE_RETRY_DELAYS_MS[attempt];
+      console.warn(`Write target locked (${error.code}); retrying ${filePath} in ${delayMs}ms.`);
+      await sleep(delayMs);
+    }
+  }
 }
 
 function resolvePath(value, fallbackPath) {
@@ -376,31 +402,39 @@ function selectedSeasonLabels(players, force) {
   return Array.from(seasons).sort((a, b) => (seasonEndYear(a) || 0) - (seasonEndYear(b) || 0));
 }
 
+function roundedAdvancedAverage(values) {
+  return Number((values.reduce((sum, value) => sum + value, 0) / values.length).toFixed(3));
+}
+
+function advancedStatFallbacks(careerSeasons = []) {
+  const fallbacks = {};
+
+  for (const key of ADVANCED_STAT_KEYS) {
+    const values = careerSeasons
+      .map((season) => numberOrNull(season?.[key]))
+      .filter((value) => value !== null);
+
+    fallbacks[key] = values.length ? roundedAdvancedAverage(values) : DEFAULT_ADVANCED_STAT_VALUES[key];
+  }
+
+  return fallbacks;
+}
+
 function updatePlayerAdvancedStats(player, advancedLookup, options = {}) {
   const force = Boolean(options.force);
-  const unavailableSeasons = options.unavailableSeasons || new Set();
   const issues = [];
-  let updatedSeasons = 0;
+  const changedSeasonIndexes = new Set();
+  const playerName = player.name || `${player.first_name || ""} ${player.last_name || ""}`;
 
-  const careerSeasons = (player.career_seasons || []).map((season) => {
+  const careerSeasonsWithFetchedStats = (player.career_seasons || []).map((season, index) => {
     if (!force && !seasonNeedsAdvancedStats(season)) {
       return season;
     }
 
-    const key = careerSeasonKey(season?.season, season?.team, player.name || `${player.first_name || ""} ${player.last_name || ""}`);
+    const key = careerSeasonKey(season?.season, season?.team, playerName);
     const advancedRow = chooseAdvancedRow(key ? advancedLookup.get(key) : [], season);
 
     if (!advancedRow) {
-      if (unavailableSeasons.has(String(season?.season || ""))) {
-        return season;
-      }
-
-      issues.push({
-        player: player.name || player.id || "Unknown player",
-        season: season?.season || null,
-        team: season?.team || null,
-        message: "No matching Basketball Reference advanced row found.",
-      });
       return season;
     }
 
@@ -423,11 +457,33 @@ function updatePlayerAdvancedStats(player, advancedLookup, options = {}) {
     }
 
     if (changed) {
-      updatedSeasons += 1;
+      changedSeasonIndexes.add(index);
     }
 
     return changed ? nextSeason : season;
   });
+
+  const fallbacks = advancedStatFallbacks(careerSeasonsWithFetchedStats);
+  const careerSeasons = careerSeasonsWithFetchedStats.map((season, index) => {
+    let changed = false;
+    const nextSeason = { ...season };
+
+    for (const key of ADVANCED_STAT_KEYS) {
+      if (numberOrNull(nextSeason[key]) !== null) {
+        continue;
+      }
+
+      nextSeason[key] = fallbacks[key];
+      changed = true;
+    }
+
+    if (changed) {
+      changedSeasonIndexes.add(index);
+    }
+
+    return changed ? nextSeason : season;
+  });
+  const updatedSeasons = changedSeasonIndexes.size;
 
   return {
     issues,

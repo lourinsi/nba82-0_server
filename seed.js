@@ -1824,6 +1824,14 @@ async function main() {
   const replace = flagEnabled(args.replace);
   const saveEvery = positiveInteger(args.saveEvery || process.env.SEED_SAVE_EVERY, 0);
   const requestedMode = String(args.mode || process.env.SEED_MODE || "smart").toLowerCase();
+
+  if (["bref", "basketball-reference", "basketball_reference"].includes(requestedMode)) {
+    const { main: runBrefSeed } = require("./seed-bref");
+    await runBrefSeed(process.argv);
+    console.timeEnd("seed: total");
+    return;
+  }
+
   const nbaDelayMs = Number(args.delayMs || process.env.NBA_STATS_DELAY_MS || 2000);
   const nbaRetries = Number(args.retries || process.env.NBA_STATS_MAX_RETRIES || 5);
   const nbaTimeoutMs = Number(args.timeoutMs || process.env.NBA_STATS_TIMEOUT_MS || 30000);

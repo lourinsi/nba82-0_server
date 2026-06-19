@@ -17,7 +17,8 @@
     "legacy_points"
   ],
   "properties": {
-    "id": { "type": "string", "examples": ["bdl-2544"] },
+    "id": { "type": "string", "examples": ["bref:jamesle01"] },
+    "bref_id": { "type": ["string", "null"] },
     "balldontlie_id": { "type": ["integer", "null"] },
     "nba_stats_id": { "type": ["integer", "null"] },
     "first_name": { "type": "string" },
@@ -196,6 +197,9 @@
       "type": "object",
       "properties": {
         "balldontlie": { "type": ["string", "null"] },
+        "basketball_reference_player": { "type": ["string", "null"] },
+        "basketball_reference_per_game": { "type": ["string", "null"] },
+        "basketball_reference_advanced": { "type": ["string", "null"] },
         "nba_stats_awards": { "type": ["string", "null"] },
         "nba_stats_career": { "type": ["string", "null"] },
         "nba_stats_game_finder": { "type": ["string", "null"] }

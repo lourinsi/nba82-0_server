@@ -2,7 +2,7 @@
 
 Backend API and data seeding tools for the 82-0 accolade workspace.
 
-This server stores player accolade data in `data/players_accolades.json`, serves it through Express, and includes scripts for fetching NBA data, resuming long seed runs, recalculating `legacy_points`, and deriving team-era Classic scores.
+This server stores live player accolade data in `data/players_accolades.json`, serves it through Express, and includes scripts for fetching NBA data, resuming long seed runs, recalculating `legacy_points`, and deriving team-era Classic scores. During the B-Ref transition, the B-Ref seed writes a side-by-side file at `data/players_accolades_bref.json`.
 
 ## Setup
 
@@ -62,10 +62,15 @@ Available scripts:
 npm start
 npm run dev
 npm run seed
+npm run seed:bref
+npm run seed:bref:dry
+npm run seed:bref:refresh
 npm run seed:active
 npm run seed:active:resume
 npm run seed:full
 npm run seed:full:resume
+npm run seed:game-wins
+npm run seed:advanced-stats
 npm run seed:stats
 npm run seed:games-started
 npm run seed:games_started
@@ -83,7 +88,7 @@ npm run fix:positions
 `npm run seed` is the same as:
 
 ```powershell
-node seed.js --mode=active
+node seed.js --mode=bref --replace --yes
 ```
 
 Simple command guide:
@@ -96,10 +101,19 @@ npm run dev
 Runs the Express API server with Node watch mode, so it restarts after local code changes.
 
 npm run seed
-Refreshes current active NBA players and merges them into the existing player file.
+Rebuilds `data/players_accolades_bref.json` from Basketball Reference player identity, per-game stats, positions, TS%, and WS/48. Existing NBA award rows are matched from `data/players_accolades.json` as the accolade fallback, then legacy/classic points are recalculated.
+
+npm run seed:bref
+Same B-Ref-primary full rebuild as npm run seed.
+
+npm run seed:bref:dry
+Builds the B-Ref-primary output in memory from existing caches without writing files.
+
+npm run seed:bref:refresh
+Forces fresh Basketball Reference per-game and advanced stat page fetches before rebuilding.
 
 npm run seed:active
-Same active-player refresh as npm run seed.
+Refreshes active NBA players from NBA Stats and merges them into the existing player file. This is now a fallback/repair path, not the default seed.
 
 npm run seed:active:resume
 Continues an active-player seed and skips players already saved in data/players_accolades.json.
@@ -138,7 +152,7 @@ npm run backfill:season-stats
 Backfills PPG/RPG/APG/SPG/BPG into stored career_seasons from NBA Stats career totals.
 
 npm run refresh:league-averages
-Builds data/historical_league_averages.json from NBA Stats/Basketball Reference season data.
+Builds data/historical_league_averages.json from NBA Stats/Basketball Reference season data, including league `TS_PCT` for future TS+ calculations.
 
 npm run seed:goat-rankings
 Fetches or refreshes the cached Bleacher Report GOAT ranking scores in data/br_goat_rankings.json.
@@ -156,67 +170,34 @@ Applies manual position overrides from data/position_overrides.json.
 Recommended seed pipeline:
 
 ```powershell
-npm run refresh:positions:dry
-npm run refresh:positions
-npm run seed:active
-npm run seed:bref-positions
-npm run seed:games-started -- --saveEvery=25
-npm run seed:legacy-points
+npm run seed
 npm run refresh:league-averages
-npm run seed:stats
-npm run backfill:season-stats -- --saveEvery=25
-npm run seed:classic-points -- --dryRun
-npm run seed:classic-points
 npm run seed:goat-rankings
 ```
 
 Step-by-step:
 
-1. Preview position changes with `npm run refresh:positions:dry`.
-   This shows what would change before touching `players_accolades.json`.
+1. Rebuild B-Ref transition storage with `npm run seed`.
+   This writes `data/players_accolades_bref.json` with the Basketball Reference player universe from `data/bref_positions.json`, fetches/reuses B-Ref per-game and advanced stat caches, carries forward existing NBA-derived award rows from `data/players_accolades.json` as fallback, and recalculates `legacy_points` plus Classic team-era blocks.
 
-2. Apply position updates with `npm run refresh:positions`.
-   This keeps blank, unknown, and broad NBA API positions current.
+2. Refresh league averages with `npm run refresh:league-averages`.
+   This builds `data/historical_league_averages.json` for the season climate baseline, including league TS%.
 
-3. Refresh player data with `npm run seed:active` or `npm run seed:full`.
-   Both commands merge into existing data by default. Use `seed:active` for current NBA players. Use `seed:full` when you want to refresh the all-time dataset from the start while preserving unprocessed records.
-
-4. Re-enforce Basketball Reference positions with `npm run seed:bref-positions`.
-   This overwrites matching players' `positions` and `primary_position` from `data/bref_positions.json` after player refreshes, so stale merged values are removed.
-
-5. Backfill games started with `npm run seed:games-started`.
-   This uses NBA Stats career totals (`GS`) and stores both per-season `games_started` and aggregate `accolades.games_started`. If a season has no `GS`, its `GP` is counted as `games_started`. Explicit `GS=0` only falls back to `GP` before 1970-71.
-
-6. Optionally seed game wins with `npm run seed:game-wins`.
-   This counts NBA Stats regular-season game logs where `WL` is `W`, stores per-season `games_won`, and exposes the career total as `accolades.games_won`. Use `--gameWins` without `--refreshGameWins` when you want to reuse cached win rows.
-
-7. Recalculate base scoring with `npm run seed:legacy-points`.
-   This updates `legacy_points` from the accolades already stored locally.
-
-8. Refresh league averages with `npm run refresh:league-averages`.
-   This builds `data/historical_league_averages.json` for the season climate baseline.
-
-9. Refresh active-player career season stats with `npm run seed:stats`.
-   This keeps current players' `career_seasons`, active status, and current team fresh from `data/nba_stats_player_directory.json` and `data/nba_stats_career_stats_cache.json`.
-
-10. Backfill Basketball Reference advanced stats with `npm run seed:advanced-stats`.
-   This stores TS% as `ts_pct` and WS/48 as `ws_per_48` on matching stored career seasons.
-
-11. Backfill any remaining stored career season stat gaps with `npm run backfill:season-stats -- --saveEvery=25`.
-   This fills PPG/RPG/APG/SPG/BPG on `career_seasons` from NBA Stats career totals.
-
-12. Recalculate Classic Mode team-era points with `npm run seed:classic-points`.
-   This uses `data/historical_league_averages.json` and only overwrites each classic block's `points`.
-
-13. Refresh GOAT ranking data with `npm run seed:goat-rankings`.
+3. Refresh GOAT ranking data with `npm run seed:goat-rankings`.
    This updates the cached media ranking file used for GOAT score overlays.
+
+The older NBA Stats commands are still available as fallback tools:
+`npm run seed:active`, `npm run seed:full`, `npm run seed:game-wins`, `npm run seed:stats`,
+`npm run seed:games-started`, and `npm run backfill:season-stats`.
 
 ## Running Scripts Safely
 
-Run only one script that writes `data/players_accolades.json` at a time. These commands all touch that file and should be run sequentially:
+Run only one script that writes player data JSON at a time. B-Ref seed writes `data/players_accolades_bref.json`; the NBA Stats fallback scripts write `data/players_accolades.json`. Keep these commands sequential so cached fallback reads and full-file writes do not race:
 
 ```powershell
 npm run seed
+npm run seed:bref
+npm run seed:bref:refresh
 npm run seed:active
 npm run seed:full
 npm run seed:game-wins
@@ -231,7 +212,7 @@ npm run refresh:positions
 npm run fix:positions
 ```
 
-Do not run `npm run seed:stats`, `npm run seed:game-wins`, `npm run seed:advanced-stats`, `npm run seed:games-started`, `npm run seed:bref-positions`, `npm run backfill:season-stats`, or `npm run refresh:positions` at the same time as any other command that writes `players_accolades.json`. These commands all read the full file, update their own fields in memory, and write the full file back. Whichever write finishes last can overwrite the other command's changes.
+Do not run `npm run seed`, `npm run seed:bref`, `npm run seed:bref:refresh`, `npm run seed:stats`, `npm run seed:game-wins`, `npm run seed:advanced-stats`, `npm run seed:games-started`, `npm run seed:bref-positions`, `npm run backfill:season-stats`, or `npm run refresh:positions` at the same time as another command that writes one of the player data files. The legacy commands all read the full live file, update their own fields in memory, and write the full file back. Whichever write finishes last can overwrite the other command's changes.
 
 This pairing is safe because the scripts write different files, though slower delays are still friendlier to the remote data sources:
 
@@ -247,7 +228,14 @@ If PowerShell blocks `npm.ps1`, use `npm.cmd` with the same arguments.
 
 ## Seed Modes
 
-`active` fetches current active players from the NBA Stats player directory, refreshes their awards/career data, and merges those updates into the existing player file by default.
+`bref` rebuilds the transition player file from Basketball Reference identity and stat caches. It writes `data/players_accolades_bref.json` by default and reads `data/players_accolades.json` only as the award/accolade fallback source. It is a replacement mode, so use `--replace --yes` when writing output. This is the default behind `npm run seed`.
+
+```powershell
+npm run seed
+node seed.js --mode=bref --replace --yes
+```
+
+`active` fetches current active players from the NBA Stats player directory, refreshes their awards/career data, and merges those updates into the existing player file by default. This is a fallback mode.
 
 ```powershell
 npm run seed:active
@@ -277,14 +265,14 @@ npm run seed:full -- --offset=200 --limit=100
 npm run seed:full -- --offset=300 --limit=100
 ```
 
-For active players:
+For NBA Stats active-player fallback runs:
 
 ```powershell
-npm run seed -- --limit=100
-npm run seed -- --offset=100 --limit=100
+npm run seed:active -- --limit=100
+npm run seed:active -- --offset=100 --limit=100
 ```
 
-Normal seed runs merge into the existing `players_accolades.json` instead of replacing it. This means refreshed players overwrite matching records one by one, while unprocessed players remain in the file. Use `--replace --yes` only when you intentionally want the output file to contain only the current run.
+`npm run seed` is now a B-Ref replacement rebuild for `players_accolades_bref.json`. NBA Stats fallback seed runs (`seed:active` and `seed:full`) still merge into the live `players_accolades.json` unless you pass `--replace --yes`.
 
 ## Resume Mode
 
@@ -320,7 +308,7 @@ This skips existing records and checkpoints after every 25 newly processed playe
 
 ## Replace Mode
 
-Use `--replace` when you intentionally want the output file to contain only the current run.
+Use `--replace` when you intentionally want the output file to contain only the current run. B-Ref mode requires replacement and targets `players_accolades_bref.json`; NBA Stats fallback modes can either merge or replace `players_accolades.json`.
 
 Example:
 
@@ -328,7 +316,7 @@ Example:
 npm run seed:full -- --limit=100 --replace --yes
 ```
 
-Without `--replace`, seed runs merge into existing data. Replacement prompts for confirmation when run interactively; use `--yes` only when you intentionally want a non-interactive replacement.
+Without `--replace`, NBA Stats fallback seed runs merge into existing data. Replacement prompts for confirmation when run interactively; use `--yes` only when you intentionally want a non-interactive replacement.
 
 ## Useful Flags
 
@@ -439,7 +427,7 @@ active: current players from nba_stats_player_directory.json plus active/current
 all: every stored player with career_seasons
 ```
 
-`seed:advanced-stats` reads Basketball Reference advanced season pages, caches them in `data/bref_advanced_stats_cache.json`, and matches rows by player name, season, and team. Use `--refreshCache` to refetch B-Ref season pages and `--force` to overwrite existing `ts_pct` / `ws_per_48` values.
+`seed:advanced-stats` reads Basketball Reference advanced season pages, caches them in `data/bref_advanced_stats_cache.json`, and matches rows by player name, season, and team. Missing seasons are filled from that player's career average for the metric. If the player has no TS% or WS/48 value anywhere in their career, the fallback is `ts_pct=0.5` and `ws_per_48=0.1`. Use `--refreshCache` to refetch B-Ref season pages and `--force` to overwrite existing B-Ref-matched `ts_pct` / `ws_per_48` values.
 
 Important: do not run `seed:stats`, `seed:game-wins`, `seed:advanced-stats`, or `seed:games-started` at the same time as `refresh:positions`, `seed`, `seed:full`, `seed:legacy-points`, `seed:classic-points`, or `backfill:season-stats`. They can update different fields, but they still rewrite the same whole `players_accolades.json` file.
 
@@ -559,10 +547,14 @@ The league-average file is keyed by NBA season:
 
 ```json
 {
-  "2011-12": { "PPG": 96.3, "RPG": 42.2, "APG": 21.0, "SPG": 7.7, "BPG": 5.1 },
-  "1961-62": { "PPG": 118.8, "RPG": 71.4, "APG": 23.9 }
+  "2011-12": { "PPG": 96.3, "RPG": 42.2, "APG": 21.0, "SPG": 7.7, "BPG": 5.1, "TS_PCT": 0.527 },
+  "1961-62": { "PPG": 118.8, "RPG": 71.4, "APG": 23.9, "TS_PCT": 0.479 }
 }
 ```
+
+`TS_PCT` is stored as a decimal, so future TS+ can use `player.ts_pct / leagueAverage.TS_PCT`.
+For very early seasons, the refresh script parses B-Ref's Advanced Stats league-average row when available.
+If a requested season has no league TS% source, the script fills `TS_PCT` from the earliest available league TS% season so TS+ still has a denominator.
 
 The weights live at the top of `eraRelativeClassicPoints.js`. If a league-average season has no
 `SPG`/`BPG`, the scorer drops defensive metrics and evenly redistributes the total stat weight across
@@ -618,10 +610,14 @@ PHW/SFW -> GSW
 The main optional controls are in `.env.example`:
 
 ```env
-SEED_MODE=active
+SEED_MODE=bref
 SEED_OFFSET=0
 SEED_RESUME=false
 SEED_SAVE_EVERY=
+BREF_SEED_DELAY_MS=4000
+BREF_SEED_RETRIES=3
+BREF_SEED_TIMEOUT_MS=30000
+BREF_SEED_SAVE_EVERY=10
 NBA_STATS_DELAY_MS=1500
 NBA_STATS_MAX_RETRIES=5
 NBA_STATS_TIMEOUT_MS=30000
@@ -660,4 +656,12 @@ If you want a clean all-time file:
 npm run seed:full -- --replace --yes
 ```
 
-For most long runs, prefer resume mode instead of deleting `players_accolades.json`.
+If you want the clean B-Ref-primary transition file:
+
+```powershell
+npm run seed
+```
+
+This writes `data/players_accolades_bref.json`.
+
+For older NBA Stats long runs, prefer resume mode instead of deleting `players_accolades.json`.
