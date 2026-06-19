@@ -159,6 +159,13 @@ function gamesStartedFromCareer(player) {
   );
 }
 
+function gamesWonFromCareer(player) {
+  return (player.career_seasons || []).reduce(
+    (sum, season) => sum + normalizedNumber(season?.games_won),
+    0,
+  );
+}
+
 function recalculateAccolades(player, awardRows) {
   const existing = player.accolades || {};
   const accolades = createEmptyClassicAccolades();
@@ -170,6 +177,7 @@ function recalculateAccolades(player, awardRows) {
   const careerSeasonCount = seasonsPlayedFromCareer(player);
   accolades.seasons_played = careerSeasonCount || normalizedNumber(existing.seasons_played);
   accolades.games_started = Math.max(gamesStartedFromCareer(player), normalizedNumber(existing.games_started));
+  accolades.games_won = Math.max(gamesWonFromCareer(player), normalizedNumber(existing.games_won));
 
   if (existing.most_improved_won) {
     accolades.most_improved = Math.max(accolades.most_improved, 1);
@@ -239,6 +247,7 @@ module.exports = {
   buildStatTitleWinnerLookup,
   derivedStatTitleRows,
   gamesStartedFromCareer,
+  gamesWonFromCareer,
   normalizePlayerAccoladeRecord,
   normalizePlayerAccoladeRecords,
 };

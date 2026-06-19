@@ -1,0 +1,4712 @@
+{
+  "fetched_at": "2026-06-19T02:33:48.845Z",
+  "players": {
+    "21": {
+      "fetched_at": "2026-06-19T02:32:39.020Z",
+      "seasons": [
+        {
+          "season": "1991-92",
+          "team": "NYK",
+          "games_won": 51
+        },
+        {
+          "season": "1992-93",
+          "team": "NYK",
+          "games_won": 50
+        },
+        {
+          "season": "1993-94",
+          "team": "NYK",
+          "games_won": 55
+        },
+        {
+          "season": "1994-95",
+          "team": "NYK",
+          "games_won": 41
+        },
+        {
+          "season": "1995-96",
+          "team": "MEM",
+          "games_won": 13
+        },
+        {
+          "season": "1996-97",
+          "team": "MEM",
+          "games_won": 9
+        },
+        {
+          "season": "1997-98",
+          "team": "OKC",
+          "games_won": 60
+        },
+        {
+          "season": "1998-99",
+          "team": "POR",
+          "games_won": 35
+        },
+        {
+          "season": "1999-00",
+          "team": "POR",
+          "games_won": 59
+        },
+        {
+          "season": "2000-01",
+          "team": "POR",
+          "games_won": 37
+        },
+        {
+          "season": "2001-02",
+          "team": "CHI",
+          "games_won": 9
+        },
+        {
+          "season": "2001-02",
+          "team": "MIL",
+          "games_won": 7
+        }
+      ]
+    },
+    "51": {
+      "fetched_at": "2026-06-19T02:25:52.788Z",
+      "seasons": [
+        {
+          "season": "1990-91",
+          "team": "DEN",
+          "games_won": 18
+        },
+        {
+          "season": "1991-92",
+          "team": "DEN",
+          "games_won": 24
+        },
+        {
+          "season": "1992-93",
+          "team": "DEN",
+          "games_won": 36
+        },
+        {
+          "season": "1993-94",
+          "team": "DEN",
+          "games_won": 40
+        },
+        {
+          "season": "1994-95",
+          "team": "DEN",
+          "games_won": 35
+        },
+        {
+          "season": "1995-96",
+          "team": "DEN",
+          "games_won": 23
+        },
+        {
+          "season": "1996-97",
+          "team": "SAC",
+          "games_won": 32
+        },
+        {
+          "season": "1997-98",
+          "team": "SAC",
+          "games_won": 10
+        },
+        {
+          "season": "2000-01",
+          "team": "MEM",
+          "games_won": 11
+        }
+      ]
+    },
+    "72": {
+      "fetched_at": "2026-06-19T02:31:19.464Z",
+      "seasons": [
+        {
+          "season": "1991-92",
+          "team": "BKN",
+          "games_won": 30
+        },
+        {
+          "season": "1992-93",
+          "team": "BKN",
+          "games_won": 31
+        },
+        {
+          "season": "1993-94",
+          "team": "BKN",
+          "games_won": 45
+        },
+        {
+          "season": "1994-95",
+          "team": "BKN",
+          "games_won": 26
+        },
+        {
+          "season": "1995-96",
+          "team": "BKN",
+          "games_won": 12
+        },
+        {
+          "season": "1995-96",
+          "team": "CHA",
+          "games_won": 20
+        },
+        {
+          "season": "1996-97",
+          "team": "POR",
+          "games_won": 49
+        },
+        {
+          "season": "1997-98",
+          "team": "BOS",
+          "games_won": 8
+        },
+        {
+          "season": "1997-98",
+          "team": "POR",
+          "games_won": 25
+        },
+        {
+          "season": "1998-99",
+          "team": "BOS",
+          "games_won": 12
+        },
+        {
+          "season": "1999-00",
+          "team": "BOS",
+          "games_won": 35
+        },
+        {
+          "season": "2000-01",
+          "team": "BOS",
+          "games_won": 14
+        },
+        {
+          "season": "2001-02",
+          "team": "BOS",
+          "games_won": 44
+        },
+        {
+          "season": "2002-03",
+          "team": "NOP",
+          "games_won": 15
+        },
+        {
+          "season": "2002-03",
+          "team": "OKC",
+          "games_won": 16
+        },
+        {
+          "season": "2003-04",
+          "team": "IND",
+          "games_won": 33
+        },
+        {
+          "season": "2004-05",
+          "team": "ATL",
+          "games_won": 8
+        },
+        {
+          "season": "2004-05",
+          "team": "LAC",
+          "games_won": 1
+        }
+      ]
+    },
+    "98": {
+      "fetched_at": "2026-06-19T02:31:36.754Z",
+      "seasons": [
+        {
+          "season": "1989-90",
+          "team": "ORL",
+          "games_won": 18
+        },
+        {
+          "season": "1990-91",
+          "team": "ORL",
+          "games_won": 26
+        },
+        {
+          "season": "1991-92",
+          "team": "ORL",
+          "games_won": 16
+        },
+        {
+          "season": "1992-93",
+          "team": "ORL",
+          "games_won": 41
+        },
+        {
+          "season": "1993-94",
+          "team": "ORL",
+          "games_won": 49
+        },
+        {
+          "season": "1994-95",
+          "team": "ORL",
+          "games_won": 55
+        },
+        {
+          "season": "1995-96",
+          "team": "ORL",
+          "games_won": 56
+        },
+        {
+          "season": "1996-97",
+          "team": "ORL",
+          "games_won": 39
+        },
+        {
+          "season": "1997-98",
+          "team": "ORL",
+          "games_won": 31
+        },
+        {
+          "season": "1998-99",
+          "team": "ORL",
+          "games_won": 30
+        },
+        {
+          "season": "1999-00",
+          "team": "SAC",
+          "games_won": 41
+        },
+        {
+          "season": "2000-01",
+          "team": "SAC",
+          "games_won": 15
+        },
+        {
+          "season": "2001-02",
+          "team": "MEM",
+          "games_won": 3
+        }
+      ]
+    },
+    "149": {
+      "fetched_at": "2026-06-19T02:26:55.728Z",
+      "seasons": [
+        {
+          "season": "1985-86",
+          "team": "SAC",
+          "games_won": 3
+        },
+        {
+          "season": "1986-87",
+          "team": "WAS",
+          "games_won": 33
+        },
+        {
+          "season": "1987-88",
+          "team": "DEN",
+          "games_won": 54
+        },
+        {
+          "season": "1988-89",
+          "team": "DEN",
+          "games_won": 42
+        },
+        {
+          "season": "1989-90",
+          "team": "DEN",
+          "games_won": 42
+        },
+        {
+          "season": "1990-91",
+          "team": "DEN",
+          "games_won": 19
+        },
+        {
+          "season": "1991-92",
+          "team": "WAS",
+          "games_won": 25
+        },
+        {
+          "season": "1992-93",
+          "team": "WAS",
+          "games_won": 21
+        },
+        {
+          "season": "1993-94",
+          "team": "WAS",
+          "games_won": 22
+        },
+        {
+          "season": "1994-95",
+          "team": "CHA",
+          "games_won": 14
+        },
+        {
+          "season": "1995-96",
+          "team": "CHA",
+          "games_won": 9
+        }
+      ]
+    },
+    "246": {
+      "fetched_at": "2026-06-19T02:31:05.426Z",
+      "seasons": [
+        {
+          "season": "1987-88",
+          "team": "SAS",
+          "games_won": 31
+        },
+        {
+          "season": "1988-89",
+          "team": "SAS",
+          "games_won": 21
+        },
+        {
+          "season": "1989-90",
+          "team": "MIL",
+          "games_won": 33
+        },
+        {
+          "season": "1990-91",
+          "team": "BKN",
+          "games_won": 0
+        },
+        {
+          "season": "1990-91",
+          "team": "DEN",
+          "games_won": 9
+        },
+        {
+          "season": "1990-91",
+          "team": "MIL",
+          "games_won": 18
+        },
+        {
+          "season": "1991-92",
+          "team": "DEN",
+          "games_won": 24
+        },
+        {
+          "season": "1993-94",
+          "team": "DET",
+          "games_won": 17
+        },
+        {
+          "season": "1994-95",
+          "team": "ATL",
+          "games_won": 27
+        },
+        {
+          "season": "1995-96",
+          "team": "SAS",
+          "games_won": 33
+        },
+        {
+          "season": "1996-97",
+          "team": "SAS",
+          "games_won": 20
+        },
+        {
+          "season": "1997-98",
+          "team": "ATL",
+          "games_won": 31
+        }
+      ]
+    },
+    "308": {
+      "fetched_at": "2026-06-19T02:30:02.880Z",
+      "seasons": [
+        {
+          "season": "1994-95",
+          "team": "PHI",
+          "games_won": 21
+        },
+        {
+          "season": "1995-96",
+          "team": "PHI",
+          "games_won": 15
+        },
+        {
+          "season": "1996-97",
+          "team": "ATL",
+          "games_won": 1
+        }
+      ]
+    },
+    "335": {
+      "fetched_at": "2026-06-19T02:31:54.482Z",
+      "seasons": [
+        {
+          "season": "1988-89",
+          "team": "SAS",
+          "games_won": 21
+        },
+        {
+          "season": "1989-90",
+          "team": "SAS",
+          "games_won": 56
+        },
+        {
+          "season": "1990-91",
+          "team": "SAS",
+          "games_won": 50
+        },
+        {
+          "season": "1991-92",
+          "team": "SAS",
+          "games_won": 32
+        },
+        {
+          "season": "1992-93",
+          "team": "SAS",
+          "games_won": 22
+        },
+        {
+          "season": "1993-94",
+          "team": "SAS",
+          "games_won": 53
+        },
+        {
+          "season": "1994-95",
+          "team": "SAS",
+          "games_won": 28
+        },
+        {
+          "season": "1995-96",
+          "team": "NYK",
+          "games_won": 11
+        },
+        {
+          "season": "1995-96",
+          "team": "TOR",
+          "games_won": 14
+        },
+        {
+          "season": "1996-97",
+          "team": "MIA",
+          "games_won": 22
+        }
+      ]
+    },
+    "353": {
+      "fetched_at": "2026-06-19T02:33:41.829Z",
+      "seasons": [
+        {
+          "season": "1994-95",
+          "team": "ORL",
+          "games_won": 2
+        },
+        {
+          "season": "1995-96",
+          "team": "ORL",
+          "games_won": 10
+        },
+        {
+          "season": "1996-97",
+          "team": "ORL",
+          "games_won": 34
+        },
+        {
+          "season": "1997-98",
+          "team": "ORL",
+          "games_won": 23
+        },
+        {
+          "season": "1998-99",
+          "team": "ORL",
+          "games_won": 33
+        },
+        {
+          "season": "1999-00",
+          "team": "ORL",
+          "games_won": 41
+        },
+        {
+          "season": "2000-01",
+          "team": "ORL",
+          "games_won": 40
+        },
+        {
+          "season": "2001-02",
+          "team": "ORL",
+          "games_won": 44
+        },
+        {
+          "season": "2002-03",
+          "team": "ORL",
+          "games_won": 42
+        },
+        {
+          "season": "2003-04",
+          "team": "NOP",
+          "games_won": 39
+        },
+        {
+          "season": "2004-05",
+          "team": "DAL",
+          "games_won": 36
+        },
+        {
+          "season": "2004-05",
+          "team": "NOP",
+          "games_won": 1
+        },
+        {
+          "season": "2005-06",
+          "team": "DAL",
+          "games_won": 42
+        },
+        {
+          "season": "2006-07",
+          "team": "IND",
+          "games_won": 34
+        },
+        {
+          "season": "2007-08",
+          "team": "BKN",
+          "games_won": 22
+        }
+      ]
+    },
+    "680": {
+      "fetched_at": "2026-06-19T02:30:16.892Z",
+      "seasons": [
+        {
+          "season": "1995-96",
+          "team": "CLE",
+          "games_won": 15
+        },
+        {
+          "season": "1999-00",
+          "team": "ORL",
+          "games_won": 39
+        },
+        {
+          "season": "2000-01",
+          "team": "ORL",
+          "games_won": 43
+        },
+        {
+          "season": "2001-02",
+          "team": "UTA",
+          "games_won": 28
+        },
+        {
+          "season": "2002-03",
+          "team": "UTA",
+          "games_won": 22
+        }
+      ]
+    },
+    "706": {
+      "fetched_at": "2026-06-19T02:29:17.726Z",
+      "seasons": [
+        {
+          "season": "1995-96",
+          "team": "MIN",
+          "games_won": 12
+        },
+        {
+          "season": "1996-97",
+          "team": "DEN",
+          "games_won": 3
+        },
+        {
+          "season": "1996-97",
+          "team": "IND",
+          "games_won": 24
+        }
+      ]
+    },
+    "724": {
+      "fetched_at": "2026-06-19T02:28:27.858Z",
+      "seasons": [
+        {
+          "season": "1995-96",
+          "team": "SAS",
+          "games_won": 45
+        },
+        {
+          "season": "1996-97",
+          "team": "SAS",
+          "games_won": 20
+        },
+        {
+          "season": "1997-98",
+          "team": "DEN",
+          "games_won": 6
+        },
+        {
+          "season": "1997-98",
+          "team": "SAS",
+          "games_won": 23
+        },
+        {
+          "season": "1998-99",
+          "team": "DEN",
+          "games_won": 9
+        },
+        {
+          "season": "1999-00",
+          "team": "DEN",
+          "games_won": 11
+        },
+        {
+          "season": "2000-01",
+          "team": "ORL",
+          "games_won": 17
+        },
+        {
+          "season": "2004-05",
+          "team": "CHA",
+          "games_won": 1
+        }
+      ]
+    },
+    "732": {
+      "fetched_at": "2026-06-19T02:30:20.228Z",
+      "seasons": [
+        {
+          "season": "1995-96",
+          "team": "MEM",
+          "games_won": 6
+        },
+        {
+          "season": "1996-97",
+          "team": "WAS",
+          "games_won": 16
+        }
+      ]
+    },
+    "769": {
+      "fetched_at": "2026-06-19T02:33:31.311Z",
+      "seasons": [
+        {
+          "season": "1989-90",
+          "team": "CHI",
+          "games_won": 55
+        },
+        {
+          "season": "1990-91",
+          "team": "CHI",
+          "games_won": 61
+        },
+        {
+          "season": "1991-92",
+          "team": "CHI",
+          "games_won": 67
+        },
+        {
+          "season": "1992-93",
+          "team": "CHI",
+          "games_won": 57
+        },
+        {
+          "season": "1993-94",
+          "team": "CHI",
+          "games_won": 55
+        },
+        {
+          "season": "1994-95",
+          "team": "CHI",
+          "games_won": 47
+        },
+        {
+          "season": "1995-96",
+          "team": "GSW",
+          "games_won": 36
+        },
+        {
+          "season": "1996-97",
+          "team": "GSW",
+          "games_won": 19
+        },
+        {
+          "season": "1997-98",
+          "team": "CHA",
+          "games_won": 36
+        },
+        {
+          "season": "1997-98",
+          "team": "GSW",
+          "games_won": 0
+        },
+        {
+          "season": "1998-99",
+          "team": "CHA",
+          "games_won": 3
+        },
+        {
+          "season": "1998-99",
+          "team": "ORL",
+          "games_won": 15
+        },
+        {
+          "season": "1999-00",
+          "team": "CHI",
+          "games_won": 5
+        }
+      ]
+    },
+    "912": {
+      "fetched_at": "2026-06-19T02:27:02.695Z",
+      "seasons": [
+        {
+          "season": "1986-87",
+          "team": "PHX",
+          "games_won": 22
+        },
+        {
+          "season": "1991-92",
+          "team": "BKN",
+          "games_won": 36
+        },
+        {
+          "season": "1992-93",
+          "team": "BKN",
+          "games_won": 34
+        },
+        {
+          "season": "1994-95",
+          "team": "DET",
+          "games_won": 28
+        },
+        {
+          "season": "1995-96",
+          "team": "CHA",
+          "games_won": 26
+        },
+        {
+          "season": "1996-97",
+          "team": "CHA",
+          "games_won": 30
+        }
+      ]
+    },
+    "944": {
+      "fetched_at": "2026-06-19T02:31:01.921Z",
+      "seasons": [
+        {
+          "season": "1992-93",
+          "team": "NYK",
+          "games_won": 13
+        },
+        {
+          "season": "1993-94",
+          "team": "NYK",
+          "games_won": 11
+        }
+      ]
+    },
+    "949": {
+      "fetched_at": "2026-06-19T02:26:00.135Z",
+      "seasons": [
+        {
+          "season": "1996-97",
+          "team": "MEM",
+          "games_won": 13
+        },
+        {
+          "season": "1997-98",
+          "team": "MEM",
+          "games_won": 19
+        },
+        {
+          "season": "1998-99",
+          "team": "MEM",
+          "games_won": 8
+        },
+        {
+          "season": "1999-00",
+          "team": "MEM",
+          "games_won": 22
+        },
+        {
+          "season": "2000-01",
+          "team": "MEM",
+          "games_won": 23
+        },
+        {
+          "season": "2001-02",
+          "team": "ATL",
+          "games_won": 32
+        },
+        {
+          "season": "2002-03",
+          "team": "ATL",
+          "games_won": 35
+        },
+        {
+          "season": "2003-04",
+          "team": "ATL",
+          "games_won": 18
+        },
+        {
+          "season": "2003-04",
+          "team": "POR",
+          "games_won": 17
+        },
+        {
+          "season": "2004-05",
+          "team": "POR",
+          "games_won": 17
+        },
+        {
+          "season": "2005-06",
+          "team": "SAC",
+          "games_won": 38
+        },
+        {
+          "season": "2006-07",
+          "team": "SAC",
+          "games_won": 31
+        },
+        {
+          "season": "2007-08",
+          "team": "SAC",
+          "games_won": 2
+        }
+      ]
+    },
+    "951": {
+      "fetched_at": "2026-06-19T02:29:38.863Z",
+      "seasons": [
+        {
+          "season": "1996-97",
+          "team": "MIL",
+          "games_won": 33
+        },
+        {
+          "season": "1997-98",
+          "team": "MIL",
+          "games_won": 36
+        },
+        {
+          "season": "1998-99",
+          "team": "MIL",
+          "games_won": 28
+        },
+        {
+          "season": "1999-00",
+          "team": "MIL",
+          "games_won": 42
+        },
+        {
+          "season": "2000-01",
+          "team": "MIL",
+          "games_won": 52
+        },
+        {
+          "season": "2001-02",
+          "team": "MIL",
+          "games_won": 35
+        },
+        {
+          "season": "2002-03",
+          "team": "MIL",
+          "games_won": 25
+        },
+        {
+          "season": "2002-03",
+          "team": "OKC",
+          "games_won": 17
+        },
+        {
+          "season": "2003-04",
+          "team": "OKC",
+          "games_won": 25
+        },
+        {
+          "season": "2004-05",
+          "team": "OKC",
+          "games_won": 50
+        },
+        {
+          "season": "2005-06",
+          "team": "OKC",
+          "games_won": 35
+        },
+        {
+          "season": "2006-07",
+          "team": "OKC",
+          "games_won": 22
+        },
+        {
+          "season": "2007-08",
+          "team": "BOS",
+          "games_won": 58
+        },
+        {
+          "season": "2008-09",
+          "team": "BOS",
+          "games_won": 59
+        },
+        {
+          "season": "2009-10",
+          "team": "BOS",
+          "games_won": 50
+        },
+        {
+          "season": "2010-11",
+          "team": "BOS",
+          "games_won": 55
+        },
+        {
+          "season": "2011-12",
+          "team": "BOS",
+          "games_won": 23
+        },
+        {
+          "season": "2012-13",
+          "team": "MIA",
+          "games_won": 63
+        },
+        {
+          "season": "2013-14",
+          "team": "MIA",
+          "games_won": 47
+        }
+      ]
+    },
+    "1000": {
+      "fetched_at": "2026-06-19T02:31:51.047Z",
+      "seasons": [
+        {
+          "season": "1996-97",
+          "team": "UTA",
+          "games_won": 56
+        },
+        {
+          "season": "1997-98",
+          "team": "UTA",
+          "games_won": 62
+        },
+        {
+          "season": "1998-99",
+          "team": "UTA",
+          "games_won": 37
+        },
+        {
+          "season": "1999-00",
+          "team": "HOU",
+          "games_won": 34
+        },
+        {
+          "season": "2000-01",
+          "team": "HOU",
+          "games_won": 45
+        },
+        {
+          "season": "2001-02",
+          "team": "NYK",
+          "games_won": 30
+        },
+        {
+          "season": "2002-03",
+          "team": "NYK",
+          "games_won": 37
+        },
+        {
+          "season": "2003-04",
+          "team": "NYK",
+          "games_won": 38
+        },
+        {
+          "season": "2004-05",
+          "team": "MIA",
+          "games_won": 45
+        },
+        {
+          "season": "2004-05",
+          "team": "NYK",
+          "games_won": 0
+        },
+        {
+          "season": "2005-06",
+          "team": "MIA",
+          "games_won": 31
+        }
+      ]
+    },
+    "1505": {
+      "fetched_at": "2026-06-19T02:25:56.210Z",
+      "seasons": [
+        {
+          "season": "1997-98",
+          "team": "SAC",
+          "games_won": 17
+        },
+        {
+          "season": "1998-99",
+          "team": "SAC",
+          "games_won": 27
+        },
+        {
+          "season": "1999-00",
+          "team": "DEN",
+          "games_won": 7
+        },
+        {
+          "season": "1999-00",
+          "team": "ORL",
+          "games_won": 20
+        },
+        {
+          "season": "2000-01",
+          "team": "DEN",
+          "games_won": 15
+        },
+        {
+          "season": "2001-02",
+          "team": "DAL",
+          "games_won": 3
+        },
+        {
+          "season": "2001-02",
+          "team": "DEN",
+          "games_won": 9
+        },
+        {
+          "season": "2002-03",
+          "team": "DAL",
+          "games_won": 9
+        }
+      ]
+    },
+    "1507": {
+      "fetched_at": "2026-06-19T02:30:54.644Z",
+      "seasons": [
+        {
+          "season": "1997-98",
+          "team": "CLE",
+          "games_won": 40
+        },
+        {
+          "season": "1998-99",
+          "team": "CLE",
+          "games_won": 16
+        },
+        {
+          "season": "1999-00",
+          "team": "LAC",
+          "games_won": 7
+        },
+        {
+          "season": "2000-01",
+          "team": "SAS",
+          "games_won": 58
+        },
+        {
+          "season": "2001-02",
+          "team": "POR",
+          "games_won": 45
+        },
+        {
+          "season": "2002-03",
+          "team": "POR",
+          "games_won": 47
+        },
+        {
+          "season": "2003-04",
+          "team": "POR",
+          "games_won": 26
+        },
+        {
+          "season": "2004-05",
+          "team": "POR",
+          "games_won": 16
+        },
+        {
+          "season": "2005-06",
+          "team": "HOU",
+          "games_won": 8
+        },
+        {
+          "season": "2005-06",
+          "team": "MIA",
+          "games_won": 14
+        },
+        {
+          "season": "2006-07",
+          "team": "CHA",
+          "games_won": 20
+        },
+        {
+          "season": "2007-08",
+          "team": "CHA",
+          "games_won": 3
+        }
+      ]
+    },
+    "1512": {
+      "fetched_at": "2026-06-19T02:32:14.988Z",
+      "seasons": [
+        {
+          "season": "1997-98",
+          "team": "DAL",
+          "games_won": 10
+        },
+        {
+          "season": "1998-99",
+          "team": "DAL",
+          "games_won": 15
+        },
+        {
+          "season": "1999-00",
+          "team": "CHI",
+          "games_won": 13
+        }
+      ]
+    },
+    "1747": {
+      "fetched_at": "2026-06-19T02:30:06.695Z",
+      "seasons": [
+        {
+          "season": "1999-00",
+          "team": "MIL",
+          "games_won": 14
+        },
+        {
+          "season": "2000-01",
+          "team": "MIL",
+          "games_won": 21
+        },
+        {
+          "season": "2001-02",
+          "team": "MIL",
+          "games_won": 27
+        },
+        {
+          "season": "2002-03",
+          "team": "TOR",
+          "games_won": 16
+        },
+        {
+          "season": "2003-04",
+          "team": "MIA",
+          "games_won": 42
+        },
+        {
+          "season": "2004-05",
+          "team": "TOR",
+          "games_won": 32
+        },
+        {
+          "season": "2005-06",
+          "team": "HOU",
+          "games_won": 27
+        },
+        {
+          "season": "2006-07",
+          "team": "HOU",
+          "games_won": 52
+        },
+        {
+          "season": "2007-08",
+          "team": "HOU",
+          "games_won": 51
+        },
+        {
+          "season": "2008-09",
+          "team": "HOU",
+          "games_won": 28
+        },
+        {
+          "season": "2008-09",
+          "team": "ORL",
+          "games_won": 20
+        },
+        {
+          "season": "2009-10",
+          "team": "BKN",
+          "games_won": 1
+        },
+        {
+          "season": "2009-10",
+          "team": "MIA",
+          "games_won": 12
+        }
+      ]
+    },
+    "1824": {
+      "fetched_at": "2026-06-19T02:30:10.111Z",
+      "seasons": [
+        {
+          "season": "1998-99",
+          "team": "SAC",
+          "games_won": 1
+        }
+      ]
+    },
+    "2042": {
+      "fetched_at": "2026-06-19T02:28:31.899Z",
+      "seasons": [
+        {
+          "season": "2000-01",
+          "team": "DAL",
+          "games_won": 23
+        },
+        {
+          "season": "2000-01",
+          "team": "WAS",
+          "games_won": 6
+        },
+        {
+          "season": "2001-02",
+          "team": "WAS",
+          "games_won": 23
+        },
+        {
+          "season": "2002-03",
+          "team": "NOP",
+          "games_won": 36
+        }
+      ]
+    },
+    "2124": {
+      "fetched_at": "2026-06-19T02:29:31.908Z",
+      "seasons": [
+        {
+          "season": "2001-02",
+          "team": "MIA",
+          "games_won": 4
+        },
+        {
+          "season": "2002-03",
+          "team": "MIA",
+          "games_won": 24
+        },
+        {
+          "season": "2003-04",
+          "team": "MIA",
+          "games_won": 20
+        },
+        {
+          "season": "2004-05",
+          "team": "CHA",
+          "games_won": 4
+        },
+        {
+          "season": "2004-05",
+          "team": "MIA",
+          "games_won": 9
+        },
+        {
+          "season": "2005-06",
+          "team": "CHI",
+          "games_won": 28
+        },
+        {
+          "season": "2006-07",
+          "team": "CHI",
+          "games_won": 35
+        },
+        {
+          "season": "2007-08",
+          "team": "BKN",
+          "games_won": 21
+        },
+        {
+          "season": "2007-08",
+          "team": "DAL",
+          "games_won": 13
+        },
+        {
+          "season": "2008-09",
+          "team": "MIL",
+          "games_won": 18
+        },
+        {
+          "season": "2009-10",
+          "team": "DEN",
+          "games_won": 36
+        },
+        {
+          "season": "2010-11",
+          "team": "ORL",
+          "games_won": 9
+        }
+      ]
+    },
+    "2220": {
+      "fetched_at": "2026-06-19T02:33:38.320Z",
+      "seasons": [
+        {
+          "season": "2001-02",
+          "team": "BKN",
+          "games_won": 24
+        },
+        {
+          "season": "2002-03",
+          "team": "BKN",
+          "games_won": 11
+        },
+        {
+          "season": "2003-04",
+          "team": "BKN",
+          "games_won": 31
+        }
+      ]
+    },
+    "2240": {
+      "fetched_at": "2026-06-19T02:33:17.525Z",
+      "seasons": [
+        {
+          "season": "2001-02",
+          "team": "GSW",
+          "games_won": 10
+        },
+        {
+          "season": "2002-03",
+          "team": "GSW",
+          "games_won": 38
+        },
+        {
+          "season": "2003-04",
+          "team": "WAS",
+          "games_won": 17
+        },
+        {
+          "season": "2004-05",
+          "team": "WAS",
+          "games_won": 44
+        },
+        {
+          "season": "2005-06",
+          "team": "WAS",
+          "games_won": 40
+        },
+        {
+          "season": "2006-07",
+          "team": "WAS",
+          "games_won": 39
+        },
+        {
+          "season": "2007-08",
+          "team": "WAS",
+          "games_won": 6
+        },
+        {
+          "season": "2008-09",
+          "team": "WAS",
+          "games_won": 1
+        },
+        {
+          "season": "2009-10",
+          "team": "WAS",
+          "games_won": 11
+        },
+        {
+          "season": "2010-11",
+          "team": "ORL",
+          "games_won": 30
+        },
+        {
+          "season": "2010-11",
+          "team": "WAS",
+          "games_won": 5
+        },
+        {
+          "season": "2011-12",
+          "team": "MEM",
+          "games_won": 12
+        }
+      ]
+    },
+    "2306": {
+      "fetched_at": "2026-06-19T02:13:11.350Z",
+      "seasons": [
+        {
+          "season": "2001-02",
+          "team": "DEN",
+          "games_won": 6
+        },
+        {
+          "season": "2001-02",
+          "team": "TOR",
+          "games_won": 11
+        },
+        {
+          "season": "2002-03",
+          "team": "UTA",
+          "games_won": 27
+        },
+        {
+          "season": "2003-04",
+          "team": "UTA",
+          "games_won": 35
+        },
+        {
+          "season": "2004-05",
+          "team": "DET",
+          "games_won": 28
+        },
+        {
+          "season": "2004-05",
+          "team": "UTA",
+          "games_won": 7
+        },
+        {
+          "season": "2005-06",
+          "team": "DET",
+          "games_won": 41
+        },
+        {
+          "season": "2005-06",
+          "team": "ORL",
+          "games_won": 13
+        },
+        {
+          "season": "2006-07",
+          "team": "ORL",
+          "games_won": 36
+        },
+        {
+          "season": "2007-08",
+          "team": "ORL",
+          "games_won": 40
+        },
+        {
+          "season": "2009-10",
+          "team": "MIA",
+          "games_won": 43
+        },
+        {
+          "season": "2010-11",
+          "team": "BOS",
+          "games_won": 8
+        },
+        {
+          "season": "2010-11",
+          "team": "MIA",
+          "games_won": 35
+        }
+      ]
+    },
+    "2349": {
+      "fetched_at": "2026-06-19T02:28:52.719Z",
+      "seasons": [
+        {
+          "season": "1991-92",
+          "team": "GSW",
+          "games_won": 55
+        },
+        {
+          "season": "1992-93",
+          "team": "GSW",
+          "games_won": 32
+        },
+        {
+          "season": "1993-94",
+          "team": "GSW",
+          "games_won": 39
+        },
+        {
+          "season": "1994-95",
+          "team": "GSW",
+          "games_won": 18
+        },
+        {
+          "season": "2001-02",
+          "team": "DET",
+          "games_won": 8
+        }
+      ]
+    },
+    "2365": {
+      "fetched_at": "2026-06-19T02:30:33.950Z",
+      "seasons": [
+        {
+          "season": "2001-02",
+          "team": "DEN",
+          "games_won": 9
+        },
+        {
+          "season": "2002-03",
+          "team": "DEN",
+          "games_won": 13
+        },
+        {
+          "season": "2003-04",
+          "team": "DEN",
+          "games_won": 39
+        },
+        {
+          "season": "2004-05",
+          "team": "NOP",
+          "games_won": 17
+        },
+        {
+          "season": "2005-06",
+          "team": "NOP",
+          "games_won": 12
+        },
+        {
+          "season": "2007-08",
+          "team": "NOP",
+          "games_won": 4
+        },
+        {
+          "season": "2008-09",
+          "team": "DEN",
+          "games_won": 45
+        },
+        {
+          "season": "2009-10",
+          "team": "DEN",
+          "games_won": 49
+        },
+        {
+          "season": "2010-11",
+          "team": "DEN",
+          "games_won": 29
+        },
+        {
+          "season": "2011-12",
+          "team": "DEN",
+          "games_won": 16
+        },
+        {
+          "season": "2012-13",
+          "team": "MIA",
+          "games_won": 39
+        },
+        {
+          "season": "2013-14",
+          "team": "MIA",
+          "games_won": 49
+        },
+        {
+          "season": "2014-15",
+          "team": "MIA",
+          "games_won": 27
+        },
+        {
+          "season": "2015-16",
+          "team": "MEM",
+          "games_won": 7
+        },
+        {
+          "season": "2015-16",
+          "team": "MIA",
+          "games_won": 4
+        },
+        {
+          "season": "2016-17",
+          "team": "CLE",
+          "games_won": 8
+        }
+      ]
+    },
+    "2425": {
+      "fetched_at": "2026-06-19T02:33:06.756Z",
+      "seasons": [
+        {
+          "season": "2002-03",
+          "team": "MEM",
+          "games_won": 8
+        },
+        {
+          "season": "2003-04",
+          "team": "ORL",
+          "games_won": 0
+        },
+        {
+          "season": "2003-04",
+          "team": "PHX",
+          "games_won": 0
+        },
+        {
+          "season": "2003-04",
+          "team": "TOR",
+          "games_won": 9
+        }
+      ]
+    },
+    "2431": {
+      "fetched_at": "2026-06-19T02:30:37.300Z",
+      "seasons": [
+        {
+          "season": "2009-10",
+          "team": "HOU",
+          "games_won": 33
+        },
+        {
+          "season": "2010-11",
+          "team": "NOP",
+          "games_won": 14
+        },
+        {
+          "season": "2010-11",
+          "team": "TOR",
+          "games_won": 3
+        }
+      ]
+    },
+    "2546": {
+      "fetched_at": "2026-06-19T02:32:32.300Z",
+      "seasons": [
+        {
+          "season": "2003-04",
+          "team": "DEN",
+          "games_won": 43
+        },
+        {
+          "season": "2004-05",
+          "team": "DEN",
+          "games_won": 47
+        },
+        {
+          "season": "2005-06",
+          "team": "DEN",
+          "games_won": 44
+        },
+        {
+          "season": "2006-07",
+          "team": "DEN",
+          "games_won": 37
+        },
+        {
+          "season": "2007-08",
+          "team": "DEN",
+          "games_won": 47
+        },
+        {
+          "season": "2008-09",
+          "team": "DEN",
+          "games_won": 45
+        },
+        {
+          "season": "2009-10",
+          "team": "DEN",
+          "games_won": 45
+        },
+        {
+          "season": "2010-11",
+          "team": "DEN",
+          "games_won": 29
+        },
+        {
+          "season": "2010-11",
+          "team": "NYK",
+          "games_won": 14
+        },
+        {
+          "season": "2011-12",
+          "team": "NYK",
+          "games_won": 29
+        },
+        {
+          "season": "2012-13",
+          "team": "NYK",
+          "games_won": 47
+        },
+        {
+          "season": "2013-14",
+          "team": "NYK",
+          "games_won": 35
+        },
+        {
+          "season": "2014-15",
+          "team": "NYK",
+          "games_won": 10
+        },
+        {
+          "season": "2015-16",
+          "team": "NYK",
+          "games_won": 32
+        },
+        {
+          "season": "2016-17",
+          "team": "NYK",
+          "games_won": 29
+        },
+        {
+          "season": "2017-18",
+          "team": "OKC",
+          "games_won": 46
+        },
+        {
+          "season": "2018-19",
+          "team": "HOU",
+          "games_won": 4
+        },
+        {
+          "season": "2019-20",
+          "team": "POR",
+          "games_won": 28
+        },
+        {
+          "season": "2020-21",
+          "team": "POR",
+          "games_won": 39
+        },
+        {
+          "season": "2021-22",
+          "team": "LAL",
+          "games_won": 27
+        }
+      ]
+    },
+    "2737": {
+      "fetched_at": "2026-06-19T02:32:56.332Z",
+      "seasons": [
+        {
+          "season": "2004-05",
+          "team": "TOR",
+          "games_won": 24
+        },
+        {
+          "season": "2005-06",
+          "team": "TOR",
+          "games_won": 17
+        },
+        {
+          "season": "2006-07",
+          "team": "UTA",
+          "games_won": 17
+        }
+      ]
+    },
+    "2754": {
+      "fetched_at": "2026-06-19T02:29:45.570Z",
+      "seasons": [
+        {
+          "season": "2004-05",
+          "team": "BOS",
+          "games_won": 42
+        },
+        {
+          "season": "2005-06",
+          "team": "BOS",
+          "games_won": 20
+        },
+        {
+          "season": "2006-07",
+          "team": "BOS",
+          "games_won": 12
+        },
+        {
+          "season": "2007-08",
+          "team": "BOS",
+          "games_won": 61
+        },
+        {
+          "season": "2008-09",
+          "team": "BOS",
+          "games_won": 37
+        },
+        {
+          "season": "2009-10",
+          "team": "BOS",
+          "games_won": 31
+        },
+        {
+          "season": "2010-11",
+          "team": "MEM",
+          "games_won": 40
+        },
+        {
+          "season": "2011-12",
+          "team": "MEM",
+          "games_won": 36
+        },
+        {
+          "season": "2012-13",
+          "team": "MEM",
+          "games_won": 54
+        },
+        {
+          "season": "2013-14",
+          "team": "MEM",
+          "games_won": 31
+        },
+        {
+          "season": "2014-15",
+          "team": "MEM",
+          "games_won": 46
+        },
+        {
+          "season": "2015-16",
+          "team": "MEM",
+          "games_won": 34
+        },
+        {
+          "season": "2016-17",
+          "team": "MEM",
+          "games_won": 36
+        },
+        {
+          "season": "2017-18",
+          "team": "NOP",
+          "games_won": 12
+        }
+      ]
+    },
+    "2772": {
+      "fetched_at": "2026-06-19T02:33:20.873Z",
+      "seasons": [
+        {
+          "season": "2004-05",
+          "team": "NYK",
+          "games_won": 33
+        },
+        {
+          "season": "2005-06",
+          "team": "NYK",
+          "games_won": 10
+        },
+        {
+          "season": "2005-06",
+          "team": "ORL",
+          "games_won": 14
+        },
+        {
+          "season": "2006-07",
+          "team": "ORL",
+          "games_won": 32
+        },
+        {
+          "season": "2007-08",
+          "team": "LAL",
+          "games_won": 18
+        },
+        {
+          "season": "2007-08",
+          "team": "ORL",
+          "games_won": 9
+        },
+        {
+          "season": "2008-09",
+          "team": "LAL",
+          "games_won": 65
+        },
+        {
+          "season": "2009-10",
+          "team": "HOU",
+          "games_won": 37
+        },
+        {
+          "season": "2010-11",
+          "team": "NOP",
+          "games_won": 43
+        },
+        {
+          "season": "2011-12",
+          "team": "NOP",
+          "games_won": 12
+        },
+        {
+          "season": "2012-13",
+          "team": "WAS",
+          "games_won": 25
+        },
+        {
+          "season": "2013-14",
+          "team": "WAS",
+          "games_won": 41
+        },
+        {
+          "season": "2014-15",
+          "team": "HOU",
+          "games_won": 56
+        },
+        {
+          "season": "2015-16",
+          "team": "HOU",
+          "games_won": 40
+        },
+        {
+          "season": "2016-17",
+          "team": "HOU",
+          "games_won": 53
+        },
+        {
+          "season": "2017-18",
+          "team": "HOU",
+          "games_won": 51
+        },
+        {
+          "season": "2018-19",
+          "team": "PHX",
+          "games_won": 4
+        },
+        {
+          "season": "2018-19",
+          "team": "WAS",
+          "games_won": 18
+        },
+        {
+          "season": "2019-20",
+          "team": "POR",
+          "games_won": 10
+        },
+        {
+          "season": "2019-20",
+          "team": "SAC",
+          "games_won": 12
+        },
+        {
+          "season": "2020-21",
+          "team": "MIA",
+          "games_won": 17
+        },
+        {
+          "season": "2021-22",
+          "team": "LAL",
+          "games_won": 8
+        }
+      ]
+    },
+    "76001": {
+      "fetched_at": "2026-06-19T02:25:42.538Z",
+      "seasons": [
+        {
+          "season": "1990-91",
+          "team": "POR",
+          "games_won": 35
+        },
+        {
+          "season": "1991-92",
+          "team": "POR",
+          "games_won": 48
+        },
+        {
+          "season": "1992-93",
+          "team": "BOS",
+          "games_won": 39
+        },
+        {
+          "season": "1992-93",
+          "team": "MIL",
+          "games_won": 10
+        },
+        {
+          "season": "1993-94",
+          "team": "BOS",
+          "games_won": 4
+        },
+        {
+          "season": "1994-95",
+          "team": "PHI",
+          "games_won": 1
+        },
+        {
+          "season": "1994-95",
+          "team": "SAC",
+          "games_won": 24
+        }
+      ]
+    },
+    "76002": {
+      "fetched_at": "2026-06-19T02:25:45.901Z",
+      "seasons": []
+    },
+    "76003": {
+      "fetched_at": "2026-06-19T02:25:49.410Z",
+      "seasons": [
+        {
+          "season": "1983-84",
+          "team": "LAL",
+          "games_won": 53
+        },
+        {
+          "season": "1984-85",
+          "team": "LAL",
+          "games_won": 60
+        },
+        {
+          "season": "1985-86",
+          "team": "LAL",
+          "games_won": 61
+        },
+        {
+          "season": "1986-87",
+          "team": "LAL",
+          "games_won": 63
+        },
+        {
+          "season": "1987-88",
+          "team": "LAL",
+          "games_won": 60
+        },
+        {
+          "season": "1988-89",
+          "team": "LAL",
+          "games_won": 50
+        }
+      ]
+    },
+    "76005": {
+      "fetched_at": "2026-06-19T02:26:03.458Z",
+      "seasons": []
+    },
+    "76006": {
+      "fetched_at": "2026-06-19T02:26:06.582Z",
+      "seasons": []
+    },
+    "76007": {
+      "fetched_at": "2026-06-19T02:26:09.851Z",
+      "seasons": []
+    },
+    "76008": {
+      "fetched_at": "2026-06-19T02:26:23.698Z",
+      "seasons": []
+    },
+    "76009": {
+      "fetched_at": "2026-06-19T02:26:27.046Z",
+      "seasons": [
+        {
+          "season": "1987-88",
+          "team": "BOS",
+          "games_won": 56
+        },
+        {
+          "season": "1988-89",
+          "team": "BOS",
+          "games_won": 32
+        },
+        {
+          "season": "1989-90",
+          "team": "ORL",
+          "games_won": 18
+        },
+        {
+          "season": "1990-91",
+          "team": "ORL",
+          "games_won": 26
+        },
+        {
+          "season": "1991-92",
+          "team": "ORL",
+          "games_won": 18
+        },
+        {
+          "season": "1992-93",
+          "team": "HOU",
+          "games_won": 5
+        },
+        {
+          "season": "1992-93",
+          "team": "WAS",
+          "games_won": 2
+        }
+      ]
+    },
+    "76010": {
+      "fetched_at": "2026-06-19T02:26:30.646Z",
+      "seasons": []
+    },
+    "76011": {
+      "fetched_at": "2026-06-19T02:26:37.896Z",
+      "seasons": [
+        {
+          "season": "1983-84",
+          "team": "PHX",
+          "games_won": 36
+        },
+        {
+          "season": "1984-85",
+          "team": "PHX",
+          "games_won": 36
+        },
+        {
+          "season": "1985-86",
+          "team": "PHX",
+          "games_won": 29
+        },
+        {
+          "season": "1986-87",
+          "team": "PHX",
+          "games_won": 34
+        },
+        {
+          "season": "1987-88",
+          "team": "PHX",
+          "games_won": 28
+        }
+      ]
+    },
+    "76012": {
+      "fetched_at": "2026-06-19T02:26:41.575Z",
+      "seasons": []
+    },
+    "76015": {
+      "fetched_at": "2026-06-19T02:27:13.311Z",
+      "seasons": []
+    },
+    "76016": {
+      "fetched_at": "2026-06-19T02:27:31.249Z",
+      "seasons": [
+        {
+          "season": "1983-84",
+          "team": "DAL",
+          "games_won": 41
+        },
+        {
+          "season": "1984-85",
+          "team": "DAL",
+          "games_won": 43
+        },
+        {
+          "season": "1985-86",
+          "team": "DAL",
+          "games_won": 41
+        },
+        {
+          "season": "1986-87",
+          "team": "DAL",
+          "games_won": 54
+        },
+        {
+          "season": "1987-88",
+          "team": "DAL",
+          "games_won": 51
+        },
+        {
+          "season": "1988-89",
+          "team": "DAL",
+          "games_won": 25
+        },
+        {
+          "season": "1988-89",
+          "team": "DET",
+          "games_won": 30
+        },
+        {
+          "season": "1989-90",
+          "team": "DET",
+          "games_won": 56
+        },
+        {
+          "season": "1990-91",
+          "team": "DET",
+          "games_won": 49
+        },
+        {
+          "season": "1991-92",
+          "team": "DET",
+          "games_won": 45
+        },
+        {
+          "season": "1992-93",
+          "team": "DET",
+          "games_won": 20
+        },
+        {
+          "season": "1993-94",
+          "team": "LAC",
+          "games_won": 14
+        }
+      ]
+    },
+    "76017": {
+      "fetched_at": "2026-06-19T02:27:38.227Z",
+      "seasons": [
+        {
+          "season": "1983-84",
+          "team": "BOS",
+          "games_won": 53
+        },
+        {
+          "season": "1984-85",
+          "team": "BOS",
+          "games_won": 59
+        },
+        {
+          "season": "1985-86",
+          "team": "BOS",
+          "games_won": 65
+        },
+        {
+          "season": "1986-87",
+          "team": "BOS",
+          "games_won": 53
+        },
+        {
+          "season": "1987-88",
+          "team": "BOS",
+          "games_won": 57
+        },
+        {
+          "season": "1988-89",
+          "team": "BOS",
+          "games_won": 22
+        },
+        {
+          "season": "1988-89",
+          "team": "SAC",
+          "games_won": 12
+        },
+        {
+          "season": "1989-90",
+          "team": "SAC",
+          "games_won": 21
+        },
+        {
+          "season": "1990-91",
+          "team": "POR",
+          "games_won": 62
+        },
+        {
+          "season": "1991-92",
+          "team": "POR",
+          "games_won": 56
+        },
+        {
+          "season": "1992-93",
+          "team": "PHX",
+          "games_won": 62
+        },
+        {
+          "season": "1993-94",
+          "team": "PHX",
+          "games_won": 50
+        },
+        {
+          "season": "1994-95",
+          "team": "PHX",
+          "games_won": 53
+        }
+      ]
+    },
+    "76018": {
+      "fetched_at": "2026-06-19T02:27:45.545Z",
+      "seasons": []
+    },
+    "76019": {
+      "fetched_at": "2026-06-19T02:27:59.473Z",
+      "seasons": [
+        {
+          "season": "1986-87",
+          "team": "DEN",
+          "games_won": 31
+        },
+        {
+          "season": "1987-88",
+          "team": "WAS",
+          "games_won": 27
+        },
+        {
+          "season": "1988-89",
+          "team": "WAS",
+          "games_won": 35
+        },
+        {
+          "season": "1989-90",
+          "team": "WAS",
+          "games_won": 31
+        },
+        {
+          "season": "1990-91",
+          "team": "WAS",
+          "games_won": 16
+        }
+      ]
+    },
+    "76020": {
+      "fetched_at": "2026-06-19T02:28:03.187Z",
+      "seasons": []
+    },
+    "76021": {
+      "fetched_at": "2026-06-19T02:28:21.001Z",
+      "seasons": [
+        {
+          "season": "1984-85",
+          "team": "GSW",
+          "games_won": 19
+        }
+      ]
+    },
+    "76022": {
+      "fetched_at": "2026-06-19T02:28:35.272Z",
+      "seasons": [
+        {
+          "season": "1993-94",
+          "team": "CLE",
+          "games_won": 4
+        },
+        {
+          "season": "1993-94",
+          "team": "MIA",
+          "games_won": 2
+        }
+      ]
+    },
+    "76024": {
+      "fetched_at": "2026-06-19T02:29:00.005Z",
+      "seasons": [
+        {
+          "season": "1987-88",
+          "team": "DAL",
+          "games_won": 20
+        },
+        {
+          "season": "1988-89",
+          "team": "DAL",
+          "games_won": 6
+        },
+        {
+          "season": "1988-89",
+          "team": "GSW",
+          "games_won": 32
+        },
+        {
+          "season": "1989-90",
+          "team": "DAL",
+          "games_won": 23
+        },
+        {
+          "season": "1990-91",
+          "team": "DAL",
+          "games_won": 9
+        }
+      ]
+    },
+    "76025": {
+      "fetched_at": "2026-06-19T02:29:35.447Z",
+      "seasons": [
+        {
+          "season": "1988-89",
+          "team": "SAC",
+          "games_won": 2
+        },
+        {
+          "season": "1989-90",
+          "team": "SAC",
+          "games_won": 16
+        }
+      ]
+    },
+    "76027": {
+      "fetched_at": "2026-06-19T02:29:28.011Z",
+      "seasons": []
+    },
+    "76028": {
+      "fetched_at": "2026-06-19T02:29:07.011Z",
+      "seasons": []
+    },
+    "76029": {
+      "fetched_at": "2026-06-19T02:29:49.466Z",
+      "seasons": []
+    },
+    "76030": {
+      "fetched_at": "2026-06-19T02:29:56.190Z",
+      "seasons": []
+    },
+    "76034": {
+      "fetched_at": "2026-06-19T02:30:30.565Z",
+      "seasons": []
+    },
+    "76035": {
+      "fetched_at": "2026-06-19T02:30:47.942Z",
+      "seasons": []
+    },
+    "76036": {
+      "fetched_at": "2026-06-19T02:30:51.258Z",
+      "seasons": []
+    },
+    "76037": {
+      "fetched_at": "2026-06-19T02:30:58.429Z",
+      "seasons": []
+    },
+    "76040": {
+      "fetched_at": "2026-06-19T02:31:12.174Z",
+      "seasons": []
+    },
+    "76041": {
+      "fetched_at": "2026-06-19T02:31:22.806Z",
+      "seasons": []
+    },
+    "76042": {
+      "fetched_at": "2026-06-19T02:31:29.581Z",
+      "seasons": [
+        {
+          "season": "1988-89",
+          "team": "SAS",
+          "games_won": 8
+        }
+      ]
+    },
+    "76043": {
+      "fetched_at": "2026-06-19T02:31:33.393Z",
+      "seasons": [
+        {
+          "season": "1983-84",
+          "team": "UTA",
+          "games_won": 26
+        },
+        {
+          "season": "1984-85",
+          "team": "UTA",
+          "games_won": 18
+        }
+      ]
+    },
+    "76045": {
+      "fetched_at": "2026-06-19T02:31:40.200Z",
+      "seasons": [
+        {
+          "season": "1983-84",
+          "team": "DEN",
+          "games_won": 34
+        },
+        {
+          "season": "1986-87",
+          "team": "HOU",
+          "games_won": 21
+        },
+        {
+          "season": "1987-88",
+          "team": "HOU",
+          "games_won": 5
+        },
+        {
+          "season": "1987-88",
+          "team": "POR",
+          "games_won": 41
+        },
+        {
+          "season": "1988-89",
+          "team": "POR",
+          "games_won": 37
+        },
+        {
+          "season": "1989-90",
+          "team": "CHA",
+          "games_won": 8
+        }
+      ]
+    },
+    "76046": {
+      "fetched_at": "2026-06-19T02:31:43.612Z",
+      "seasons": [
+        {
+          "season": "1984-85",
+          "team": "CLE",
+          "games_won": 17
+        },
+        {
+          "season": "1985-86",
+          "team": "CLE",
+          "games_won": 7
+        },
+        {
+          "season": "1985-86",
+          "team": "IND",
+          "games_won": 21
+        },
+        {
+          "season": "1986-87",
+          "team": "IND",
+          "games_won": 28
+        },
+        {
+          "season": "1987-88",
+          "team": "IND",
+          "games_won": 36
+        },
+        {
+          "season": "1988-89",
+          "team": "PHI",
+          "games_won": 46
+        },
+        {
+          "season": "1989-90",
+          "team": "PHI",
+          "games_won": 49
+        },
+        {
+          "season": "1990-91",
+          "team": "PHI",
+          "games_won": 44
+        },
+        {
+          "season": "1991-92",
+          "team": "PHI",
+          "games_won": 35
+        },
+        {
+          "season": "1992-93",
+          "team": "PHI",
+          "games_won": 21
+        },
+        {
+          "season": "1993-94",
+          "team": "BKN",
+          "games_won": 3
+        },
+        {
+          "season": "1993-94",
+          "team": "WAS",
+          "games_won": 2
+        }
+      ]
+    },
+    "76048": {
+      "fetched_at": "2026-06-19T02:31:57.848Z",
+      "seasons": []
+    },
+    "76049": {
+      "fetched_at": "2026-06-19T02:32:04.365Z",
+      "seasons": []
+    },
+    "76050": {
+      "fetched_at": "2026-06-19T02:32:11.659Z",
+      "seasons": [
+        {
+          "season": "1989-90",
+          "team": "ORL",
+          "games_won": 15
+        },
+        {
+          "season": "1990-91",
+          "team": "ORL",
+          "games_won": 26
+        },
+        {
+          "season": "1991-92",
+          "team": "CHA",
+          "games_won": 0
+        },
+        {
+          "season": "1991-92",
+          "team": "PHI",
+          "games_won": 5
+        }
+      ]
+    },
+    "76053": {
+      "fetched_at": "2026-06-19T02:33:00.093Z",
+      "seasons": []
+    },
+    "76054": {
+      "fetched_at": "2026-06-19T02:33:03.421Z",
+      "seasons": [
+        {
+          "season": "1983-84",
+          "team": "MIL",
+          "games_won": 30
+        }
+      ]
+    },
+    "76055": {
+      "fetched_at": "2026-06-19T02:33:13.471Z",
+      "seasons": []
+    },
+    "76056": {
+      "fetched_at": "2026-06-19T02:33:24.234Z",
+      "seasons": []
+    },
+    "76057": {
+      "fetched_at": "2026-06-19T02:33:27.947Z",
+      "seasons": [
+        {
+          "season": "1987-88",
+          "team": "SAC",
+          "games_won": 1
+        }
+      ]
+    },
+    "76059": {
+      "fetched_at": "2026-06-19T02:12:52.731Z",
+      "seasons": []
+    },
+    "76060": {
+      "fetched_at": "2026-06-19T02:33:48.407Z",
+      "seasons": []
+    },
+    "76061": {
+      "fetched_at": "2026-06-19T02:33:34.963Z",
+      "seasons": []
+    },
+    "76062": {
+      "fetched_at": "2026-06-19T02:12:57.636Z",
+      "seasons": []
+    },
+    "76063": {
+      "fetched_at": "2026-06-19T02:13:01.950Z",
+      "seasons": []
+    },
+    "76064": {
+      "fetched_at": "2026-06-19T02:13:06.419Z",
+      "seasons": []
+    },
+    "76065": {
+      "fetched_at": "2026-06-19T02:13:20.344Z",
+      "seasons": []
+    },
+    "101149": {
+      "fetched_at": "2026-06-19T02:32:01.240Z",
+      "seasons": [
+        {
+          "season": "2005-06",
+          "team": "CLE",
+          "games_won": 1
+        }
+      ]
+    },
+    "101165": {
+      "fetched_at": "2026-06-19T02:26:20.532Z",
+      "seasons": [
+        {
+          "season": "2005-06",
+          "team": "DET",
+          "games_won": 3
+        },
+        {
+          "season": "2008-09",
+          "team": "DET",
+          "games_won": 3
+        },
+        {
+          "season": "2008-09",
+          "team": "LAC",
+          "games_won": 1
+        }
+      ]
+    },
+    "101187": {
+      "fetched_at": "2026-06-19T02:30:41.168Z",
+      "seasons": [
+        {
+          "season": "2005-06",
+          "team": "CHA",
+          "games_won": 7
+        },
+        {
+          "season": "2006-07",
+          "team": "CHA",
+          "games_won": 7
+        },
+        {
+          "season": "2011-12",
+          "team": "TOR",
+          "games_won": 7
+        },
+        {
+          "season": "2012-13",
+          "team": "TOR",
+          "games_won": 31
+        },
+        {
+          "season": "2013-14",
+          "team": "BKN",
+          "games_won": 43
+        },
+        {
+          "season": "2014-15",
+          "team": "BKN",
+          "games_won": 35
+        },
+        {
+          "season": "2015-16",
+          "team": "WAS",
+          "games_won": 8
+        },
+        {
+          "season": "2016-17",
+          "team": "LAC",
+          "games_won": 20
+        }
+      ]
+    },
+    "200746": {
+      "fetched_at": "2026-06-19T02:28:16.764Z",
+      "seasons": [
+        {
+          "season": "2006-07",
+          "team": "POR",
+          "games_won": 24
+        },
+        {
+          "season": "2007-08",
+          "team": "POR",
+          "games_won": 35
+        },
+        {
+          "season": "2008-09",
+          "team": "POR",
+          "games_won": 54
+        },
+        {
+          "season": "2009-10",
+          "team": "POR",
+          "games_won": 49
+        },
+        {
+          "season": "2010-11",
+          "team": "POR",
+          "games_won": 48
+        },
+        {
+          "season": "2011-12",
+          "team": "POR",
+          "games_won": 26
+        },
+        {
+          "season": "2012-13",
+          "team": "POR",
+          "games_won": 32
+        },
+        {
+          "season": "2013-14",
+          "team": "POR",
+          "games_won": 46
+        },
+        {
+          "season": "2014-15",
+          "team": "POR",
+          "games_won": 48
+        },
+        {
+          "season": "2015-16",
+          "team": "SAS",
+          "games_won": 61
+        },
+        {
+          "season": "2016-17",
+          "team": "SAS",
+          "games_won": 52
+        },
+        {
+          "season": "2017-18",
+          "team": "SAS",
+          "games_won": 45
+        },
+        {
+          "season": "2018-19",
+          "team": "SAS",
+          "games_won": 48
+        },
+        {
+          "season": "2019-20",
+          "team": "SAS",
+          "games_won": 23
+        },
+        {
+          "season": "2020-21",
+          "team": "BKN",
+          "games_won": 3
+        },
+        {
+          "season": "2020-21",
+          "team": "SAS",
+          "games_won": 12
+        },
+        {
+          "season": "2021-22",
+          "team": "BKN",
+          "games_won": 26
+        }
+      ]
+    },
+    "200756": {
+      "fetched_at": "2026-06-19T02:33:45.266Z",
+      "seasons": [
+        {
+          "season": "2006-07",
+          "team": "NOP",
+          "games_won": 28
+        },
+        {
+          "season": "2007-08",
+          "team": "NOP",
+          "games_won": 43
+        },
+        {
+          "season": "2008-09",
+          "team": "NOP",
+          "games_won": 40
+        },
+        {
+          "season": "2009-10",
+          "team": "HOU",
+          "games_won": 4
+        },
+        {
+          "season": "2009-10",
+          "team": "NOP",
+          "games_won": 7
+        },
+        {
+          "season": "2009-10",
+          "team": "SAC",
+          "games_won": 0
+        },
+        {
+          "season": "2010-11",
+          "team": "ATL",
+          "games_won": 5
+        },
+        {
+          "season": "2010-11",
+          "team": "WAS",
+          "games_won": 10
+        },
+        {
+          "season": "2013-14",
+          "team": "GSW",
+          "games_won": 12
+        }
+      ]
+    },
+    "200772": {
+      "fetched_at": "2026-06-19T02:27:27.633Z",
+      "seasons": [
+        {
+          "season": "2006-07",
+          "team": "DAL",
+          "games_won": 26
+        },
+        {
+          "season": "2007-08",
+          "team": "BKN",
+          "games_won": 6
+        },
+        {
+          "season": "2007-08",
+          "team": "DAL",
+          "games_won": 8
+        },
+        {
+          "season": "2008-09",
+          "team": "BKN",
+          "games_won": 7
+        },
+        {
+          "season": "2010-11",
+          "team": "MIN",
+          "games_won": 1
+        }
+      ]
+    },
+    "200801": {
+      "fetched_at": "2026-06-19T02:26:44.953Z",
+      "seasons": [
+        {
+          "season": "2006-07",
+          "team": "BKN",
+          "games_won": 31
+        },
+        {
+          "season": "2008-09",
+          "team": "TOR",
+          "games_won": 4
+        }
+      ]
+    },
+    "200811": {
+      "fetched_at": "2026-06-19T02:30:27.452Z",
+      "seasons": [
+        {
+          "season": "2006-07",
+          "team": "PHI",
+          "games_won": 5
+        },
+        {
+          "season": "2006-07",
+          "team": "UTA",
+          "games_won": 1
+        },
+        {
+          "season": "2007-08",
+          "team": "PHI",
+          "games_won": 7
+        },
+        {
+          "season": "2008-09",
+          "team": "PHX",
+          "games_won": 41
+        },
+        {
+          "season": "2009-10",
+          "team": "PHX",
+          "games_won": 53
+        },
+        {
+          "season": "2010-11",
+          "team": "GSW",
+          "games_won": 20
+        },
+        {
+          "season": "2011-12",
+          "team": "IND",
+          "games_won": 38
+        },
+        {
+          "season": "2012-13",
+          "team": "CHI",
+          "games_won": 0
+        },
+        {
+          "season": "2012-13",
+          "team": "MIN",
+          "games_won": 6
+        },
+        {
+          "season": "2012-13",
+          "team": "NOP",
+          "games_won": 5
+        },
+        {
+          "season": "2013-14",
+          "team": "CHI",
+          "games_won": 1
+        },
+        {
+          "season": "2013-14",
+          "team": "NOP",
+          "games_won": 10
+        },
+        {
+          "season": "2014-15",
+          "team": "CLE",
+          "games_won": 5
+        },
+        {
+          "season": "2014-15",
+          "team": "NYK",
+          "games_won": 12
+        },
+        {
+          "season": "2015-16",
+          "team": "NYK",
+          "games_won": 11
+        }
+      ]
+    },
+    "200984": {
+      "fetched_at": "2026-06-19T02:29:52.803Z",
+      "seasons": [
+        {
+          "season": "2007-08",
+          "team": "CLE",
+          "games_won": 0
+        }
+      ]
+    },
+    "201165": {
+      "fetched_at": "2026-06-19T02:29:59.529Z",
+      "seasons": [
+        {
+          "season": "2007-08",
+          "team": "UTA",
+          "games_won": 9
+        },
+        {
+          "season": "2008-09",
+          "team": "UTA",
+          "games_won": 16
+        },
+        {
+          "season": "2011-12",
+          "team": "WAS",
+          "games_won": 4
+        }
+      ]
+    },
+    "201167": {
+      "fetched_at": "2026-06-19T02:27:20.273Z",
+      "seasons": [
+        {
+          "season": "2007-08",
+          "team": "DET",
+          "games_won": 55
+        },
+        {
+          "season": "2008-09",
+          "team": "DET",
+          "games_won": 36
+        },
+        {
+          "season": "2009-10",
+          "team": "DEN",
+          "games_won": 53
+        },
+        {
+          "season": "2010-11",
+          "team": "DEN",
+          "games_won": 40
+        },
+        {
+          "season": "2011-12",
+          "team": "DEN",
+          "games_won": 36
+        },
+        {
+          "season": "2012-13",
+          "team": "ORL",
+          "games_won": 18
+        },
+        {
+          "season": "2013-14",
+          "team": "ORL",
+          "games_won": 21
+        },
+        {
+          "season": "2014-15",
+          "team": "DEN",
+          "games_won": 20
+        },
+        {
+          "season": "2014-15",
+          "team": "POR",
+          "games_won": 15
+        },
+        {
+          "season": "2015-16",
+          "team": "NYK",
+          "games_won": 27
+        },
+        {
+          "season": "2016-17",
+          "team": "SAC",
+          "games_won": 23
+        },
+        {
+          "season": "2017-18",
+          "team": "ORL",
+          "games_won": 16
+        }
+      ]
+    },
+    "201202": {
+      "fetched_at": "2026-06-19T02:32:42.808Z",
+      "seasons": [
+        {
+          "season": "2007-08",
+          "team": "MIA",
+          "games_won": 5
+        },
+        {
+          "season": "2008-09",
+          "team": "MIA",
+          "games_won": 36
+        },
+        {
+          "season": "2009-10",
+          "team": "MIA",
+          "games_won": 46
+        },
+        {
+          "season": "2010-11",
+          "team": "MIA",
+          "games_won": 55
+        },
+        {
+          "season": "2011-12",
+          "team": "MIA",
+          "games_won": 45
+        },
+        {
+          "season": "2012-13",
+          "team": "MIA",
+          "games_won": 50
+        },
+        {
+          "season": "2013-14",
+          "team": "BOS",
+          "games_won": 5
+        },
+        {
+          "season": "2013-14",
+          "team": "MIA",
+          "games_won": 11
+        },
+        {
+          "season": "2014-15",
+          "team": "DET",
+          "games_won": 25
+        },
+        {
+          "season": "2015-16",
+          "team": "DET",
+          "games_won": 12
+        },
+        {
+          "season": "2016-17",
+          "team": "SAS",
+          "games_won": 15
+        }
+      ]
+    },
+    "201336": {
+      "fetched_at": "2026-06-19T02:27:34.607Z",
+      "seasons": [
+        {
+          "season": "2007-08",
+          "team": "MIA",
+          "games_won": 1
+        },
+        {
+          "season": "2008-09",
+          "team": "SAS",
+          "games_won": 2
+        },
+        {
+          "season": "2011-12",
+          "team": "UTA",
+          "games_won": 3
+        }
+      ]
+    },
+    "201570": {
+      "fetched_at": "2026-06-19T02:28:39.076Z",
+      "seasons": [
+        {
+          "season": "2008-09",
+          "team": "MIL",
+          "games_won": 23
+        },
+        {
+          "season": "2009-10",
+          "team": "CHI",
+          "games_won": 1
+        }
+      ]
+    },
+    "201582": {
+      "fetched_at": "2026-06-19T02:27:41.636Z",
+      "seasons": [
+        {
+          "season": "2008-09",
+          "team": "CHA",
+          "games_won": 11
+        },
+        {
+          "season": "2009-10",
+          "team": "CHA",
+          "games_won": 1
+        },
+        {
+          "season": "2010-11",
+          "team": "DAL",
+          "games_won": 3
+        },
+        {
+          "season": "2010-11",
+          "team": "TOR",
+          "games_won": 3
+        },
+        {
+          "season": "2013-14",
+          "team": "NOP",
+          "games_won": 22
+        },
+        {
+          "season": "2014-15",
+          "team": "NOP",
+          "games_won": 41
+        },
+        {
+          "season": "2015-16",
+          "team": "NOP",
+          "games_won": 20
+        },
+        {
+          "season": "2016-17",
+          "team": "NOP",
+          "games_won": 15
+        }
+      ]
+    },
+    "201583": {
+      "fetched_at": "2026-06-19T02:31:47.008Z",
+      "seasons": [
+        {
+          "season": "2008-09",
+          "team": "BKN",
+          "games_won": 28
+        },
+        {
+          "season": "2009-10",
+          "team": "ORL",
+          "games_won": 46
+        },
+        {
+          "season": "2010-11",
+          "team": "ORL",
+          "games_won": 43
+        },
+        {
+          "season": "2011-12",
+          "team": "ORL",
+          "games_won": 36
+        },
+        {
+          "season": "2012-13",
+          "team": "NOP",
+          "games_won": 27
+        },
+        {
+          "season": "2013-14",
+          "team": "NOP",
+          "games_won": 12
+        },
+        {
+          "season": "2014-15",
+          "team": "NOP",
+          "games_won": 33
+        },
+        {
+          "season": "2015-16",
+          "team": "NOP",
+          "games_won": 24
+        },
+        {
+          "season": "2016-17",
+          "team": "HOU",
+          "games_won": 50
+        },
+        {
+          "season": "2017-18",
+          "team": "HOU",
+          "games_won": 52
+        },
+        {
+          "season": "2018-19",
+          "team": "MIA",
+          "games_won": 4
+        },
+        {
+          "season": "2018-19",
+          "team": "PHX",
+          "games_won": 3
+        },
+        {
+          "season": "2019-20",
+          "team": "HOU",
+          "games_won": 1
+        }
+      ]
+    },
+    "201589": {
+      "fetched_at": "2026-06-19T02:13:15.831Z",
+      "seasons": [
+        {
+          "season": "2008-09",
+          "team": "MEM",
+          "games_won": 21
+        },
+        {
+          "season": "2009-10",
+          "team": "MEM",
+          "games_won": 14
+        },
+        {
+          "season": "2010-11",
+          "team": "MEM",
+          "games_won": 45
+        },
+        {
+          "season": "2012-13",
+          "team": "MEM",
+          "games_won": 37
+        },
+        {
+          "season": "2013-14",
+          "team": "DEN",
+          "games_won": 33
+        },
+        {
+          "season": "2014-15",
+          "team": "DEN",
+          "games_won": 22
+        },
+        {
+          "season": "2015-16",
+          "team": "DEN",
+          "games_won": 26
+        },
+        {
+          "season": "2016-17",
+          "team": "DEN",
+          "games_won": 20
+        },
+        {
+          "season": "2017-18",
+          "team": "DEN",
+          "games_won": 12
+        }
+      ]
+    },
+    "201600": {
+      "fetched_at": "2026-06-19T02:13:31.069Z",
+      "seasons": [
+        {
+          "season": "2010-11",
+          "team": "CHI",
+          "games_won": 62
+        },
+        {
+          "season": "2011-12",
+          "team": "CHI",
+          "games_won": 50
+        },
+        {
+          "season": "2012-13",
+          "team": "HOU",
+          "games_won": 45
+        },
+        {
+          "season": "2013-14",
+          "team": "HOU",
+          "games_won": 32
+        },
+        {
+          "season": "2014-15",
+          "team": "NOP",
+          "games_won": 43
+        },
+        {
+          "season": "2015-16",
+          "team": "NOP",
+          "games_won": 29
+        },
+        {
+          "season": "2016-17",
+          "team": "NOP",
+          "games_won": 12
+        },
+        {
+          "season": "2017-18",
+          "team": "CHI",
+          "games_won": 0
+        },
+        {
+          "season": "2017-18",
+          "team": "NOP",
+          "games_won": 7
+        }
+      ]
+    },
+    "202079": {
+      "fetched_at": "2026-06-19T02:30:44.536Z",
+      "seasons": [
+        {
+          "season": "2009-10",
+          "team": "OKC",
+          "games_won": 0
+        }
+      ]
+    },
+    "202329": {
+      "fetched_at": "2026-06-19T02:30:24.128Z",
+      "seasons": [
+        {
+          "season": "2010-11",
+          "team": "LAC",
+          "games_won": 31
+        },
+        {
+          "season": "2011-12",
+          "team": "NOP",
+          "games_won": 21
+        },
+        {
+          "season": "2012-13",
+          "team": "NOP",
+          "games_won": 25
+        },
+        {
+          "season": "2013-14",
+          "team": "NOP",
+          "games_won": 33
+        },
+        {
+          "season": "2014-15",
+          "team": "DAL",
+          "games_won": 45
+        },
+        {
+          "season": "2015-16",
+          "team": "POR",
+          "games_won": 44
+        },
+        {
+          "season": "2016-17",
+          "team": "POR",
+          "games_won": 33
+        },
+        {
+          "season": "2017-18",
+          "team": "POR",
+          "games_won": 40
+        },
+        {
+          "season": "2018-19",
+          "team": "POR",
+          "games_won": 52
+        },
+        {
+          "season": "2019-20",
+          "team": "ORL",
+          "games_won": 7
+        },
+        {
+          "season": "2020-21",
+          "team": "CHI",
+          "games_won": 0
+        },
+        {
+          "season": "2020-21",
+          "team": "ORL",
+          "games_won": 5
+        }
+      ]
+    },
+    "202332": {
+      "fetched_at": "2026-06-19T02:28:13.338Z",
+      "seasons": [
+        {
+          "season": "2010-11",
+          "team": "OKC",
+          "games_won": 11
+        },
+        {
+          "season": "2011-12",
+          "team": "OKC",
+          "games_won": 21
+        },
+        {
+          "season": "2012-13",
+          "team": "HOU",
+          "games_won": 14
+        },
+        {
+          "season": "2012-13",
+          "team": "SAC",
+          "games_won": 6
+        },
+        {
+          "season": "2013-14",
+          "team": "NYK",
+          "games_won": 26
+        },
+        {
+          "season": "2014-15",
+          "team": "NYK",
+          "games_won": 11
+        },
+        {
+          "season": "2015-16",
+          "team": "LAC",
+          "games_won": 41
+        },
+        {
+          "season": "2016-17",
+          "team": "MIN",
+          "games_won": 23
+        },
+        {
+          "season": "2017-18",
+          "team": "MIN",
+          "games_won": 14
+        }
+      ]
+    },
+    "202341": {
+      "fetched_at": "2026-06-19T02:31:08.845Z",
+      "seasons": [
+        {
+          "season": "2010-11",
+          "team": "SAS",
+          "games_won": 17
+        },
+        {
+          "season": "2011-12",
+          "team": "SAS",
+          "games_won": 40
+        },
+        {
+          "season": "2012-13",
+          "team": "HOU",
+          "games_won": 18
+        },
+        {
+          "season": "2012-13",
+          "team": "SAS",
+          "games_won": 8
+        },
+        {
+          "season": "2013-14",
+          "team": "PHI",
+          "games_won": 19
+        },
+        {
+          "season": "2015-16",
+          "team": "SAC",
+          "games_won": 19
+        }
+      ]
+    },
+    "202374": {
+      "fetched_at": "2026-06-19T02:27:56.085Z",
+      "seasons": [
+        {
+          "season": "2010-11",
+          "team": "TOR",
+          "games_won": 1
+        },
+        {
+          "season": "2011-12",
+          "team": "TOR",
+          "games_won": 5
+        }
+      ]
+    },
+    "202399": {
+      "fetched_at": "2026-06-19T02:27:16.748Z",
+      "seasons": [
+        {
+          "season": "2010-11",
+          "team": "GSW",
+          "games_won": 7
+        },
+        {
+          "season": "2011-12",
+          "team": "HOU",
+          "games_won": 5
+        },
+        {
+          "season": "2012-13",
+          "team": "CHA",
+          "games_won": 13
+        },
+        {
+          "season": "2013-14",
+          "team": "CHA",
+          "games_won": 12
+        },
+        {
+          "season": "2013-14",
+          "team": "MIL",
+          "games_won": 5
+        },
+        {
+          "season": "2014-15",
+          "team": "MIN",
+          "games_won": 1
+        }
+      ]
+    },
+    "202730": {
+      "fetched_at": "2026-06-19T02:29:24.575Z",
+      "seasons": [
+        {
+          "season": "2011-12",
+          "team": "PHI",
+          "games_won": 22
+        },
+        {
+          "season": "2012-13",
+          "team": "PHI",
+          "games_won": 34
+        },
+        {
+          "season": "2013-14",
+          "team": "IND",
+          "games_won": 4
+        },
+        {
+          "season": "2013-14",
+          "team": "PHI",
+          "games_won": 14
+        },
+        {
+          "season": "2014-15",
+          "team": "IND",
+          "games_won": 29
+        },
+        {
+          "season": "2015-16",
+          "team": "IND",
+          "games_won": 43
+        },
+        {
+          "season": "2016-17",
+          "team": "IND",
+          "games_won": 31
+        }
+      ]
+    },
+    "203006": {
+      "fetched_at": "2026-06-19T02:27:49.057Z",
+      "seasons": [
+        {
+          "season": "2012-13",
+          "team": "DAL",
+          "games_won": 2
+        }
+      ]
+    },
+    "203112": {
+      "fetched_at": "2026-06-19T02:26:34.485Z",
+      "seasons": [
+        {
+          "season": "2012-13",
+          "team": "TOR",
+          "games_won": 13
+        },
+        {
+          "season": "2013-14",
+          "team": "SAC",
+          "games_won": 20
+        },
+        {
+          "season": "2013-14",
+          "team": "TOR",
+          "games_won": 2
+        },
+        {
+          "season": "2014-15",
+          "team": "NYK",
+          "games_won": 12
+        },
+        {
+          "season": "2015-16",
+          "team": "SAC",
+          "games_won": 21
+        },
+        {
+          "season": "2016-17",
+          "team": "BKN",
+          "games_won": 11
+        },
+        {
+          "season": "2016-17",
+          "team": "DAL",
+          "games_won": 0
+        },
+        {
+          "season": "2017-18",
+          "team": "BKN",
+          "games_won": 26
+        },
+        {
+          "season": "2018-19",
+          "team": "PHX",
+          "games_won": 2
+        }
+      ]
+    },
+    "203128": {
+      "fetched_at": "2026-06-19T02:28:09.940Z",
+      "seasons": [
+        {
+          "season": "2014-15",
+          "team": "PHI",
+          "games_won": 9
+        }
+      ]
+    },
+    "203500": {
+      "fetched_at": "2026-06-19T02:26:59.061Z",
+      "seasons": [
+        {
+          "season": "2013-14",
+          "team": "OKC",
+          "games_won": 59
+        },
+        {
+          "season": "2014-15",
+          "team": "OKC",
+          "games_won": 37
+        },
+        {
+          "season": "2015-16",
+          "team": "OKC",
+          "games_won": 54
+        },
+        {
+          "season": "2016-17",
+          "team": "OKC",
+          "games_won": 47
+        },
+        {
+          "season": "2017-18",
+          "team": "OKC",
+          "games_won": 43
+        },
+        {
+          "season": "2018-19",
+          "team": "OKC",
+          "games_won": 47
+        },
+        {
+          "season": "2019-20",
+          "team": "OKC",
+          "games_won": 40
+        },
+        {
+          "season": "2020-21",
+          "team": "NOP",
+          "games_won": 26
+        },
+        {
+          "season": "2021-22",
+          "team": "MEM",
+          "games_won": 51
+        },
+        {
+          "season": "2022-23",
+          "team": "MEM",
+          "games_won": 28
+        },
+        {
+          "season": "2024-25",
+          "team": "HOU",
+          "games_won": 38
+        },
+        {
+          "season": "2025-26",
+          "team": "HOU",
+          "games_won": 21
+        }
+      ]
+    },
+    "203507": {
+      "fetched_at": "2026-06-19T02:32:21.737Z",
+      "seasons": [
+        {
+          "season": "2013-14",
+          "team": "MIL",
+          "games_won": 14
+        },
+        {
+          "season": "2014-15",
+          "team": "MIL",
+          "games_won": 41
+        },
+        {
+          "season": "2015-16",
+          "team": "MIL",
+          "games_won": 32
+        },
+        {
+          "season": "2016-17",
+          "team": "MIL",
+          "games_won": 42
+        },
+        {
+          "season": "2017-18",
+          "team": "MIL",
+          "games_won": 39
+        },
+        {
+          "season": "2018-19",
+          "team": "MIL",
+          "games_won": 56
+        },
+        {
+          "season": "2019-20",
+          "team": "MIL",
+          "games_won": 51
+        },
+        {
+          "season": "2020-21",
+          "team": "MIL",
+          "games_won": 40
+        },
+        {
+          "season": "2021-22",
+          "team": "MIL",
+          "games_won": 45
+        },
+        {
+          "season": "2022-23",
+          "team": "MIL",
+          "games_won": 47
+        },
+        {
+          "season": "2023-24",
+          "team": "MIL",
+          "games_won": 45
+        },
+        {
+          "season": "2024-25",
+          "team": "MIL",
+          "games_won": 40
+        },
+        {
+          "season": "2025-26",
+          "team": "MIL",
+          "games_won": 17
+        }
+      ]
+    },
+    "203518": {
+      "fetched_at": "2026-06-19T02:26:13.290Z",
+      "seasons": [
+        {
+          "season": "2016-17",
+          "team": "OKC",
+          "games_won": 37
+        },
+        {
+          "season": "2017-18",
+          "team": "OKC",
+          "games_won": 42
+        },
+        {
+          "season": "2018-19",
+          "team": "OKC",
+          "games_won": 21
+        }
+      ]
+    },
+    "203544": {
+      "fetched_at": "2026-06-19T02:32:46.279Z",
+      "seasons": [
+        {
+          "season": "2013-14",
+          "team": "ATL",
+          "games_won": 23
+        },
+        {
+          "season": "2014-15",
+          "team": "ATL",
+          "games_won": 46
+        }
+      ]
+    },
+    "203648": {
+      "fetched_at": "2026-06-19T02:32:28.970Z",
+      "seasons": [
+        {
+          "season": "2015-16",
+          "team": "NYK",
+          "games_won": 1
+        },
+        {
+          "season": "2019-20",
+          "team": "MIL",
+          "games_won": 16
+        },
+        {
+          "season": "2020-21",
+          "team": "MIL",
+          "games_won": 37
+        },
+        {
+          "season": "2021-22",
+          "team": "MIL",
+          "games_won": 26
+        },
+        {
+          "season": "2022-23",
+          "team": "MIL",
+          "games_won": 25
+        },
+        {
+          "season": "2023-24",
+          "team": "MIL",
+          "games_won": 21
+        },
+        {
+          "season": "2025-26",
+          "team": "MIL",
+          "games_won": 9
+        }
+      ]
+    },
+    "203919": {
+      "fetched_at": "2026-06-19T02:26:52.146Z",
+      "seasons": [
+        {
+          "season": "2014-15",
+          "team": "MEM",
+          "games_won": 14
+        },
+        {
+          "season": "2015-16",
+          "team": "MEM",
+          "games_won": 0
+        }
+      ]
+    },
+    "203937": {
+      "fetched_at": "2026-06-19T02:31:26.151Z",
+      "seasons": [
+        {
+          "season": "2014-15",
+          "team": "SAS",
+          "games_won": 22
+        },
+        {
+          "season": "2015-16",
+          "team": "SAS",
+          "games_won": 64
+        },
+        {
+          "season": "2016-17",
+          "team": "SAS",
+          "games_won": 53
+        },
+        {
+          "season": "2017-18",
+          "team": "SAS",
+          "games_won": 41
+        },
+        {
+          "season": "2018-19",
+          "team": "MEM",
+          "games_won": 19
+        },
+        {
+          "season": "2019-20",
+          "team": "MEM",
+          "games_won": 32
+        },
+        {
+          "season": "2020-21",
+          "team": "MEM",
+          "games_won": 36
+        },
+        {
+          "season": "2021-22",
+          "team": "MEM",
+          "games_won": 46
+        },
+        {
+          "season": "2022-23",
+          "team": "MIN",
+          "games_won": 36
+        },
+        {
+          "season": "2023-24",
+          "team": "MIN",
+          "games_won": 55
+        },
+        {
+          "season": "2024-25",
+          "team": "GSW",
+          "games_won": 19
+        },
+        {
+          "season": "2024-25",
+          "team": "MIA",
+          "games_won": 11
+        },
+        {
+          "season": "2025-26",
+          "team": "MEM",
+          "games_won": 1
+        },
+        {
+          "season": "2025-26",
+          "team": "MIN",
+          "games_won": 10
+        },
+        {
+          "season": "2025-26",
+          "team": "UTA",
+          "games_won": 4
+        }
+      ]
+    },
+    "203951": {
+      "fetched_at": "2026-06-19T02:32:52.981Z",
+      "seasons": [
+        {
+          "season": "2015-16",
+          "team": "ORL",
+          "games_won": 0
+        }
+      ]
+    },
+    "1626146": {
+      "fetched_at": "2026-06-19T02:28:24.436Z",
+      "seasons": [
+        {
+          "season": "2015-16",
+          "team": "POR",
+          "games_won": 3
+        }
+      ]
+    },
+    "1626147": {
+      "fetched_at": "2026-06-19T02:31:16.055Z",
+      "seasons": [
+        {
+          "season": "2015-16",
+          "team": "DAL",
+          "games_won": 28
+        },
+        {
+          "season": "2016-17",
+          "team": "DAL",
+          "games_won": 19
+        },
+        {
+          "season": "2016-17",
+          "team": "PHI",
+          "games_won": 5
+        },
+        {
+          "season": "2017-18",
+          "team": "PHI",
+          "games_won": 27
+        },
+        {
+          "season": "2018-19",
+          "team": "ATL",
+          "games_won": 17
+        },
+        {
+          "season": "2019-20",
+          "team": "BKN",
+          "games_won": 6
+        },
+        {
+          "season": "2021-22",
+          "team": "CLE",
+          "games_won": 1
+        },
+        {
+          "season": "2021-22",
+          "team": "IND",
+          "games_won": 2
+        }
+      ]
+    },
+    "1627853": {
+      "fetched_at": "2026-06-19T02:33:10.113Z",
+      "seasons": [
+        {
+          "season": "2017-18",
+          "team": "CHI",
+          "games_won": 6
+        },
+        {
+          "season": "2018-19",
+          "team": "CHI",
+          "games_won": 22
+        },
+        {
+          "season": "2019-20",
+          "team": "CHI",
+          "games_won": 21
+        },
+        {
+          "season": "2020-21",
+          "team": "CHI",
+          "games_won": 20
+        },
+        {
+          "season": "2021-22",
+          "team": "NYK",
+          "games_won": 8
+        },
+        {
+          "season": "2022-23",
+          "team": "NYK",
+          "games_won": 7
+        },
+        {
+          "season": "2022-23",
+          "team": "POR",
+          "games_won": 2
+        },
+        {
+          "season": "2023-24",
+          "team": "NYK",
+          "games_won": 15
+        }
+      ]
+    },
+    "1628384": {
+      "fetched_at": "2026-06-19T02:32:49.647Z",
+      "seasons": [
+        {
+          "season": "2017-18",
+          "team": "TOR",
+          "games_won": 51
+        },
+        {
+          "season": "2018-19",
+          "team": "TOR",
+          "games_won": 46
+        },
+        {
+          "season": "2019-20",
+          "team": "TOR",
+          "games_won": 50
+        },
+        {
+          "season": "2020-21",
+          "team": "TOR",
+          "games_won": 18
+        },
+        {
+          "season": "2021-22",
+          "team": "TOR",
+          "games_won": 31
+        },
+        {
+          "season": "2022-23",
+          "team": "TOR",
+          "games_won": 33
+        },
+        {
+          "season": "2023-24",
+          "team": "NYK",
+          "games_won": 20
+        },
+        {
+          "season": "2023-24",
+          "team": "TOR",
+          "games_won": 11
+        },
+        {
+          "season": "2024-25",
+          "team": "NYK",
+          "games_won": 45
+        },
+        {
+          "season": "2025-26",
+          "team": "NYK",
+          "games_won": 45
+        }
+      ]
+    },
+    "1628386": {
+      "fetched_at": "2026-06-19T02:29:14.263Z",
+      "seasons": [
+        {
+          "season": "2017-18",
+          "team": "BKN",
+          "games_won": 25
+        },
+        {
+          "season": "2018-19",
+          "team": "BKN",
+          "games_won": 42
+        },
+        {
+          "season": "2019-20",
+          "team": "BKN",
+          "games_won": 33
+        },
+        {
+          "season": "2020-21",
+          "team": "BKN",
+          "games_won": 6
+        },
+        {
+          "season": "2020-21",
+          "team": "CLE",
+          "games_won": 14
+        },
+        {
+          "season": "2021-22",
+          "team": "CLE",
+          "games_won": 35
+        },
+        {
+          "season": "2022-23",
+          "team": "CLE",
+          "games_won": 44
+        },
+        {
+          "season": "2023-24",
+          "team": "CLE",
+          "games_won": 46
+        },
+        {
+          "season": "2024-25",
+          "team": "CLE",
+          "games_won": 64
+        },
+        {
+          "season": "2025-26",
+          "team": "CLE",
+          "games_won": 37
+        }
+      ]
+    },
+    "1628387": {
+      "fetched_at": "2026-06-19T02:32:08.321Z",
+      "seasons": [
+        {
+          "season": "2017-18",
+          "team": "IND",
+          "games_won": 5
+        },
+        {
+          "season": "2018-19",
+          "team": "IND",
+          "games_won": 2
+        }
+      ]
+    },
+    "1628389": {
+      "fetched_at": "2026-06-19T02:27:06.039Z",
+      "seasons": [
+        {
+          "season": "2017-18",
+          "team": "MIA",
+          "games_won": 34
+        },
+        {
+          "season": "2018-19",
+          "team": "MIA",
+          "games_won": 39
+        },
+        {
+          "season": "2019-20",
+          "team": "MIA",
+          "games_won": 44
+        },
+        {
+          "season": "2020-21",
+          "team": "MIA",
+          "games_won": 34
+        },
+        {
+          "season": "2021-22",
+          "team": "MIA",
+          "games_won": 36
+        },
+        {
+          "season": "2022-23",
+          "team": "MIA",
+          "games_won": 40
+        },
+        {
+          "season": "2023-24",
+          "team": "MIA",
+          "games_won": 40
+        },
+        {
+          "season": "2024-25",
+          "team": "MIA",
+          "games_won": 36
+        },
+        {
+          "season": "2025-26",
+          "team": "MIA",
+          "games_won": 37
+        }
+      ]
+    },
+    "1628443": {
+      "fetched_at": "2026-06-19T02:29:21.232Z",
+      "seasons": [
+        {
+          "season": "2017-18",
+          "team": "BOS",
+          "games_won": 9
+        },
+        {
+          "season": "2018-19",
+          "team": "NYK",
+          "games_won": 3
+        },
+        {
+          "season": "2019-20",
+          "team": "NYK",
+          "games_won": 3
+        }
+      ]
+    },
+    "1628503": {
+      "fetched_at": "2026-06-19T02:13:24.910Z",
+      "seasons": [
+        {
+          "season": "2017-18",
+          "team": "ORL",
+          "games_won": 4
+        }
+      ]
+    },
+    "1628959": {
+      "fetched_at": "2026-06-19T02:29:03.358Z",
+      "seasons": [
+        {
+          "season": "2018-19",
+          "team": "CHI",
+          "games_won": 3
+        }
+      ]
+    },
+    "1628960": {
+      "fetched_at": "2026-06-19T02:29:10.442Z",
+      "seasons": [
+        {
+          "season": "2018-19",
+          "team": "UTA",
+          "games_won": 22
+        },
+        {
+          "season": "2019-20",
+          "team": "MEM",
+          "games_won": 16
+        },
+        {
+          "season": "2020-21",
+          "team": "MEM",
+          "games_won": 26
+        },
+        {
+          "season": "2021-22",
+          "team": "MIL",
+          "games_won": 43
+        },
+        {
+          "season": "2022-23",
+          "team": "MIL",
+          "games_won": 53
+        },
+        {
+          "season": "2023-24",
+          "team": "PHX",
+          "games_won": 45
+        },
+        {
+          "season": "2024-25",
+          "team": "PHX",
+          "games_won": 29
+        },
+        {
+          "season": "2025-26",
+          "team": "PHX",
+          "games_won": 26
+        }
+      ]
+    },
+    "1628961": {
+      "fetched_at": "2026-06-19T02:32:25.485Z",
+      "seasons": [
+        {
+          "season": "2018-19",
+          "team": "DAL",
+          "games_won": 1
+        },
+        {
+          "season": "2019-20",
+          "team": "LAL",
+          "games_won": 3
+        },
+        {
+          "season": "2020-21",
+          "team": "LAL",
+          "games_won": 6
+        }
+      ]
+    },
+    "1629061": {
+      "fetched_at": "2026-06-19T02:27:09.954Z",
+      "seasons": [
+        {
+          "season": "2018-19",
+          "team": "CLE",
+          "games_won": 4
+        }
+      ]
+    },
+    "1629121": {
+      "fetched_at": "2026-06-19T02:26:48.334Z",
+      "seasons": [
+        {
+          "season": "2018-19",
+          "team": "ATL",
+          "games_won": 13
+        },
+        {
+          "season": "2020-21",
+          "team": "MIL",
+          "games_won": 5
+        }
+      ]
+    },
+    "1629152": {
+      "fetched_at": "2026-06-19T02:27:52.714Z",
+      "seasons": [
+        {
+          "season": "2018-19",
+          "team": "DEN",
+          "games_won": 7
+        }
+      ]
+    },
+    "1629638": {
+      "fetched_at": "2026-06-19T02:28:56.595Z",
+      "seasons": [
+        {
+          "season": "2019-20",
+          "team": "NOP",
+          "games_won": 19
+        },
+        {
+          "season": "2020-21",
+          "team": "NOP",
+          "games_won": 20
+        },
+        {
+          "season": "2021-22",
+          "team": "NOP",
+          "games_won": 19
+        },
+        {
+          "season": "2021-22",
+          "team": "UTA",
+          "games_won": 10
+        },
+        {
+          "season": "2022-23",
+          "team": "MIN",
+          "games_won": 11
+        },
+        {
+          "season": "2022-23",
+          "team": "UTA",
+          "games_won": 18
+        },
+        {
+          "season": "2023-24",
+          "team": "MIN",
+          "games_won": 56
+        },
+        {
+          "season": "2024-25",
+          "team": "MIN",
+          "games_won": 49
+        },
+        {
+          "season": "2025-26",
+          "team": "ATL",
+          "games_won": 43
+        }
+      ]
+    },
+    "1629734": {
+      "fetched_at": "2026-06-19T02:28:42.451Z",
+      "seasons": [
+        {
+          "season": "2019-20",
+          "team": "MIA",
+          "games_won": 0
+        }
+      ]
+    },
+    "1630173": {
+      "fetched_at": "2026-06-19T02:26:17.137Z",
+      "seasons": [
+        {
+          "season": "2020-21",
+          "team": "MIA",
+          "games_won": 31
+        },
+        {
+          "season": "2021-22",
+          "team": "TOR",
+          "games_won": 46
+        },
+        {
+          "season": "2022-23",
+          "team": "TOR",
+          "games_won": 30
+        },
+        {
+          "season": "2023-24",
+          "team": "NYK",
+          "games_won": 32
+        },
+        {
+          "season": "2023-24",
+          "team": "TOR",
+          "games_won": 8
+        },
+        {
+          "season": "2024-25",
+          "team": "NYK",
+          "games_won": 36
+        },
+        {
+          "season": "2025-26",
+          "team": "SAC",
+          "games_won": 20
+        }
+      ]
+    },
+    "1630175": {
+      "fetched_at": "2026-06-19T02:32:35.671Z",
+      "seasons": [
+        {
+          "season": "2020-21",
+          "team": "ORL",
+          "games_won": 13
+        },
+        {
+          "season": "2021-22",
+          "team": "ORL",
+          "games_won": 18
+        },
+        {
+          "season": "2022-23",
+          "team": "ORL",
+          "games_won": 28
+        },
+        {
+          "season": "2023-24",
+          "team": "ORL",
+          "games_won": 47
+        },
+        {
+          "season": "2024-25",
+          "team": "ORL",
+          "games_won": 35
+        },
+        {
+          "season": "2025-26",
+          "team": "MIL",
+          "games_won": 12
+        }
+      ]
+    },
+    "1630234": {
+      "fetched_at": "2026-06-19T02:28:49.166Z",
+      "seasons": [
+        {
+          "season": "2020-21",
+          "team": "PHX",
+          "games_won": 11
+        }
+      ]
+    },
+    "1630534": {
+      "fetched_at": "2026-06-19T02:27:23.765Z",
+      "seasons": [
+        {
+          "season": "2022-23",
+          "team": "UTA",
+          "games_won": 29
+        },
+        {
+          "season": "2023-24",
+          "team": "TOR",
+          "games_won": 6
+        },
+        {
+          "season": "2023-24",
+          "team": "UTA",
+          "games_won": 25
+        },
+        {
+          "season": "2024-25",
+          "team": "TOR",
+          "games_won": 19
+        },
+        {
+          "season": "2025-26",
+          "team": "BKN",
+          "games_won": 4
+        },
+        {
+          "season": "2025-26",
+          "team": "TOR",
+          "games_won": 24
+        }
+      ]
+    },
+    "1630583": {
+      "fetched_at": "2026-06-19T02:28:06.590Z",
+      "seasons": [
+        {
+          "season": "2021-22",
+          "team": "MEM",
+          "games_won": 20
+        },
+        {
+          "season": "2022-23",
+          "team": "MEM",
+          "games_won": 47
+        },
+        {
+          "season": "2023-24",
+          "team": "MEM",
+          "games_won": 23
+        },
+        {
+          "season": "2024-25",
+          "team": "MEM",
+          "games_won": 38
+        },
+        {
+          "season": "2025-26",
+          "team": "MEM",
+          "games_won": 19
+        }
+      ]
+    },
+    "1630631": {
+      "fetched_at": "2026-06-19T02:30:13.461Z",
+      "seasons": [
+        {
+          "season": "2021-22",
+          "team": "NOP",
+          "games_won": 25
+        },
+        {
+          "season": "2022-23",
+          "team": "NOP",
+          "games_won": 30
+        },
+        {
+          "season": "2023-24",
+          "team": "NOP",
+          "games_won": 38
+        },
+        {
+          "season": "2024-25",
+          "team": "NOP",
+          "games_won": 19
+        },
+        {
+          "season": "2025-26",
+          "team": "NOP",
+          "games_won": 10
+        },
+        {
+          "season": "2025-26",
+          "team": "NYK",
+          "games_won": 18
+        }
+      ]
+    },
+    "1630828": {
+      "fetched_at": "2026-06-19T02:32:18.346Z",
+      "seasons": [
+        {
+          "season": "2025-26",
+          "team": "MIL",
+          "games_won": 2
+        }
+      ]
+    },
+    "1641725": {
+      "fetched_at": "2026-06-19T02:28:45.808Z",
+      "seasons": [
+        {
+          "season": "2024-25",
+          "team": "DEN",
+          "games_won": 14
+        },
+        {
+          "season": "2025-26",
+          "team": "NOP",
+          "games_won": 2
+        }
+      ]
+    },
+    "1641851": {
+      "fetched_at": "2026-06-19T02:29:42.224Z",
+      "seasons": [
+        {
+          "season": "2023-24",
+          "team": "MEM",
+          "games_won": 0
+        }
+      ]
+    },
+    "1642379": {
+      "fetched_at": "2026-06-19T02:12:48.102Z",
+      "seasons": []
+    }
+  }
+}

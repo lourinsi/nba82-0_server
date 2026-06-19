@@ -41,6 +41,7 @@ function createEmptyClassicAccolades() {
     steal_titles: 0,
     block_titles: 0,
     games_started: 0,
+    games_won: 0,
     award_counts: {},
   };
 }
@@ -235,6 +236,7 @@ function addSeasonContext(records, season) {
   const key = `${season?.season || ""}:${team}`;
   record.season_keys.add(key);
   record.accolades.games_started += nonNegativeInteger(season?.games_started);
+  record.accolades.games_won += nonNegativeInteger(season?.games_won);
 }
 
 function addAwardContext(records, award) {

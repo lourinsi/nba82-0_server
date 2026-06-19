@@ -110,6 +110,12 @@ Refreshes the all-time player dataset. This can take a long time.
 npm run seed:full:resume
 Continues a long all-time seed and skips players already saved.
 
+npm run seed:game-wins
+Refreshes active players with fresh NBA Stats regular-season game-log wins, storing `career_seasons[*].games_won` and `accolades.games_won`.
+
+npm run seed:advanced-stats
+Backfills Basketball Reference advanced metrics into `career_seasons[*].ts_pct` and `career_seasons[*].ws_per_48`.
+
 npm run seed:stats
 Refreshes active players' cached NBA Stats career seasons, appends new seasons, syncs active/current_team from the NBA Stats directory, and writes the updated player file.
 
@@ -181,22 +187,28 @@ Step-by-step:
 5. Backfill games started with `npm run seed:games-started`.
    This uses NBA Stats career totals (`GS`) and stores both per-season `games_started` and aggregate `accolades.games_started`. If a season has no `GS`, its `GP` is counted as `games_started`. Explicit `GS=0` only falls back to `GP` before 1970-71.
 
-6. Recalculate base scoring with `npm run seed:legacy-points`.
+6. Optionally seed game wins with `npm run seed:game-wins`.
+   This counts NBA Stats regular-season game logs where `WL` is `W`, stores per-season `games_won`, and exposes the career total as `accolades.games_won`. Use `--gameWins` without `--refreshGameWins` when you want to reuse cached win rows.
+
+7. Recalculate base scoring with `npm run seed:legacy-points`.
    This updates `legacy_points` from the accolades already stored locally.
 
-7. Refresh league averages with `npm run refresh:league-averages`.
+8. Refresh league averages with `npm run refresh:league-averages`.
    This builds `data/historical_league_averages.json` for the season climate baseline.
 
-8. Refresh active-player career season stats with `npm run seed:stats`.
+9. Refresh active-player career season stats with `npm run seed:stats`.
    This keeps current players' `career_seasons`, active status, and current team fresh from `data/nba_stats_player_directory.json` and `data/nba_stats_career_stats_cache.json`.
 
-9. Backfill any remaining stored career season stat gaps with `npm run backfill:season-stats -- --saveEvery=25`.
+10. Backfill Basketball Reference advanced stats with `npm run seed:advanced-stats`.
+   This stores TS% as `ts_pct` and WS/48 as `ws_per_48` on matching stored career seasons.
+
+11. Backfill any remaining stored career season stat gaps with `npm run backfill:season-stats -- --saveEvery=25`.
    This fills PPG/RPG/APG/SPG/BPG on `career_seasons` from NBA Stats career totals.
 
-10. Recalculate Classic Mode team-era points with `npm run seed:classic-points`.
+12. Recalculate Classic Mode team-era points with `npm run seed:classic-points`.
    This uses `data/historical_league_averages.json` and only overwrites each classic block's `points`.
 
-11. Refresh GOAT ranking data with `npm run seed:goat-rankings`.
+13. Refresh GOAT ranking data with `npm run seed:goat-rankings`.
    This updates the cached media ranking file used for GOAT score overlays.
 
 ## Running Scripts Safely
@@ -207,6 +219,8 @@ Run only one script that writes `data/players_accolades.json` at a time. These c
 npm run seed
 npm run seed:active
 npm run seed:full
+npm run seed:game-wins
+npm run seed:advanced-stats
 npm run seed:stats
 npm run seed:games-started
 npm run seed:bref-positions
@@ -217,7 +231,7 @@ npm run refresh:positions
 npm run fix:positions
 ```
 
-Do not run `npm run seed:stats`, `npm run seed:games-started`, `npm run seed:bref-positions`, `npm run backfill:season-stats`, or `npm run refresh:positions` at the same time as any other command that writes `players_accolades.json`. These commands all read the full file, update their own fields in memory, and write the full file back. Whichever write finishes last can overwrite the other command's changes.
+Do not run `npm run seed:stats`, `npm run seed:game-wins`, `npm run seed:advanced-stats`, `npm run seed:games-started`, `npm run seed:bref-positions`, `npm run backfill:season-stats`, or `npm run refresh:positions` at the same time as any other command that writes `players_accolades.json`. These commands all read the full file, update their own fields in memory, and write the full file back. Whichever write finishes last can overwrite the other command's changes.
 
 This pairing is safe because the scripts write different files, though slower delays are still friendlier to the remote data sources:
 
@@ -329,6 +343,8 @@ Without `--replace`, seed runs merge into existing data. Replacement prompts for
 --retries=5
 --timeoutMs=30000
 --refreshNbaDirectory
+--gameWins
+--refreshGameWins
 --hydratePlayerInfo
 ```
 
@@ -409,6 +425,8 @@ npm run seed:stats -- --maxCacheAgeDays=7
 npm run seed:stats -- --refreshCache --delayMs=2000
 npm run seed:games-started -- --dryRun --limit=25
 npm run seed:games-started -- --mode=all --saveEvery=25
+npm run seed:advanced-stats -- --dryRun --limit=25
+npm run seed:advanced-stats -- --mode=all --saveEvery=100
 npm run backfill:season-stats -- --mode=missing --saveEvery=25
 npm run backfill:season-stats -- --mode=all --maxCacheAgeDays=30 --dryRun
 ```
@@ -416,12 +434,14 @@ npm run backfill:season-stats -- --mode=all --maxCacheAgeDays=30 --dryRun
 Modes:
 
 ```text
-missing: only players with missing games started or PPG/RPG/APG/SPG/BPG in stored career_seasons
+missing: only players with missing games started, PPG/RPG/APG/SPG/BPG, TS%, or WS/48 in stored career_seasons
 active: current players from nba_stats_player_directory.json plus active/current_team sync
 all: every stored player with career_seasons
 ```
 
-Important: do not run `seed:stats` or `seed:games-started` at the same time as `refresh:positions`, `seed`, `seed:full`, `seed:legacy-points`, `seed:classic-points`, or `backfill:season-stats`. They can update different fields, but they still rewrite the same whole `players_accolades.json` file.
+`seed:advanced-stats` reads Basketball Reference advanced season pages, caches them in `data/bref_advanced_stats_cache.json`, and matches rows by player name, season, and team. Use `--refreshCache` to refetch B-Ref season pages and `--force` to overwrite existing `ts_pct` / `ws_per_48` values.
+
+Important: do not run `seed:stats`, `seed:game-wins`, `seed:advanced-stats`, or `seed:games-started` at the same time as `refresh:positions`, `seed`, `seed:full`, `seed:legacy-points`, `seed:classic-points`, or `backfill:season-stats`. They can update different fields, but they still rewrite the same whole `players_accolades.json` file.
 
 ## Legacy Points
 

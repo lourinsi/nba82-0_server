@@ -41,6 +41,7 @@ const HISTORICAL_TEAM_TO_CURRENT = {
   BRK: "BKN",
   BUF: "LAC",
   CAP: "WAS",
+  CHO: "CHA",
   CHH: "CHA",
   CHP: "WAS",
   CHZ: "WAS",

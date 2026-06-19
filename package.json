@@ -12,6 +12,8 @@
     "seed:active:resume": "node seed.js --mode=active --resume",
     "seed:full": "node seed.js --mode=full",
     "seed:full:resume": "node seed.js --mode=full --resume",
+    "seed:game-wins": "node seed.js --mode=active --gameWins --refreshGameWins",
+    "seed:advanced-stats": "node seed-advanced-stats.js",
     "seed:stats": "node seed-stats.js --mode=active --maxCacheAgeDays=1 --force --appendMissingSeasons",
     "seed:games-started": "node seed-games-started.js",
     "seed:games_started": "npm run seed:games-started",

@@ -14,6 +14,7 @@ require("dotenv").config();
 
 const NBA_STATS_AWARDS_URL = "https://stats.nba.com/stats/playerawards";
 const NBA_STATS_CAREER_URL = "https://stats.nba.com/stats/playercareerstats";
+const NBA_STATS_GAME_FINDER_URL = "https://stats.nba.com/stats/leaguegamefinder";
 const NBA_STATS_PLAYER_DIRECTORY_URL = "https://stats.nba.com/stats/commonallplayers";
 const NBA_STATS_PLAYER_INFO_URL = "https://stats.nba.com/stats/commonplayerinfo";
 const NBA_STATS_LEAGUE_LEADERS_URL = "https://stats.nba.com/stats/leagueleaders";
@@ -21,6 +22,7 @@ const GAMES_STARTED_TRACKED_START_END_YEAR = 1971;
 const OUTPUT_PATH = path.join(__dirname, "data", "players_accolades.json");
 const BREF_POSITIONS_PATH = path.join(__dirname, "data", "bref_positions.json");
 const CAREER_STATS_CACHE_PATH = path.join(__dirname, "data", "nba_stats_career_stats_cache.json");
+const GAME_WINS_CACHE_PATH = path.join(__dirname, "data", "nba_stats_game_wins_cache.json");
 const MANUAL_ID_MAP_PATH = path.join(__dirname, "data", "nba_stats_id_map.json");
 const NBA_PLAYER_DIRECTORY_CACHE_PATH = path.join(__dirname, "data", "nba_stats_player_directory.json");
 const STAT_TITLE_CACHE_PATH = path.join(__dirname, "data", "stat_title_winners.json");
@@ -32,6 +34,7 @@ const STAT_TITLE_CONFIGS = [
   { accoladeKey: "steal_titles", category: "STL" },
   { accoladeKey: "block_titles", category: "BLK" },
 ];
+const PRESERVED_CAREER_SEASON_FIELDS = ["games_won", "ts_pct", "ws_per_48"];
 
 const POSITION_ORDER = ["PG", "SG", "SF", "PF", "C"];
 const UNKNOWN_POSITION_FALLBACK = ["SF", "PF"];
@@ -271,6 +274,7 @@ function createEmptyAccolades() {
     steal_titles: 0,
     block_titles: 0,
     games_started: 0,
+    games_won: 0,
     award_counts: {},
   };
 }
@@ -438,6 +442,7 @@ async function loadSeedInputs(idMapPath) {
     rawExistingPlayers,
     brefPositions,
     careerStatsCache,
+    gameWinsCache,
     idMap,
     statTitleCache,
     playerDirectoryCache,
@@ -445,6 +450,7 @@ async function loadSeedInputs(idMapPath) {
     readJsonIfExists(OUTPUT_PATH),
     readJsonIfExists(BREF_POSITIONS_PATH),
     readJsonIfExists(CAREER_STATS_CACHE_PATH),
+    readJsonIfExists(GAME_WINS_CACHE_PATH),
     readJsonIfExists(resolvedIdMapPath),
     readJsonIfExists(STAT_TITLE_CACHE_PATH),
     readJsonIfExists(NBA_PLAYER_DIRECTORY_CACHE_PATH),
@@ -453,6 +459,7 @@ async function loadSeedInputs(idMapPath) {
   return {
     brefPositions: brefPositions || {},
     careerStatsCache: careerStatsCache?.players ? careerStatsCache : { fetched_at: null, players: {} },
+    gameWinsCache: gameWinsCache?.players ? gameWinsCache : { fetched_at: null, players: {} },
     idMap: idMap || {},
     playerDirectoryCache,
     rawExistingPlayers: Array.isArray(rawExistingPlayers) ? rawExistingPlayers : [],
@@ -710,6 +717,27 @@ async function fetchNbaCareerStats(playerId, { retries, delayMs, timeoutMs }) {
     response.data.resultSets?.[0] ||
     { headers: [], rowSet: [] }
   );
+}
+
+async function fetchNbaRegularSeasonGameWins(playerId, { retries, delayMs, timeoutMs }) {
+  const response = await getWithRetry({
+    label: `NBA Stats game wins PlayerID=${playerId}`,
+    retries,
+    delayMs,
+    retryStatuses: [403, 429],
+    request: () =>
+      axios.get(NBA_STATS_GAME_FINDER_URL, {
+        headers: NBA_STATS_HEADERS,
+        params: {
+          LeagueID: "00",
+          PlayerID: playerId,
+          SeasonType: "Regular Season",
+        },
+        timeout: timeoutMs,
+      }),
+  });
+
+  return parseRegularSeasonGameWins(resultSetFromResponse(response.data, "LeagueGameFinderResults"));
 }
 
 async function fetchNbaPlayerInfo(playerId, { retries, delayMs, timeoutMs }) {
@@ -981,6 +1009,82 @@ function gamesStartedFromCareerRow(row, gamesPlayed, season) {
   return gamesPlayed;
 }
 
+function seasonLabelFromGameFinderSeasonId(value) {
+  const raw = String(value || "").trim();
+  const startYear = Number(raw.slice(-4));
+
+  if (!Number.isInteger(startYear) || startYear <= 0) {
+    return null;
+  }
+
+  return `${startYear}-${String((startYear + 1) % 100).padStart(2, "0")}`;
+}
+
+function seasonTeamKey(season, team) {
+  const seasonLabel = season ? String(season) : null;
+  const normalizedTeam = normalizeTeamCodeForSeason(team, seasonLabel);
+
+  return seasonLabel && normalizedTeam ? `${seasonLabel}:${normalizedTeam}` : null;
+}
+
+function normalizeGameWinRows(rows = []) {
+  const normalizedRows = [];
+  const seen = new Set();
+
+  for (const row of rows || []) {
+    const season = row?.season ? String(row.season) : null;
+    const team = normalizeTeamCodeForSeason(row?.team, season);
+    const key = seasonTeamKey(season, team);
+
+    if (!key || seen.has(key)) {
+      continue;
+    }
+
+    seen.add(key);
+    normalizedRows.push({
+      season,
+      team,
+      games_won: positiveInteger(row?.games_won, 0),
+    });
+  }
+
+  return normalizedRows;
+}
+
+function parseRegularSeasonGameWins(resultSet) {
+  const headers = resultSet.headers || [];
+  const rows = resultSet.rowSet || [];
+  const mapRow = buildHeaderMapper(headers);
+  const winsBySeasonTeam = new Map();
+
+  for (const rawRow of rows) {
+    const row = mapRow(rawRow);
+    const season = seasonLabelFromGameFinderSeasonId(row.SEASON_ID);
+    const team = normalizeTeamCodeForSeason(row.TEAM_ABBREVIATION, season);
+    const key = seasonTeamKey(season, team);
+
+    if (!key) {
+      continue;
+    }
+
+    if (!winsBySeasonTeam.has(key)) {
+      winsBySeasonTeam.set(key, {
+        season,
+        team,
+        games_won: 0,
+      });
+    }
+
+    if (String(row.WL || "").trim().toUpperCase() === "W") {
+      winsBySeasonTeam.get(key).games_won += 1;
+    }
+  }
+
+  return Array.from(winsBySeasonTeam.values()).sort(
+    (a, b) => a.season.localeCompare(b.season) || a.team.localeCompare(b.team),
+  );
+}
+
 function parseCareerStats(resultSet) {
   const headers = resultSet.headers || [];
   const rows = resultSet.rowSet || [];
@@ -1066,14 +1170,105 @@ function careerStatsFromCachedSeasons(cachedSeasons = []) {
   };
 }
 
+function applyGameWinsToCareer(career, gameWinRows = []) {
+  const winsByKey = new Map(
+    normalizeGameWinRows(gameWinRows).map((row) => [seasonTeamKey(row.season, row.team), row.games_won]),
+  );
+
+  if (!winsByKey.size) {
+    return career;
+  }
+
+  let changed = false;
+  const careerSeasons = career.careerSeasons.map((season) => {
+    const key = seasonTeamKey(season?.season, season?.team);
+
+    if (!key || !winsByKey.has(key)) {
+      return season;
+    }
+
+    const gamesWon = winsByKey.get(key);
+    if (season.games_won === gamesWon) {
+      return season;
+    }
+
+    changed = true;
+    return {
+      ...season,
+      games_won: gamesWon,
+    };
+  });
+
+  return changed ? { ...career, careerSeasons } : career;
+}
+
+function fillMissingCareerSeasonFields(career, storedSeasons = [], fieldKeys = PRESERVED_CAREER_SEASON_FIELDS) {
+  const storedByKey = new Map();
+
+  for (const storedSeason of storedSeasons || []) {
+    const key = seasonTeamKey(storedSeason?.season, storedSeason?.team);
+
+    if (key && !storedByKey.has(key)) {
+      storedByKey.set(key, storedSeason);
+    }
+  }
+
+  if (!storedByKey.size) {
+    return career;
+  }
+
+  let changed = false;
+  const careerSeasons = career.careerSeasons.map((season) => {
+    const key = seasonTeamKey(season?.season, season?.team);
+    const storedSeason = key ? storedByKey.get(key) : null;
+
+    if (!storedSeason) {
+      return season;
+    }
+
+    let seasonChanged = false;
+    const nextSeason = { ...season };
+
+    for (const fieldKey of fieldKeys) {
+      if (
+        (Object.prototype.hasOwnProperty.call(nextSeason, fieldKey) &&
+          nextSeason[fieldKey] !== null &&
+          nextSeason[fieldKey] !== undefined) ||
+        !Object.prototype.hasOwnProperty.call(storedSeason, fieldKey)
+      ) {
+        continue;
+      }
+
+      nextSeason[fieldKey] = storedSeason[fieldKey];
+      seasonChanged = true;
+    }
+
+    changed ||= seasonChanged;
+    return seasonChanged ? nextSeason : season;
+  });
+
+  return changed ? { ...career, careerSeasons } : career;
+}
+
 function gamesStartedFromCareerSeasons(careerSeasons = []) {
   return careerSeasons.reduce((sum, season) => sum + positiveInteger(season?.games_started, 0), 0);
+}
+
+function gamesWonFromCareerSeasons(careerSeasons = []) {
+  return careerSeasons.reduce((sum, season) => sum + positiveInteger(season?.games_won, 0), 0);
 }
 
 function cachedCareerEntryLooksValid(entry) {
   return (
     Array.isArray(entry?.seasons) &&
     entry.seasons.every((season) => Object.prototype.hasOwnProperty.call(season, "games_started"))
+  );
+}
+
+function cachedGameWinsEntryLooksValid(entry) {
+  return (
+    Array.isArray(entry?.seasons) &&
+    entry.seasons.every((season) => Object.prototype.hasOwnProperty.call(season, "games_won"))
   );
 }
 
@@ -1102,6 +1297,7 @@ function aggregatePlayer(player, awards, career, nbaStatsId) {
     awards.accolades.seasons_played = career.seasonsPlayed;
   }
   awards.accolades.games_started = gamesStartedFromCareerSeasons(career.careerSeasons);
+  awards.accolades.games_won = gamesWonFromCareerSeasons(career.careerSeasons);
 
   const positions = positionOverrideForPlayer(player, nbaStatsId) || parsePositionGroup(player.position);
   const recordId = `nba-${nbaStatsId || player.nba_stats_id || String(player.id).replace("nba-", "")}`;
@@ -1126,6 +1322,9 @@ function aggregatePlayer(player, awards, career, nbaStatsId) {
     source: {
       nba_stats_awards: nbaStatsId ? `${NBA_STATS_AWARDS_URL}?PlayerID=${nbaStatsId}` : null,
       nba_stats_career: nbaStatsId ? `${NBA_STATS_CAREER_URL}?LeagueID=00&PerMode=Totals&PlayerID=${nbaStatsId}` : null,
+      nba_stats_game_finder: nbaStatsId
+        ? `${NBA_STATS_GAME_FINDER_URL}?LeagueID=00&PlayerID=${nbaStatsId}&SeasonType=Regular%20Season`
+        : null,
     },
   };
 }
@@ -1164,6 +1363,32 @@ function recordIdentityKeys(player) {
   }
 
   return keys;
+}
+
+function buildExistingRecordLookup(players) {
+  const lookup = new Map();
+
+  for (const player of players) {
+    for (const key of recordIdentityKeys(player)) {
+      if (!lookup.has(key)) {
+        lookup.set(key, player);
+      }
+    }
+  }
+
+  return lookup;
+}
+
+function existingRecordForSeedPlayer(player, existingRecordLookup) {
+  for (const key of recordIdentityKeys(player)) {
+    const existingRecord = existingRecordLookup.get(key);
+
+    if (existingRecord) {
+      return existingRecord;
+    }
+  }
+
+  return existingRecordLookup.get(seedPlayerIdentityKey(player)) || null;
 }
 
 function filterResumePlayers(players, existingPlayers) {
@@ -1436,6 +1661,10 @@ async function refreshSeedPlayer({
   playerDirectory,
   statTitleCache,
   careerStatsCache,
+  gameWinsCache,
+  existingRecord,
+  seedGameWins,
+  refreshGameWins,
   hydratePlayerInfo,
   nbaRetries,
   nbaDelayMs,
@@ -1449,6 +1678,7 @@ async function refreshSeedPlayer({
   let playerInfo = null;
   let awardRowCount = 0;
   let careerSource = "empty";
+  let gameWinsSource = null;
 
   if (!nbaStatsId) {
     console.warn(`[${index + 1}/${total}] ${label}: NBA Stats ID not found; skipping awards/career (${resolution.source}).`);
@@ -1525,6 +1755,46 @@ async function refreshSeedPlayer({
       }
     }
 
+    if (seedGameWins) {
+      const cachedGameWinsEntry = gameWinsCache?.players?.[careerCacheKey];
+      let gameWinRows = [];
+
+      if (!refreshGameWins && cachedGameWinsEntryLooksValid(cachedGameWinsEntry)) {
+        gameWinRows = normalizeGameWinRows(cachedGameWinsEntry.seasons);
+        gameWinsSource = "cache";
+      } else {
+        try {
+          await sleep(nbaDelayMs);
+          gameWinRows = await fetchNbaRegularSeasonGameWins(nbaStatsId, {
+            retries: nbaRetries,
+            delayMs: nbaDelayMs,
+            timeoutMs: nbaTimeoutMs,
+          });
+          gameWinsSource = "fetched";
+
+          if (gameWinsCache?.players) {
+            gameWinsCache.players[careerCacheKey] = {
+              fetched_at: new Date().toISOString(),
+              seasons: gameWinRows,
+            };
+          }
+        } catch (error) {
+          console.warn(`[${index + 1}/${total}] ${label}: game wins fetch failed (${safeErrorMessage(error)})`);
+        }
+      }
+
+      career = applyGameWinsToCareer(career, gameWinRows);
+
+      if (gameWinsSource && careerStatsCache?.players?.[careerCacheKey]) {
+        careerStatsCache.players[careerCacheKey] = {
+          ...careerStatsCache.players[careerCacheKey],
+          seasons: career.careerSeasons,
+        };
+      }
+    }
+
+    career = fillMissingCareerSeasonFields(career, existingRecord?.career_seasons || []);
+
     try {
       await applyStatTitles(awards.accolades, career, nbaStatsId, statTitleCache, {
         retries: nbaRetries,
@@ -1539,7 +1809,7 @@ async function refreshSeedPlayer({
   const hydratedPlayer = playerInfo ? player : applyDirectoryRosterStatus(player, nbaStatsId, playerDirectory);
   const aggregated = aggregatePlayer(hydratedPlayer, awards, career, nbaStatsId);
   console.log(
-    `[${index + 1}/${total}] ${label}: ${awardRowCount} award rows, ${career.careerSeasons.length} team seasons${careerSource !== "empty" ? ` (${careerSource})` : ""}${nbaStatsId ? `, NBA ID ${nbaStatsId} (${resolution.source})` : ""}`,
+    `[${index + 1}/${total}] ${label}: ${awardRowCount} award rows, ${career.careerSeasons.length} team seasons${careerSource !== "empty" ? ` (${careerSource})` : ""}${gameWinsSource ? `, game wins ${gameWinsSource}` : ""}${nbaStatsId ? `, NBA ID ${nbaStatsId} (${resolution.source})` : ""}`,
   );
 
   return { aggregated, nbaStatsId };
@@ -1560,12 +1830,22 @@ async function main() {
   const nbaDirectorySeason = args.directorySeason || process.env.NBA_STATS_DIRECTORY_SEASON || "2025-26";
   const refreshNbaDirectory =
     flagEnabled(args.refreshNbaDirectory) || flagEnabled(process.env.NBA_STATS_REFRESH_PLAYER_DIRECTORY);
+  const seedGameWins =
+    flagEnabled(args.gameWins) ||
+    flagEnabled(args.gamesWon) ||
+    flagEnabled(args.seedGameWins) ||
+    flagEnabled(process.env.SEED_GAME_WINS);
+  const refreshGameWins =
+    flagEnabled(args.refreshGameWins) ||
+    flagEnabled(args.refreshGameWinsCache) ||
+    flagEnabled(process.env.SEED_REFRESH_GAME_WINS);
   const idMapPath = process.env.NBA_STATS_ID_MAP_PATH || "./data/nba_stats_id_map.json";
 
   console.time("seed: load inputs");
   const {
     brefPositions,
     careerStatsCache,
+    gameWinsCache,
     idMap,
     playerDirectoryCache,
     rawExistingPlayers,
@@ -1601,6 +1881,7 @@ async function main() {
 
   console.time("seed: normalize existing roster");
   const existingPlayers = normalizeExistingRosterStatus(rawExistingPlayers, playerDirectory);
+  const existingRecordLookup = buildExistingRecordLookup(existingPlayers);
   console.timeEnd("seed: normalize existing roster");
 
   let players;
@@ -1634,9 +1915,9 @@ async function main() {
     console.log(`Resume mode: skipped ${resumeFilter.skipped.length} already-seeded players; ${players.length} left to process.`);
   }
 
-  if (limit || offset || resume || mergeOutput) {
+  if (limit || offset || resume || mergeOutput || seedGameWins) {
     console.log(
-      `Batch settings: limit=${limit || "none"}, offset=${offset}, resume=${resume ? "on" : "off"}, output=${mergeOutput ? "merge" : "replace"}, saveEvery=${saveEvery || "final-only"}, hydratePlayerInfo=${hydratePlayerInfo ? "on" : "off"}.`,
+      `Batch settings: limit=${limit || "none"}, offset=${offset}, resume=${resume ? "on" : "off"}, output=${mergeOutput ? "merge" : "replace"}, saveEvery=${saveEvery || "final-only"}, hydratePlayerInfo=${hydratePlayerInfo ? "on" : "off"}, gameWins=${seedGameWins ? "on" : "off"}, refreshGameWins=${refreshGameWins ? "on" : "off"}.`,
     );
   }
 
@@ -1667,6 +1948,10 @@ async function main() {
       playerDirectory,
       statTitleCache,
       careerStatsCache,
+      gameWinsCache,
+      existingRecord: existingRecordForSeedPlayer(player, existingRecordLookup),
+      seedGameWins,
+      refreshGameWins,
       hydratePlayerInfo,
       nbaRetries,
       nbaDelayMs,
@@ -1691,6 +1976,12 @@ async function main() {
         ...careerStatsCache,
         fetched_at: new Date().toISOString(),
       });
+      if (seedGameWins) {
+        await writeJsonAtomically(GAME_WINS_CACHE_PATH, {
+          ...gameWinsCache,
+          fetched_at: new Date().toISOString(),
+        });
+      }
       console.timeEnd(`seed: checkpoint ${index + 1}: write`);
       console.log(`Checkpoint saved ${checkpointPlayers.length} players to ${OUTPUT_PATH}.`);
     }
@@ -1720,6 +2011,15 @@ async function main() {
     fetched_at: new Date().toISOString(),
   });
   console.timeEnd("seed: save career cache");
+
+  if (seedGameWins) {
+    console.time("seed: save game wins cache");
+    await writeJsonAtomically(GAME_WINS_CACHE_PATH, {
+      ...gameWinsCache,
+      fetched_at: new Date().toISOString(),
+    });
+    console.timeEnd("seed: save game wins cache");
+  }
 
   console.log(
     `Wrote ${outputPlayers.length} players to ${OUTPUT_PATH}`,
