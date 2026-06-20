@@ -8,10 +8,18 @@ const LEAGUE_AVERAGES_PATH = path.join(__dirname, "data", "historical_league_ave
 
 // Tune these values to rebalance the box-score signal across eras. The scorer
 // compares each stat to that exact season's league climate before scaling.
-const WEIGHTS = { ppg: 0.8, rpg: 0.55, apg: 0.55, spg: 0.25, bpg: 0.25, ts_impact: 1.0, ws_impact: 1.5 };
+const WEIGHTS = {
+  ppg: 0.8,
+  rpg: 0.45,
+  apg: 0.55,
+  spg: 0.25,
+  bpg: 0.25,
+  ts_impact: 1.0,
+  ts_peer_weight: 0.5,
+  ts_skill_weight: 0.5,
+  ws_impact: 1.5,
+};
 const STINT_SCALING_FACTOR = 250;
-const ALL_TIME_TS_BASELINE = 0.54;
-const TS_BLEND_WEIGHTS = { era: 0.25, absolute: 0.5 };
 
 const BASE_METRICS = ["ppg", "rpg", "apg"];
 const DEFENSIVE_METRICS = ["spg", "bpg"];
@@ -24,7 +32,7 @@ const LEAGUE_AVERAGE_KEYS = {
   apg: ["APG", "apg"],
   spg: ["SPG", "spg"],
   bpg: ["BPG", "bpg"],
-  ts_pct: ["TS_PCT", "ts_pct", "TS%", "true_shooting_pct", "trueShootingPct"],
+  ts_pct: ["league_ts_pct", "leagueTsPct", "TS_PCT", "ts_pct", "TS%", "true_shooting_pct", "trueShootingPct"],
 };
 const PLAYER_DIRECT_STAT_KEYS = {
   ppg: ["ppg", "PPG", "points_per_game", "pointsPerGame", "pts_per_game", "ptsPerGame"],
@@ -79,6 +87,41 @@ function numericValue(value) {
 
   const numeric = Number(value);
   return Number.isFinite(numeric) ? numeric : null;
+}
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function roundWeight(value) {
+  return Number(value.toFixed(4));
+}
+
+function resolveTsWeights(weights = WEIGHTS) {
+  const peerWeight = numericValue(weights?.ts_peer_weight);
+  const skillWeight = numericValue(weights?.ts_skill_weight);
+  const peer = clamp(
+    peerWeight !== null
+      ? peerWeight
+      : skillWeight !== null
+        ? 1 - skillWeight
+        : WEIGHTS.ts_peer_weight,
+    0,
+    1,
+  );
+
+  return { peer: roundWeight(peer), skill: roundWeight(1 - peer) };
+}
+
+function eraAdjustedTsPct(playerTs, leagueTs) {
+  return playerTs + (playerTs - leagueTs);
+}
+
+function tsHybridPct(playerTs, leagueTs, weights = WEIGHTS) {
+  const tsWeights = resolveTsWeights(weights);
+  const adjustedTs = eraAdjustedTsPct(playerTs, leagueTs);
+
+  return adjustedTs * tsWeights.peer + playerTs * tsWeights.skill;
 }
 
 function positiveNumericValue(value) {
@@ -288,13 +331,10 @@ function scoreSeasonAgainstLeague(season, leagueAverages, options = {}) {
   const leagueTs = leagueMetricValue(leagueAverages, "ts_pct");
 
   if (playerTs !== null && leagueTs !== null) {
-    const eraRelativeTs = playerTs / leagueTs;
-    const absoluteRelativeTs = playerTs / ALL_TIME_TS_BASELINE;
-    const blendedTsRatio =
-      eraRelativeTs * TS_BLEND_WEIGHTS.era + absoluteRelativeTs * TS_BLEND_WEIGHTS.absolute;
+    const tsHybrid = tsHybridPct(playerTs, leagueTs, configuredWeights);
 
-    if (Number.isFinite(blendedTsRatio)) {
-      efficiencyModifier += (blendedTsRatio - 1) * Number(configuredWeights.ts_impact ?? WEIGHTS.ts_impact);
+    if (Number.isFinite(tsHybrid)) {
+      efficiencyModifier += (tsHybrid - leagueTs) * Number(configuredWeights.ts_impact ?? WEIGHTS.ts_impact);
     }
   }
 
@@ -550,18 +590,19 @@ if (require.main === module) {
 
 module.exports = {
   ALL_METRICS,
-  ALL_TIME_TS_BASELINE,
   EFFICIENCY_METRICS,
   LEAGUE_AVERAGES_PATH,
   PLAYERS_PATH,
   STINT_SCALING_FACTOR,
-  TS_BLEND_WEIGHTS,
   WEIGHTS,
   calculateClassicPointsForBlock,
+  eraAdjustedTsPct,
   leagueAverageForSeason,
   metricWeightsForSeason,
   playerMetricValue,
+  resolveTsWeights,
   scoreSeasonAgainstLeague,
+  tsHybridPct,
   updatePlayerClassicPoints,
   updatePlayersClassicPoints,
   writeJsonAtomically,

@@ -4,9 +4,8 @@ const fs = require("fs/promises");
 const path = require("path");
 const { ACCOLADE_WEIGHTS, LEGACY_ENGINE_FACTORS } = require("./legacyPoints");
 const {
-  ALL_TIME_TS_BASELINE,
+  resolveTsWeights,
   STINT_SCALING_FACTOR,
-  TS_BLEND_WEIGHTS,
   WEIGHTS: CLASSIC_STAT_WEIGHTS,
 } = require("./eraRelativeClassicPoints");
 const { applyGoatRankingsToPlayers, loadCachedGoatRankings } = require("./mediaGoatRankings");
@@ -75,9 +74,9 @@ async function readPlayers() {
 
 async function readStatsEngineConfig() {
   const leagueAverages = await readJson(LEAGUE_AVERAGES_PATH);
+  const tsWeights = resolveTsWeights(CLASSIC_STAT_WEIGHTS);
 
   return {
-    allTimeTsBaseline: ALL_TIME_TS_BASELINE,
     leagueAverages,
     scalingFactor: STINT_SCALING_FACTOR,
     statWeights: {
@@ -85,11 +84,11 @@ async function readStatsEngineConfig() {
       pts: CLASSIC_STAT_WEIGHTS.ppg,
       rebs: CLASSIC_STAT_WEIGHTS.rpg,
       stocks: CLASSIC_STAT_WEIGHTS.spg,
-      tsAbsoluteImpact: CLASSIC_STAT_WEIGHTS.ts_impact * TS_BLEND_WEIGHTS.absolute,
-      tsEraImpact: CLASSIC_STAT_WEIGHTS.ts_impact * TS_BLEND_WEIGHTS.era,
+      tsImpact: CLASSIC_STAT_WEIGHTS.ts_impact,
+      tsPeerWeight: tsWeights.peer,
+      tsSkillWeight: tsWeights.skill,
       wsImpact: CLASSIC_STAT_WEIGHTS.ws_impact,
     },
-    tsBlendWeights: TS_BLEND_WEIGHTS,
     ws48Baseline: 0.1,
   };
 }
