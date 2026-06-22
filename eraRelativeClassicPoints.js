@@ -10,14 +10,14 @@ const LEAGUE_AVERAGES_PATH = path.join(__dirname, "data", "historical_league_ave
 // compares each stat to that exact season's league climate before scaling.
 const WEIGHTS = {
   ppg: 0.8,
-  rpg: 0.45,
-  apg: 0.55,
-  spg: 0.25,
-  bpg: 0.25,
-  ts_impact: 1.0,
+  rpg: 0.3,
+  apg: 0.45,
+  spg: 0.2,
+  bpg: 0.2,
+  ts_impact: 0.5,
   ts_peer_weight: 0.5,
   ts_skill_weight: 0.5,
-  ws_impact: 1.5,
+  ws_impact: 1.25,
 };
 const STINT_SCALING_FACTOR = 250;
 
