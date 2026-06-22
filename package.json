@@ -7,6 +7,14 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
+    "db:generate": "prisma generate",
+    "db:check": "node scripts/check-db-connection.js",
+    "db:migrate": "node scripts/prisma-with-direct-url.js migrate deploy",
+    "db:migrate:dev": "node scripts/prisma-with-direct-url.js migrate dev",
+    "db:studio": "node scripts/prisma-with-direct-url.js studio",
+    "db:import:players": "node scripts/import-players-to-db.js",
+    "db:import:players:dry": "node scripts/import-players-to-db.js --dryRun",
+    "db:sync:players": "node scripts/import-players-to-db.js --deleteMissing",
     "seed": "node seed.js --mode=bref --replace --yes",
     "seed:bref": "node seed.js --mode=bref --replace --yes",
     "seed:bref:dry": "node seed.js --mode=bref --replace --yes --dryRun --skipFetch",
@@ -31,9 +39,15 @@
     "fix:positions": "node fix-position-overrides.js"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
     "axios": "^1.13.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "pg": "^8.22.0"
+  },
+  "devDependencies": {
+    "prisma": "^7.8.0"
   }
 }
