@@ -13,12 +13,37 @@ const { playerCacheStatus, readJson, readPlayers } = require("./playerRepository
 const app = express();
 const PORT = Number(process.env.PORT || 4000);
 const LEAGUE_AVERAGES_PATH = path.join(__dirname, "data", "historical_league_averages.json");
-const DEFAULT_FRONTEND_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"];
+const DEFAULT_FRONTEND_ORIGINS = [
+  "https://nba82-0.vercel.app",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+];
 const LOCAL_DEV_HOSTNAMES = new Set(["localhost", "127.0.0.1", "::1", "[::1]"]);
-const allowedOrigins = (process.env.FRONTEND_ORIGIN || DEFAULT_FRONTEND_ORIGINS.join(","))
+
+function normalizeOrigin(origin) {
+  const trimmedOrigin = String(origin || "").trim();
+
+  if (!trimmedOrigin) {
+    return "";
+  }
+
+  try {
+    return new URL(trimmedOrigin).origin;
+  } catch {
+    return trimmedOrigin.replace(/\/+$/, "");
+  }
+}
+
+const configuredFrontendOrigins = (process.env.FRONTEND_ORIGIN || "")
   .split(",")
-  .map((origin) => origin.trim())
+  .map(normalizeOrigin)
   .filter(Boolean);
+const allowedOrigins = Array.from(
+  new Set([...DEFAULT_FRONTEND_ORIGINS.map(normalizeOrigin), ...configuredFrontendOrigins]),
+);
+const allowedOriginSet = new Set(allowedOrigins);
 
 function isLocalDevOrigin(origin) {
   if (process.env.NODE_ENV === "production") {
@@ -37,7 +62,26 @@ function isLocalDevOrigin(origin) {
 }
 
 function isAllowedOrigin(origin) {
-  return allowedOrigins.includes(origin) || isLocalDevOrigin(origin);
+  return allowedOriginSet.has(normalizeOrigin(origin)) || isLocalDevOrigin(origin);
+}
+
+function corsDeniedError(origin) {
+  const error = new Error(`Origin ${origin} is not allowed by CORS.`);
+  error.statusCode = 403;
+  error.code = "CORS_ORIGIN_DENIED";
+
+  return error;
+}
+
+function setCorsHeaderForAllowedOrigin(req, res) {
+  const origin = req.get("Origin");
+
+  if (!origin || !isAllowedOrigin(origin) || res.get("Access-Control-Allow-Origin")) {
+    return;
+  }
+
+  res.set("Access-Control-Allow-Origin", normalizeOrigin(origin));
+  res.vary("Origin");
 }
 
 app.use(
@@ -48,7 +92,7 @@ app.use(
         return;
       }
 
-      callback(new Error(`Origin ${origin} is not allowed by CORS.`));
+      callback(corsDeniedError(origin));
     },
   }),
 );
@@ -114,10 +158,16 @@ app.get("/api/stats-engine-config", async (_req, res, next) => {
   }
 });
 
-app.use((error, _req, res, _next) => {
+app.use((error, req, res, _next) => {
+  const statusCode = Number.isInteger(error.statusCode) ? error.statusCode : 500;
+
+  if (statusCode !== 403) {
+    setCorsHeaderForAllowedOrigin(req, res);
+  }
+
   console.error(error);
-  res.status(500).json({
-    error: "Unable to load player accolade data.",
+  res.status(statusCode).json({
+    error: statusCode === 403 ? "Origin is not allowed by CORS." : "Unable to load player accolade data.",
     details: process.env.NODE_ENV === "production" ? undefined : error.message,
   });
 });

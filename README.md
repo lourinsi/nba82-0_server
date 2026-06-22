@@ -22,7 +22,7 @@ Defaults are already usable locally:
 
 ```env
 PORT=4000
-FRONTEND_ORIGIN=http://localhost:3000,http://127.0.0.1:3000
+FRONTEND_ORIGIN=https://nba82-0.vercel.app,http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173
 PLAYER_DATA_PATH=./data/players_accolades_bref.json
 PLAYER_DATA_SOURCE=auto
 DATABASE_URL="postgresql://postgres.[project-ref]:[YOUR-PASSWORD]@[region].pooler.supabase.com:6543/postgres?pgbouncer=true&sslmode=require"
