@@ -13,6 +13,8 @@ const { playerCacheStatus, readJson, readPlayers } = require("./playerRepository
 const app = express();
 const PORT = Number(process.env.PORT || 4000);
 const LEAGUE_AVERAGES_PATH = path.join(__dirname, "data", "historical_league_averages.json");
+const PLAYER_RESPONSE_CACHE_CONTROL = "public, max-age=600, stale-while-revalidate=86400";
+const CONFIG_RESPONSE_CACHE_CONTROL = "public, max-age=600, stale-while-revalidate=3600";
 const DEFAULT_FRONTEND_ORIGINS = [
   "https://nba82-0.vercel.app",
   "http://localhost:3000",
@@ -134,7 +136,7 @@ app.get("/api/players", async (_req, res, next) => {
     const players = await readPlayers();
     const durationMs = Date.now() - startedAt;
     console.log(`/api/players served ${players.length} players in ${durationMs}ms`);
-    res.set("Cache-Control", "no-store");
+    res.set("Cache-Control", PLAYER_RESPONSE_CACHE_CONTROL);
     res.json(players);
   } catch (error) {
     next(error);
@@ -142,7 +144,7 @@ app.get("/api/players", async (_req, res, next) => {
 });
 
 app.get("/api/legacy-engine-config", (_req, res) => {
-  res.set("Cache-Control", "no-store");
+  res.set("Cache-Control", CONFIG_RESPONSE_CACHE_CONTROL);
   res.json({
     accoladeWeights: ACCOLADE_WEIGHTS,
     legacyEngineFactors: LEGACY_ENGINE_FACTORS,
@@ -151,7 +153,7 @@ app.get("/api/legacy-engine-config", (_req, res) => {
 
 app.get("/api/stats-engine-config", async (_req, res, next) => {
   try {
-    res.set("Cache-Control", "no-store");
+    res.set("Cache-Control", CONFIG_RESPONSE_CACHE_CONTROL);
     res.json(await readStatsEngineConfig());
   } catch (error) {
     next(error);
