@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Player {
+  id                     String   @id
+  brefId                 String?  @map("bref_id")
+  balldontlieId          Int?     @map("balldontlie_id")
+  nbaStatsId             Int?     @map("nba_stats_id")
+  firstName              String   @map("first_name")
+  lastName               String   @map("last_name")
+  name                   String
+  positions              String[]
+  primaryPosition        String?  @map("primary_position")
+  currentTeam            String?  @map("current_team")
+  teams                  String[]
+  eras                   String[]
+  teamEras               Json     @map("team_eras")
+  careerSeasons          Json     @map("career_seasons")
+  accolades              Json
+  awardsRaw              Json     @map("awards_raw")
+  classicPointsByTeamEra Json     @map("classic_points_by_team_era")
+  legacyPoints           Float?   @map("legacy_points")
+  draftYear              Int?     @map("draft_year")
+  active                 Boolean?
+  source                 String?
+  sortOrder              Int      @default(0) @map("sort_order")
+  payload                Json
+  createdAt              DateTime @default(now()) @map("created_at")
+  updatedAt              DateTime @updatedAt @map("updated_at")
+
+  @@index([brefId])
+  @@index([name])
+  @@index([currentTeam])
+  @@index([primaryPosition])
+  @@index([legacyPoints])
+  @@index([sortOrder])
+  @@map("players")
+}
+
+model DataImport {
+  id          String   @id @default(cuid())
+  source      String
+  sourcePath  String   @map("source_path")
+  checksum    String
+  playerCount Int      @map("player_count")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([source])
+  @@map("data_imports")
+}

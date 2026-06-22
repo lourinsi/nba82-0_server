@@ -2,7 +2,7 @@
 
 Backend API and data seeding tools for the 82-0 accolade workspace.
 
-This server serves live player accolade data from `data/players_accolades_bref.json` by default and includes scripts for fetching NBA data, resuming long seed runs, recalculating `legacy_points`, and deriving team-era Classic scores. The older NBA Stats fallback dataset remains at `data/players_accolades.json`.
+This server serves live player accolade data from PostgreSQL through Prisma when `DATABASE_URL` is configured, with `data/players_accolades_bref.json` kept as the migration fallback. It also includes scripts for fetching NBA data, resuming long seed runs, recalculating `legacy_points`, and deriving team-era Classic scores. The older NBA Stats fallback dataset remains at `data/players_accolades.json`.
 
 ## Setup
 
@@ -24,6 +24,9 @@ Defaults are already usable locally:
 PORT=4000
 FRONTEND_ORIGIN=http://localhost:3000,http://127.0.0.1:3000
 PLAYER_DATA_PATH=./data/players_accolades_bref.json
+PLAYER_DATA_SOURCE=auto
+DATABASE_URL="postgresql://postgres.[project-ref]:[YOUR-PASSWORD]@[region].pooler.supabase.com:6543/postgres?pgbouncer=true&sslmode=require"
+DIRECT_URL="postgresql://postgres.[project-ref]:[YOUR-PASSWORD]@[region].pooler.supabase.com:5432/postgres?sslmode=require"
 ```
 
 In development, the API also accepts browser requests from localhost on any port.
@@ -53,7 +56,55 @@ Default API endpoint:
 http://localhost:4000/api/players
 ```
 
-The server reads `data/players_accolades_bref.json` fresh on each request, so seed updates are reflected without restarting the server. Set `PLAYER_DATA_PATH` to point the API at another player JSON during local checks.
+With `PLAYER_DATA_SOURCE=auto`, the server reads players from PostgreSQL when `DATABASE_URL` is set and the `players` table has rows. If the database is unavailable or empty during local migration, it falls back to `PLAYER_DATA_PATH`. Set `PLAYER_DATA_SOURCE=json` to force the JSON file, or `PLAYER_DATA_SOURCE=database` to fail fast when Postgres is not ready.
+
+## Prisma Database
+
+The player migration keeps the existing API response shape intact. Searchable identity fields live in columns, while nested basketball data such as `career_seasons`, `accolades`, `awards_raw`, and `classic_points_by_team_era` is stored as `jsonb`.
+
+Initial local setup:
+
+```powershell
+# Replace the bracketed DATABASE_URL and DIRECT_URL placeholders in .env first.
+npm run db:generate
+npm run db:migrate
+npm run db:import:players:dry
+npm run db:sync:players
+```
+
+Command guide:
+
+```text
+npm run db:generate
+Generates Prisma Client from prisma/schema.prisma.
+
+npm run db:migrate
+Applies committed migrations to the configured PostgreSQL database.
+
+npm run db:migrate:dev
+Creates/applies development migrations after schema edits.
+
+npm run db:studio
+Opens Prisma Studio using DIRECT_URL when it is configured. This avoids Supabase transaction-pooler metadata issues.
+
+npm run db:import:players
+Upserts players from PLAYER_DATA_PATH or --file without deleting rows missing from the source.
+
+npm run db:import:players:dry
+Validates and summarizes the JSON import source without writing to Postgres.
+
+npm run db:sync:players
+Upserts players from the JSON source and deletes database rows that are no longer present.
+```
+
+Useful import flags:
+
+```text
+--file=./data/players_accolades_bref.json
+--dryRun
+--deleteMissing
+--batchSize=100
+```
 
 ## Seed Scripts
 
@@ -62,6 +113,13 @@ Available scripts:
 ```powershell
 npm start
 npm run dev
+npm run db:generate
+npm run db:migrate
+npm run db:migrate:dev
+npm run db:studio
+npm run db:import:players
+npm run db:import:players:dry
+npm run db:sync:players
 npm run seed
 npm run seed:bref
 npm run seed:bref:dry
