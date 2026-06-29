@@ -1,5 +1,6 @@
 const ACCOLADE_WEIGHTS = {
   finals_mvp_count: 7.5,
+  estimated_finals_mvp_count: 7.5,
   mvp_count: 5,
   all_nba_1st: 7,
   all_nba_2nd: 5.5,

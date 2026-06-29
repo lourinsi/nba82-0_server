@@ -204,6 +204,9 @@ Overwrites stored positions and primary_position from data/bref_positions.json f
 npm run seed:legacy-points
 Recalculates legacy_points from stored accolades without refetching NBA APIs.
 
+npm run seed:retro-finals-mvps
+Seeds estimated pre-1969 Retro FMVP counts into the player database JSON fields. These counts stay separate from official `finals_mvp_count`.
+
 npm run seed:three-point-accolades
 Backfills regular-season three-point titles from NBA Stats FG3M leaders and All-Star 3-Point Contest winners from Basketball Reference into `data/players_accolades.json`, then recalculates legacy/classic scores. Use `npm run seed:three-point-accolades:bref` for `data/players_accolades_bref.json`.
 
@@ -536,6 +539,7 @@ Current weighted fields:
 ```text
 mvp_count: 8
 finals_mvp_count: 7.1
+estimated_finals_mvp_count: 4.5
 all_nba_1st: 7
 all_nba_2nd: 5.5
 all_nba_3rd: 4

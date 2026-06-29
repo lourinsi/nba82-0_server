@@ -249,6 +249,7 @@ function createEmptyAccolades() {
   return {
     mvp_count: 0,
     finals_mvp_count: 0,
+    estimated_finals_mvp_count: 0,
     dpoy_count: 0,
     roy_won: false,
     championship_rings: 0,

@@ -31,6 +31,8 @@
     "seed:bref-positions": "node seed-bref-positions.js",
     "seed:goat-rankings": "node seed-goat-rankings.js",
     "seed:legacy-points": "node seed-legacy-points.js",
+    "seed:retro-finals-mvps": "node seed-retro-finals-mvps.js",
+    "seed:retro-finals-mvps:verify": "node seed-retro-finals-mvps.js --verifyOnly",
     "seed:three-point-accolades": "node seed-three-point-accolades.js",
     "seed:three-point-accolades:bref": "node seed-three-point-accolades.js --players=./data/players_accolades_bref.json",
     "seed:classic-points": "node eraRelativeClassicPoints.js",

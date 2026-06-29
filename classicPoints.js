@@ -17,6 +17,7 @@ function createEmptyClassicAccolades() {
   return {
     mvp_count: 0,
     finals_mvp_count: 0,
+    estimated_finals_mvp_count: 0,
     dpoy_count: 0,
     roy_won: false,
     championship_rings: 0,
@@ -112,6 +113,16 @@ function isNbaFinalsMvpDescription(description) {
   );
 }
 
+function isEstimatedFinalsMvpDescription(description) {
+  const normalized = normalizeText(description);
+
+  return (
+    (normalized.includes("estimated") || normalized.includes("retro")) &&
+    normalized.includes("finals") &&
+    (normalized.includes("mvp") || normalized.includes("most valuable player"))
+  );
+}
+
 function addAwardCount(accolades, rawDescription) {
   if (!rawDescription) {
     return;
@@ -131,7 +142,9 @@ function applyAwardToAccolades(accolades, award) {
     return;
   }
 
-  if (isNbaFinalsMvpDescription(description)) {
+  if (isEstimatedFinalsMvpDescription(description)) {
+    accolades.estimated_finals_mvp_count += 1;
+  } else if (isNbaFinalsMvpDescription(description)) {
     accolades.finals_mvp_count += 1;
   } else if (description.includes("all-star") && description.includes("most valuable player")) {
     accolades.all_star_mvp_count += 1;
