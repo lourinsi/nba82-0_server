@@ -9,7 +9,15 @@ const {
 } = require("./seed-advanced-stats");
 const { applyLegacyScoringPipeline } = require("./seed-legacy-points");
 const { eraSortValue, seasonEndYear, seasonEra } = require("./seasonEras");
-const { normalizeTeamCodeForSeason } = require("./teamFranchises");
+const {
+  isAbaSeason,
+  normalizeSourceLeague,
+  normalizeTeamCodeForSeason,
+  normalizedRawTeamCode,
+  summarizeAbaTranslationsFromPlayers,
+  teamTranslationFields,
+  translateTeamForSeason,
+} = require("./teamFranchises");
 require("dotenv").config();
 
 const FALLBACK_PLAYERS_PATH = path.join(__dirname, "data", "players_accolades.json");
@@ -22,10 +30,10 @@ const BREF_TEAM_ADVANCED_CACHE_PATH = path.join(__dirname, "data", "bref_team_ad
 const STAT_TITLE_CACHE_PATH = path.join(__dirname, "data", "stat_title_winners.json");
 const THREE_POINT_CONTEST_CACHE_PATH = path.join(__dirname, "data", "three_point_contest_winners.json");
 
-const BREF_PER_GAME_URL_TEMPLATE = "https://www.basketball-reference.com/leagues/NBA_{year}_per_game.html";
-const BREF_PER_100_URL_TEMPLATE = "https://www.basketball-reference.com/leagues/NBA_{year}_per_poss.html";
-const BREF_ADVANCED_URL_TEMPLATE = "https://www.basketball-reference.com/leagues/NBA_{year}_advanced.html";
-const BREF_TEAM_ADVANCED_URL_TEMPLATE = "https://www.basketball-reference.com/leagues/NBA_{year}.html";
+const BREF_PER_GAME_URL_TEMPLATE = "https://www.basketball-reference.com/leagues/{league}_{year}_per_game.html";
+const BREF_PER_100_URL_TEMPLATE = "https://www.basketball-reference.com/leagues/{league}_{year}_per_poss.html";
+const BREF_ADVANCED_URL_TEMPLATE = "https://www.basketball-reference.com/leagues/{league}_{year}_advanced.html";
+const BREF_TEAM_ADVANCED_URL_TEMPLATE = "https://www.basketball-reference.com/leagues/{league}_{year}.html";
 const WRITE_RETRY_DELAYS_MS = [250, 500, 1000, 2000, 4000];
 const POSITION_ORDER = ["PG", "SG", "SF", "PF", "C"];
 const VALID_POSITIONS = new Set(POSITION_ORDER);
@@ -195,6 +203,22 @@ function resolvePath(value, fallbackPath) {
   return path.resolve(process.cwd(), String(value));
 }
 
+function brefLeagueCodesForSeason(season) {
+  const endYear = seasonEndYear(season);
+
+  if (endYear && endYear < 1950) {
+    return ["BAA"];
+  }
+
+  return isAbaSeason(season) ? ["NBA", "ABA"] : ["NBA"];
+}
+
+function brefLeagueUrl(urlTemplate, league, season) {
+  return urlTemplate
+    .replace("{league}", league)
+    .replace("{year}", String(seasonEndYear(season)));
+}
+
 function fixPossiblyMojibake(value) {
   const text = String(value || "");
 
@@ -335,6 +359,23 @@ function isAggregateTeam(team) {
   return normalized === "TOT" || /^\d+TM$/.test(normalized);
 }
 
+function sourceLeagueForRow(row, fallback = null) {
+  return normalizeSourceLeague(row?.source_league || row?.sourceLeague || row?.league || fallback);
+}
+
+function translatedTeamForRow(rawTeam, season, sourceLeague) {
+  const translation = translateTeamForSeason(rawTeam, season, { sourceLeague });
+
+  if (!translation.team) {
+    return null;
+  }
+
+  return {
+    team: translation.team,
+    fields: teamTranslationFields(translation),
+  };
+}
+
 function normalizePosition(value) {
   const position = String(value || "").match(/\b(PG|SG|SF|PF|C)\b/i)?.[1]?.toUpperCase();
   return VALID_POSITIONS.has(position) ? position : null;
@@ -365,15 +406,17 @@ function normalizeBrefSeason(rawSeason) {
 
   const season = String(rawSeason.season || "").trim();
   const rawTeam = String(rawSeason.team || "").trim().toUpperCase();
-  const team = normalizeTeamCodeForSeason(rawTeam, season);
+  const sourceLeague = sourceLeagueForRow(rawSeason);
+  const translated = translatedTeamForRow(rawTeam, season, sourceLeague);
 
-  if (!season || !team || isAggregateTeam(rawTeam)) {
+  if (!season || !translated || isAggregateTeam(rawTeam)) {
     return null;
   }
 
   return {
     season,
-    team,
+    team: translated.team,
+    ...translated.fields,
     games_played: positiveInteger(rawSeason.games_played ?? rawSeason.gamesPlayed ?? rawSeason.games, 0),
   };
 }
@@ -480,7 +523,7 @@ function seasonLabelsFromBrefRecords(records) {
   return Array.from(seasons).sort((a, b) => (seasonEndYear(a) || 0) - (seasonEndYear(b) || 0));
 }
 
-function parsePerGameRows(html, season) {
+function parsePerGameRows(html, season, sourceLeague = "NBA") {
   const table = extractTableHtml(html, "per_game_stats");
 
   if (!table) {
@@ -492,9 +535,9 @@ function parsePerGameRows(html, season) {
   for (const cells of parseTableRows(table)) {
     const playerCell = cells.player || cells.name_display;
     const rawTeam = cells.team_id?.text || cells.team_name_abbr?.text;
-    const team = normalizeTeamCodeForSeason(rawTeam, season);
+    const translated = translatedTeamForRow(rawTeam, season, sourceLeague);
 
-    if (!playerCell?.text || !team || isAggregateTeam(rawTeam)) {
+    if (!playerCell?.text || !translated || isAggregateTeam(rawTeam)) {
       continue;
     }
 
@@ -504,7 +547,8 @@ function parsePerGameRows(html, season) {
 
     rows.push({
       season,
-      team,
+      team: translated.team,
+      ...translated.fields,
       player: playerCell.text.replace(/\*/g, "").trim(),
       bref_id: brefPlayerIdFromHtml(playerCell.html),
       games_played: gamesPlayed,
@@ -527,7 +571,7 @@ function parsePerGameRows(html, season) {
   );
 }
 
-function parsePer100Rows(html, season) {
+function parsePer100Rows(html, season, sourceLeague = "NBA") {
   const table = extractTableHtml(html, "per_poss") || extractTableHtml(html, "per_poss_stats");
 
   if (!table) {
@@ -539,9 +583,9 @@ function parsePer100Rows(html, season) {
   for (const cells of parseTableRows(table)) {
     const playerCell = cells.player || cells.name_display;
     const rawTeam = cells.team_id?.text || cells.team_name_abbr?.text;
-    const team = normalizeTeamCodeForSeason(rawTeam, season);
+    const translated = translatedTeamForRow(rawTeam, season, sourceLeague);
 
-    if (!playerCell?.text || !team || isAggregateTeam(rawTeam)) {
+    if (!playerCell?.text || !translated || isAggregateTeam(rawTeam)) {
       continue;
     }
 
@@ -555,7 +599,8 @@ function parsePer100Rows(html, season) {
 
     rows.push({
       season,
-      team,
+      team: translated.team,
+      ...translated.fields,
       player: playerCell.text.replace(/\*/g, "").trim(),
       bref_id: brefPlayerIdFromHtml(playerCell.html),
       games_played: positiveInteger(cells.g?.text || cells.games?.text, 0),
@@ -579,7 +624,7 @@ function brefTeamIdFromHtml(html) {
   return match?.[1] || null;
 }
 
-function parseTeamAdvancedRows(html, season) {
+function parseTeamAdvancedRows(html, season, sourceLeague = "NBA") {
   const table = extractTableHtml(html, "advanced-team");
 
   if (!table) {
@@ -591,16 +636,17 @@ function parseTeamAdvancedRows(html, season) {
   for (const cells of parseTableRows(table)) {
     const teamCell = cells.team || cells.team_name;
     const rawTeam = brefTeamIdFromHtml(teamCell?.html) || teamCell?.text;
-    const team = normalizeTeamCodeForSeason(rawTeam, season);
+    const translated = translatedTeamForRow(rawTeam, season, sourceLeague);
     const pace = roundedNumber(cells.pace?.text);
 
-    if (!team || !pace || /league average/i.test(teamCell?.text || "")) {
+    if (!translated || !pace || /league average/i.test(teamCell?.text || "")) {
       continue;
     }
 
     rows.push({
       season,
-      team,
+      team: translated.team,
+      ...translated.fields,
       pace,
     });
   }
@@ -612,23 +658,50 @@ async function fetchRowsForSeason(season, options) {
   const endYear = seasonEndYear(season);
 
   if (!endYear) {
-    return [];
+    return { rows: [], sources: [] };
   }
 
-  const url = options.urlTemplate.replace("{year}", String(endYear));
-  const response = await getWithRetry({
-    label: `${options.label} ${season}`,
-    retries: options.retries,
-    delayMs: options.delayMs,
-    retryStatuses: [403, 429, 500, 502, 503, 504],
-    request: () =>
-      axios.get(url, {
-        headers: BREF_HEADERS,
-        timeout: options.timeoutMs,
-      }),
-  });
+  const rows = [];
+  const sources = [];
+  const leagues = options.leagues || brefLeagueCodesForSeason(season);
+  let lastNotFoundError = null;
 
-  return options.parseRows(response.data, season);
+  for (const [leagueIndex, league] of leagues.entries()) {
+    const url = brefLeagueUrl(options.urlTemplate, league, season);
+
+    try {
+      const response = await getWithRetry({
+        label: `${options.label} ${league} ${season}`,
+        retries: options.retries,
+        delayMs: options.delayMs,
+        retryStatuses: [403, 429, 500, 502, 503, 504],
+        request: () =>
+          axios.get(url, {
+            headers: BREF_HEADERS,
+            timeout: options.timeoutMs,
+          }),
+      });
+
+      rows.push(...options.parseRows(response.data, season, league));
+      sources.push(url);
+    } catch (error) {
+      if (httpStatus(error) !== 404 || leagues.length === 1) {
+        throw error;
+      }
+
+      lastNotFoundError = error;
+    }
+
+    if (leagueIndex < leagues.length - 1) {
+      await sleep(options.delayMs);
+    }
+  }
+
+  if (!sources.length && lastNotFoundError) {
+    throw lastNotFoundError;
+  }
+
+  return { rows, sources };
 }
 
 async function populateSeasonCache(options) {
@@ -660,15 +733,15 @@ async function populateSeasonCache(options) {
     await waitForRateLimit(lastFetchAt, options.delayMs);
 
     try {
-      const rows = await fetchRowsForSeason(season, options);
+      const result = await fetchRowsForSeason(season, options);
       lastFetchAt = Date.now();
       cache.seasons[season] = {
         fetched_at: new Date().toISOString(),
-        source: options.urlTemplate.replace("{year}", String(seasonEndYear(season))),
-        rows,
+        source: result.sources.length === 1 ? result.sources[0] : result.sources,
+        rows: result.rows,
       };
       fetchedSeasons += 1;
-      console.log(`[${index + 1}/${options.seasons.length}] ${season}: fetched ${rows.length} ${options.cacheLabel} rows.`);
+      console.log(`[${index + 1}/${options.seasons.length}] ${season}: fetched ${result.rows.length} ${options.cacheLabel} rows.`);
     } catch (error) {
       lastFetchAt = Date.now();
 
@@ -678,7 +751,7 @@ async function populateSeasonCache(options) {
 
       cache.seasons[season] = {
         fetched_at: new Date().toISOString(),
-        source: options.urlTemplate.replace("{year}", String(seasonEndYear(season))),
+        source: brefLeagueCodesForSeason(season).map((league) => brefLeagueUrl(options.urlTemplate, league, season)),
         unavailable: true,
         reason: "not-found",
         rows: [],
@@ -719,17 +792,36 @@ function seasonRowsFromCache(cache, seasons) {
   return rows;
 }
 
-function seasonPlayerTeamKey(season, team, playerName) {
-  const normalizedTeam = normalizeTeamCodeForSeason(team, season);
+function seasonPlayerTeamKey(season, team, playerName, options = {}) {
+  const normalizedTeam = normalizeTeamCodeForSeason(team, season, { sourceLeague: options.sourceLeague });
   const normalizedName = normalizeName(playerName);
 
-  return season && normalizedTeam && normalizedName ? `${season}:${normalizedTeam}:${normalizedName}` : null;
+  return season && normalizedTeam && normalizedName ? `${season}:team:${normalizedTeam}:${normalizedName}` : null;
 }
 
-function seasonBrefTeamKey(season, team, brefId) {
-  const normalizedTeam = normalizeTeamCodeForSeason(team, season);
+function seasonPlayerSourceTeamKey(season, originalTeam, sourceLeague, playerName) {
+  const normalizedSourceLeague = normalizeSourceLeague(sourceLeague);
+  const normalizedOriginalTeam = normalizedRawTeamCode(originalTeam);
+  const normalizedName = normalizeName(playerName);
 
-  return season && normalizedTeam && brefId ? `${season}:${normalizedTeam}:${brefId}` : null;
+  return season && normalizedSourceLeague && normalizedOriginalTeam && normalizedName
+    ? `${season}:source:${normalizedSourceLeague}:${normalizedOriginalTeam}:${normalizedName}`
+    : null;
+}
+
+function seasonBrefTeamKey(season, team, brefId, options = {}) {
+  const normalizedTeam = normalizeTeamCodeForSeason(team, season, { sourceLeague: options.sourceLeague });
+
+  return season && normalizedTeam && brefId ? `${season}:team:${normalizedTeam}:${brefId}` : null;
+}
+
+function seasonBrefSourceTeamKey(season, originalTeam, sourceLeague, brefId) {
+  const normalizedSourceLeague = normalizeSourceLeague(sourceLeague);
+  const normalizedOriginalTeam = normalizedRawTeamCode(originalTeam);
+
+  return season && normalizedSourceLeague && normalizedOriginalTeam && brefId
+    ? `${season}:source:${normalizedSourceLeague}:${normalizedOriginalTeam}:${brefId}`
+    : null;
 }
 
 function addLookupValue(lookup, key, value) {
@@ -744,13 +836,52 @@ function addLookupValue(lookup, key, value) {
   lookup.get(key).push(value);
 }
 
+function addLookupValues(lookup, keys, value) {
+  for (const key of keys) {
+    addLookupValue(lookup, key, value);
+  }
+}
+
+function sourceLookupOptions(row) {
+  return {
+    originalTeam: row?.original_team,
+    sourceLeague: sourceLeagueForRow(row),
+  };
+}
+
+function seasonBrefLookupKeys(row, brefId) {
+  const options = sourceLookupOptions(row);
+
+  return Array.from(
+    new Set(
+      [
+        seasonBrefSourceTeamKey(row?.season, options.originalTeam, options.sourceLeague, brefId),
+        seasonBrefTeamKey(row?.season, row?.team, brefId, options),
+      ].filter(Boolean),
+    ),
+  );
+}
+
+function seasonPlayerLookupKeys(row, playerName) {
+  const options = sourceLookupOptions(row);
+
+  return Array.from(
+    new Set(
+      [
+        seasonPlayerSourceTeamKey(row?.season, options.originalTeam, options.sourceLeague, playerName),
+        seasonPlayerTeamKey(row?.season, row?.team, playerName, options),
+      ].filter(Boolean),
+    ),
+  );
+}
+
 function buildPerGameLookup(rows) {
   const byBref = new Map();
   const byName = new Map();
 
   for (const row of rows || []) {
-    addLookupValue(byBref, seasonBrefTeamKey(row.season, row.team, row.bref_id), row);
-    addLookupValue(byName, seasonPlayerTeamKey(row.season, row.team, row.player), row);
+    addLookupValues(byBref, seasonBrefLookupKeys(row, row.bref_id), row);
+    addLookupValues(byName, seasonPlayerLookupKeys(row, row.player), row);
   }
 
   return { byBref, byName };
@@ -773,11 +904,11 @@ function chooseClosestByGames(candidates = [], gamesPlayed = 0) {
 }
 
 function perGameRowForSeason(record, season, perGameLookup) {
-  const byBrefKey = seasonBrefTeamKey(season.season, season.team, record.bref_id);
-  const byNameKey = seasonPlayerTeamKey(season.season, season.team, record.name);
+  const byBrefKeys = seasonBrefLookupKeys(season, record.bref_id);
+  const byNameKeys = seasonPlayerLookupKeys(season, record.name);
   const candidates = [
-    ...(byBrefKey ? perGameLookup.byBref.get(byBrefKey) || [] : []),
-    ...(byNameKey ? perGameLookup.byName.get(byNameKey) || [] : []),
+    ...byBrefKeys.flatMap((key) => perGameLookup.byBref.get(key) || []),
+    ...byNameKeys.flatMap((key) => perGameLookup.byName.get(key) || []),
   ];
 
   return chooseClosestByGames(candidates, season.games_played);
@@ -791,29 +922,49 @@ function buildTeamPaceLookup(rows) {
   const lookup = new Map();
 
   for (const row of rows || []) {
-    const team = normalizeTeamCodeForSeason(row.team, row.season);
+    const team = normalizeTeamCodeForSeason(row.team, row.season, { sourceLeague: row.source_league });
 
     if (!row.season || !team || numberOrNull(row.pace) === null) {
       continue;
     }
 
-    lookup.set(`${row.season}:${team}`, row.pace);
+    const sourceLeague = sourceLeagueForRow(row);
+    const originalTeam = normalizedRawTeamCode(row.original_team);
+
+    if (sourceLeague && originalTeam) {
+      lookup.set(`${row.season}:source:${sourceLeague}:${originalTeam}`, row.pace);
+    }
+
+    if (!lookup.has(`${row.season}:team:${team}`)) {
+      lookup.set(`${row.season}:team:${team}`, row.pace);
+    }
   }
 
   return lookup;
 }
 
 function teamPaceForSeason(season, teamPaceLookup) {
-  const team = normalizeTeamCodeForSeason(season?.team, season?.season);
+  const sourceLeague = sourceLeagueForRow(season);
+  const originalTeam = normalizedRawTeamCode(season?.original_team);
+  const sourceKey =
+    season?.season && sourceLeague && originalTeam
+      ? `${season.season}:source:${sourceLeague}:${originalTeam}`
+      : null;
+  const team = normalizeTeamCodeForSeason(season?.team, season?.season, { sourceLeague });
 
-  return season?.season && team ? teamPaceLookup.get(`${season.season}:${team}`) ?? null : null;
+  if (sourceKey && teamPaceLookup.has(sourceKey)) {
+    return teamPaceLookup.get(sourceKey);
+  }
+
+  return season?.season && team ? teamPaceLookup.get(`${season.season}:team:${team}`) ?? null : null;
 }
 
 function careerSeasonKeys(careerSeasons = []) {
   const keys = new Set();
 
   for (const season of careerSeasons) {
-    const team = normalizeTeamCodeForSeason(season?.team, season?.season);
+    const sourceLeague = sourceLeagueForRow(season);
+    const team = normalizeTeamCodeForSeason(season?.team, season?.season, { sourceLeague });
 
     if (season?.season && team) {
       keys.add(`${season.season}:${team}`);
@@ -929,7 +1080,7 @@ function existingSeasonFor(recordSeason, existing) {
   const exact = seasons.filter(
     (season) =>
       season?.season === recordSeason.season &&
-      normalizeTeamCodeForSeason(season.team, season.season) === recordSeason.team,
+      normalizeTeamCodeForSeason(season.team, season.season, { sourceLeague: sourceLeagueForRow(season) }) === recordSeason.team,
   );
 
   if (exact.length) {
@@ -950,13 +1101,16 @@ function fallbackSeasonsFromExisting(existing) {
 
   for (const rawSeason of existing.career_seasons) {
     const season = String(rawSeason?.season || "").trim();
-    const team = normalizeTeamCodeForSeason(rawSeason?.team, season);
+    const translation = translateTeamForSeason(rawSeason?.original_team || rawSeason?.team, season, {
+      sourceLeague: rawSeason?.source_league,
+    });
+    const team = translation.team;
 
     if (!season || !team) {
       continue;
     }
 
-    const key = `${season}:${team}`;
+    const key = `${season}:${rawSeason?.source_league || ""}:${rawSeason?.original_team || team}`;
 
     if (seen.has(key)) {
       continue;
@@ -966,6 +1120,7 @@ function fallbackSeasonsFromExisting(existing) {
     seasons.push({
       season,
       team,
+      ...teamTranslationFields(translation, rawSeason),
       games_played: positiveInteger(rawSeason.games_played, 0),
     });
   }
@@ -1007,6 +1162,9 @@ function estimatedPer100FromPerGame(perGame, mpg, teamPace) {
 }
 
 function buildCareerSeason(record, rawSeason, perGameRow, per100Row, teamPace, existingSeason) {
+  const translation = translateTeamForSeason(rawSeason.original_team || rawSeason.team, rawSeason.season, {
+    sourceLeague: rawSeason.source_league,
+  });
   const gamesPlayed =
     positiveInteger(perGameRow?.games_played, 0) ||
     positiveInteger(per100Row?.games_played, 0) ||
@@ -1018,7 +1176,8 @@ function buildCareerSeason(record, rawSeason, perGameRow, per100Row, teamPace, e
     gamesPlayed;
   const season = {
     season: rawSeason.season,
-    team: rawSeason.team,
+    team: translation.team || rawSeason.team,
+    ...teamTranslationFields(translation, rawSeason),
     era: seasonEra(rawSeason.season),
     games_played: gamesPlayed,
     games_started: Math.max(0, Math.floor(gamesStarted)),
@@ -1424,10 +1583,20 @@ async function main(argv = process.argv) {
   console.time("seed:bref legacy/classic pipeline");
   const outputPlayers = applyLegacyScoringPipeline(rebuiltPlayers, {
     brefPositions: rawBrefPositions,
+    brefPerGameCache: perGameResult.cache,
     statTitleCache,
     threePointContestCache,
   });
   console.timeEnd("seed:bref legacy/classic pipeline");
+
+  const abaSummary = summarizeAbaTranslationsFromPlayers(outputPlayers);
+  console.log(
+    `ABA team translation: ${abaSummary.nbaFranchiseSeasons} seasons mapped to NBA-continuity franchises; ` +
+      `${abaSummary.abaTeamSeasons} seasons grouped into ABA Team.`,
+  );
+  if (abaSummary.unknownAbaTeamCodes.length) {
+    console.warn(`Unknown ABA-era team codes not mapped: ${abaSummary.unknownAbaTeamCodes.join(", ")}`);
+  }
 
   if (dryRun) {
     console.log(`Dry run enabled; would write ${outputPlayers.length} players to ${outputPath}.`);

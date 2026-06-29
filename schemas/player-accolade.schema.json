@@ -63,6 +63,11 @@
         "properties": {
           "season": { "type": "string" },
           "team": { "type": "string" },
+          "original_team": { "type": "string" },
+          "source_league": { "enum": ["ABA", "NBA"] },
+          "team_name": { "type": "string" },
+          "franchise_group": { "type": "string" },
+          "is_aba_only_team": { "type": "boolean" },
           "era": { "type": "string", "pattern": "^[0-9]{2}'s$" },
           "games_played": { "type": "integer", "minimum": 0 },
           "games_started": { "type": "integer", "minimum": 0 },

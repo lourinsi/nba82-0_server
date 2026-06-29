@@ -41,7 +41,9 @@
     "refresh:league-averages": "node refresh-historical-league-averages.js",
     "refresh:positions": "python scripts/refresh_positions_nba_api.py",
     "refresh:positions:dry": "python scripts/refresh_positions_nba_api.py --dry-run",
-    "fix:positions": "node fix-position-overrides.js"
+    "fix:positions": "node fix-position-overrides.js",
+    "verify:aba-teams": "node scripts/verify-aba-team-translations.js",
+    "verify:stat-titles": "node scripts/verify-stat-title-fallbacks.js"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",

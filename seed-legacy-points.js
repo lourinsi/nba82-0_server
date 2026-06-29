@@ -11,6 +11,7 @@ const { normalizePlayerTeams } = require("./teamFranchises");
 
 const OUTPUT_PATH = path.join(__dirname, "data", "players_accolades_bref.json");
 const BREF_POSITIONS_PATH = path.join(__dirname, "data", "bref_positions.json");
+const BREF_PER_GAME_CACHE_PATH = path.join(__dirname, "data", "bref_per_game_stats_cache.json");
 const STAT_TITLE_CACHE_PATH = path.join(__dirname, "data", "stat_title_winners.json");
 const THREE_POINT_CONTEST_CACHE_PATH = path.join(__dirname, "data", "three_point_contest_winners.json");
 
@@ -42,6 +43,7 @@ function applyLegacyScoringPipeline(players, options = {}) {
   const statTitleRowsByPlayerId =
     options.statTitleRowsByPlayerId || buildStatTitleWinnerLookup(options.statTitleCache);
   const normalizedPlayers = normalizePlayerAccoladeRecords(players, {
+    brefPerGameCache: options.brefPerGameCache,
     statTitleCache: options.statTitleCache,
     statTitleRowsByPlayerId,
     threePointContestCache: options.threePointContestCache,
@@ -61,9 +63,10 @@ async function main() {
   console.log(`Using legacy engine factors: ${JSON.stringify(LEGACY_ENGINE_FACTORS)}`);
 
   console.time("legacy-points: read");
-  const [players, brefPositions, statTitleCache, threePointContestCache] = await Promise.all([
+  const [players, brefPositions, brefPerGameCache, statTitleCache, threePointContestCache] = await Promise.all([
     JSON.parse(await fs.readFile(OUTPUT_PATH, "utf8")),
     readJsonIfExists(BREF_POSITIONS_PATH),
+    readJsonIfExists(BREF_PER_GAME_CACHE_PATH),
     readJsonIfExists(STAT_TITLE_CACHE_PATH),
     readJsonIfExists(THREE_POINT_CONTEST_CACHE_PATH),
   ]);
@@ -72,6 +75,7 @@ async function main() {
   console.time("legacy-points: in-memory pipeline");
   const outputPlayers = applyLegacyScoringPipeline(players, {
     brefPositions,
+    brefPerGameCache,
     statTitleCache,
     threePointContestCache,
   });

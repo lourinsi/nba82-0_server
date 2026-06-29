@@ -1,4 +1,4 @@
-const { normalizeTeamCodeForSeason } = require("./teamFranchises");
+const { normalizeSourceLeague, normalizeTeamCodeForSeason } = require("./teamFranchises");
 
 const POSITION_ORDER = ["PG", "SG", "SF", "PF", "C"];
 const VALID_POSITIONS = new Set(POSITION_ORDER);
@@ -98,6 +98,7 @@ function normalizeBrefSeason(rawSeason) {
 
   const season = String(rawSeason.season || "").trim();
   const team = String(rawSeason.team || "").trim().toUpperCase();
+  const sourceLeague = normalizeSourceLeague(rawSeason.source_league || rawSeason.sourceLeague || rawSeason.league);
 
   if (!season || !team || team === "TOT") {
     return null;
@@ -106,6 +107,7 @@ function normalizeBrefSeason(rawSeason) {
   return {
     season,
     team,
+    sourceLeague,
     gamesPlayed: Number(rawSeason.games_played ?? rawSeason.gamesPlayed ?? rawSeason.games ?? 0) || 0,
   };
 }
@@ -299,7 +301,8 @@ function playerSeasonTeamKeys(player) {
 
   for (const rawSeason of player?.career_seasons || []) {
     const season = String(rawSeason?.season || "").trim();
-    const team = normalizeTeamCodeForSeason(rawSeason?.team, season);
+    const sourceLeague = normalizeSourceLeague(rawSeason?.source_league || rawSeason?.sourceLeague || rawSeason?.league);
+    const team = normalizeTeamCodeForSeason(rawSeason?.team, season, { sourceLeague });
 
     if (season && team) {
       keys.add(`${season}:${team}`);
@@ -314,7 +317,8 @@ function brefSeasonTeamKeys(record) {
 
   for (const rawSeason of record?.seasons || []) {
     const season = String(rawSeason?.season || "").trim();
-    const team = normalizeTeamCodeForSeason(rawSeason?.team, season);
+    const sourceLeague = normalizeSourceLeague(rawSeason?.sourceLeague || rawSeason?.source_league || rawSeason?.league);
+    const team = normalizeTeamCodeForSeason(rawSeason?.team, season, { sourceLeague });
 
     if (season && team) {
       keys.add(`${season}:${team}`);

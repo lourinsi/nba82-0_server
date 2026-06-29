@@ -21,6 +21,7 @@ const NBA_STATS_LEAGUE_LEADERS_URL = "https://stats.nba.com/stats/leagueleaders"
 const GAMES_STARTED_TRACKED_START_END_YEAR = 1971;
 const OUTPUT_PATH = path.join(__dirname, "data", "players_accolades.json");
 const BREF_POSITIONS_PATH = path.join(__dirname, "data", "bref_positions.json");
+const BREF_PER_GAME_CACHE_PATH = path.join(__dirname, "data", "bref_per_game_stats_cache.json");
 const CAREER_STATS_CACHE_PATH = path.join(__dirname, "data", "nba_stats_career_stats_cache.json");
 const GAME_WINS_CACHE_PATH = path.join(__dirname, "data", "nba_stats_game_wins_cache.json");
 const MANUAL_ID_MAP_PATH = path.join(__dirname, "data", "nba_stats_id_map.json");
@@ -445,6 +446,7 @@ async function loadSeedInputs(idMapPath) {
   const resolvedIdMapPath = path.resolve(__dirname, idMapPath || MANUAL_ID_MAP_PATH);
   const [
     rawExistingPlayers,
+    brefPerGameCache,
     brefPositions,
     careerStatsCache,
     gameWinsCache,
@@ -454,6 +456,7 @@ async function loadSeedInputs(idMapPath) {
     playerDirectoryCache,
   ] = await Promise.all([
     readJsonIfExists(OUTPUT_PATH),
+    readJsonIfExists(BREF_PER_GAME_CACHE_PATH),
     readJsonIfExists(BREF_POSITIONS_PATH),
     readJsonIfExists(CAREER_STATS_CACHE_PATH),
     readJsonIfExists(GAME_WINS_CACHE_PATH),
@@ -470,6 +473,7 @@ async function loadSeedInputs(idMapPath) {
     idMap: idMap || {},
     playerDirectoryCache,
     rawExistingPlayers: Array.isArray(rawExistingPlayers) ? rawExistingPlayers : [],
+    brefPerGameCache: brefPerGameCache?.seasons ? brefPerGameCache : { fetched_at: null, seasons: {} },
     statTitleCache: statTitleCache?.winners ? statTitleCache : { fetched_at: null, winners: {} },
     threePointContestCache,
   };
@@ -1438,9 +1442,14 @@ function timedStep(label, callback) {
   }
 }
 
-function buildPlayersOutput(players, { brefPositions, statTitleCache, threePointContestCache }, labelPrefix = "seed: pipeline") {
+function buildPlayersOutput(
+  players,
+  { brefPerGameCache, brefPositions, statTitleCache, threePointContestCache },
+  labelPrefix = "seed: pipeline",
+) {
   return timedStep(`${labelPrefix}: legacy/classic`, () =>
     applyLegacyScoringPipeline(players, {
+      brefPerGameCache,
       brefPositions,
       statTitleCache,
       threePointContestCache,
@@ -1879,6 +1888,7 @@ async function main() {
     idMap,
     playerDirectoryCache,
     rawExistingPlayers,
+    brefPerGameCache,
     statTitleCache,
     threePointContestCache,
   } = await loadSeedInputs(idMapPath);
@@ -1997,7 +2007,7 @@ async function main() {
         : updatedPlayers;
       const checkpointPlayers = buildPlayersOutput(
         checkpointBasePlayers,
-        { brefPositions, statTitleCache, threePointContestCache },
+        { brefPerGameCache, brefPositions, statTitleCache, threePointContestCache },
         `seed: checkpoint ${index + 1}`,
       );
 
@@ -2028,7 +2038,7 @@ async function main() {
     : updatedPlayers;
   const outputPlayers = buildPlayersOutput(
     baseOutputPlayers,
-    { brefPositions, statTitleCache, threePointContestCache },
+    { brefPerGameCache, brefPositions, statTitleCache, threePointContestCache },
     "seed: final pipeline",
   );
 

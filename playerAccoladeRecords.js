@@ -16,6 +16,22 @@ const STAT_TITLE_CATEGORY_TO_ACCOLADE = {
   BLK: "block_titles",
 };
 
+const BREF_PER_GAME_STAT_FIELDS = {
+  PTS: ["ppg", "points_per_game", "PTS"],
+  AST: ["apg", "assists_per_game", "AST"],
+  REB: ["rpg", "rebounds_per_game", "trb_per_game", "REB"],
+  STL: ["spg", "steals_per_game", "STL"],
+  BLK: ["bpg", "blocks_per_game", "BLK"],
+};
+
+const HISTORICAL_AWARD_ROWS = [
+  {
+    player: "George Mikan",
+    seasons: ["1949-50", "1950-51"],
+    description: "MBWA NBA Most Valuable Player",
+  },
+];
+
 function normalizedNumber(value) {
   const numeric = Number(value || 0);
   return Number.isFinite(numeric) && numeric > 0 ? numeric : 0;
@@ -87,6 +103,33 @@ function hasAwardDescriptionForSeason(rows, candidate) {
   });
 }
 
+function derivedHistoricalAwardRows(player) {
+  const playerName = normalizeName(player.name || `${player.first_name || ""} ${player.last_name || ""}`);
+  const playerSeasons = careerSeasonsForPlayer(player);
+  const rows = [];
+
+  for (const award of HISTORICAL_AWARD_ROWS) {
+    if (playerName !== normalizeName(award.player)) {
+      continue;
+    }
+
+    for (const season of award.seasons || []) {
+      if (playerSeasons.size && !playerSeasons.has(season)) {
+        continue;
+      }
+
+      rows.push({
+        season,
+        team: award.team || awardTeamForSeason(player, season),
+        description: award.description,
+        all_nba_team_number: award.all_nba_team_number || null,
+      });
+    }
+  }
+
+  return rows;
+}
+
 function buildStatTitleWinnerLookup(statTitleCache = null) {
   const rowsByPlayerId = new Map();
 
@@ -126,6 +169,101 @@ function buildStatTitleWinnerLookup(statTitleCache = null) {
   }
 
   return rowsByPlayerId;
+}
+
+function brefSeasonEntries(brefPerGameCache = null) {
+  if (!brefPerGameCache?.seasons || typeof brefPerGameCache.seasons !== "object") {
+    return [];
+  }
+
+  return Object.entries(brefPerGameCache.seasons).filter(([, seasonEntry]) =>
+    Array.isArray(seasonEntry?.rows),
+  );
+}
+
+function statValueFromBrefRow(row, category) {
+  for (const field of BREF_PER_GAME_STAT_FIELDS[category] || []) {
+    const value = normalizedNumber(row?.[field]);
+
+    if (value > 0) {
+      return value;
+    }
+  }
+
+  return 0;
+}
+
+function playerKeyFromBrefRow(row) {
+  const playerName = normalizeName(row?.player || row?.name);
+
+  if (row?.bref_id) {
+    return `bref:${row.bref_id}`;
+  }
+
+  return playerName ? `name:${playerName}` : "";
+}
+
+function topBrefStatRows(rows, category) {
+  const bestByPlayer = new Map();
+
+  for (const row of rows || []) {
+    const value = statValueFromBrefRow(row, category);
+    const key = playerKeyFromBrefRow(row);
+
+    if (!key || value <= 0) {
+      continue;
+    }
+
+    const existing = bestByPlayer.get(key);
+    if (!existing || value > existing.value) {
+      bestByPlayer.set(key, { row, value });
+    }
+  }
+
+  const ranked = Array.from(bestByPlayer.values()).sort((a, b) => b.value - a.value);
+  const winningValue = ranked[0]?.value || 0;
+
+  return winningValue ? ranked.filter((entry) => entry.value === winningValue) : [];
+}
+
+function buildBrefStatTitleWinnerLookup(brefPerGameCache = null) {
+  const rowsByPlayerKey = new Map();
+
+  for (const [season, seasonEntry] of brefSeasonEntries(brefPerGameCache)) {
+    for (const category of Object.keys(BREF_PER_GAME_STAT_FIELDS)) {
+      const accoladeKey = STAT_TITLE_CATEGORY_TO_ACCOLADE[category];
+      const description = accoladeKey ? STAT_TITLE_DESCRIPTIONS[accoladeKey] : null;
+
+      if (!description) {
+        continue;
+      }
+
+      for (const winner of topBrefStatRows(seasonEntry.rows, category)) {
+        const row = winner.row;
+        const keys = [
+          row?.bref_id ? `bref:${row.bref_id}` : null,
+          normalizeName(row?.player || row?.name) ? `name:${normalizeName(row?.player || row?.name)}` : null,
+        ].filter(Boolean);
+
+        for (const key of keys) {
+          if (!rowsByPlayerKey.has(key)) {
+            rowsByPlayerKey.set(key, []);
+          }
+
+          rowsByPlayerKey.get(key).push({
+            season,
+            team: row.team || null,
+            description,
+            all_nba_team_number: null,
+            player: row.player || row.name || null,
+            bref_id: row.bref_id || null,
+          });
+        }
+      }
+    }
+  }
+
+  return rowsByPlayerKey;
 }
 
 function derivedStatTitleRows(player, statTitleCache = null, statTitleRowsByPlayerId = null) {
@@ -203,6 +341,56 @@ function playerBrefIds(player) {
   }
 
   return ids;
+}
+
+function careerSeasonsForPlayer(player) {
+  return new Set(
+    (player.career_seasons || [])
+      .map((season) => String(season?.season || ""))
+      .filter(Boolean),
+  );
+}
+
+function playerMatchesBrefStatTitleRow(player, row, playerSeasonSet = null) {
+  const rowBrefId = row?.bref_id ? String(row.bref_id) : "";
+
+  if (rowBrefId && playerBrefIds(player).has(rowBrefId)) {
+    return true;
+  }
+
+  const playerName = normalizeName(player.name || `${player.first_name || ""} ${player.last_name || ""}`);
+  if (!playerName || playerName !== normalizeName(row?.player || row?.name)) {
+    return false;
+  }
+
+  const rowSeason = String(row?.season || "");
+  const seasons = playerSeasonSet || careerSeasonsForPlayer(player);
+
+  return !rowSeason || seasons.has(rowSeason);
+}
+
+function derivedBrefStatTitleRows(player, brefStatTitleRowsByPlayerKey = null) {
+  if (!brefStatTitleRowsByPlayerKey) {
+    return [];
+  }
+
+  const playerName = normalizeName(player.name || `${player.first_name || ""} ${player.last_name || ""}`);
+  const keys = [
+    ...Array.from(playerBrefIds(player)).map((id) => `bref:${id}`),
+    playerName ? `name:${playerName}` : null,
+  ].filter(Boolean);
+  const playerSeasonSet = careerSeasonsForPlayer(player);
+  const rows = [];
+
+  for (const key of keys) {
+    for (const row of brefStatTitleRowsByPlayerKey.get(key) || []) {
+      if (playerMatchesBrefStatTitleRow(player, row, playerSeasonSet)) {
+        rows.push(row);
+      }
+    }
+  }
+
+  return uniqueAwardRows(rows);
 }
 
 function contestWinnerMatchesPlayer(player, winner) {
@@ -406,13 +594,31 @@ function normalizePlayerAccoladeRecord(player, options = {}) {
   ).filter(
     (row) => !hasAwardRow(baseAwardRows, row),
   );
+  const brefStatTitleRows = derivedBrefStatTitleRows(
+    player,
+    options.brefStatTitleRowsByPlayerKey || buildBrefStatTitleWinnerLookup(options.brefPerGameCache),
+  ).filter(
+    (row) => !hasAwardDescriptionForSeason(baseAwardRows, row) && !hasAwardDescriptionForSeason(statTitleRows, row),
+  );
+  const historicalAwardRows = derivedHistoricalAwardRows(player).filter(
+    (row) =>
+      !hasAwardDescriptionForSeason(baseAwardRows, row) &&
+      !hasAwardDescriptionForSeason(statTitleRows, row) &&
+      !hasAwardDescriptionForSeason(brefStatTitleRows, row),
+  );
   const threePointContestRows = derivedThreePointContestRows(
     player,
     options.threePointContestCache,
   ).filter(
     (row) => !hasAwardDescriptionForSeason(baseAwardRows, row),
   );
-  const awardsRaw = uniqueAwardRows([...baseAwardRows, ...statTitleRows, ...threePointContestRows]);
+  const awardsRaw = uniqueAwardRows([
+    ...baseAwardRows,
+    ...statTitleRows,
+    ...brefStatTitleRows,
+    ...historicalAwardRows,
+    ...threePointContestRows,
+  ]);
   const normalized = {
     ...player,
     accolades: recalculateAccolades(player, awardsRaw, {
@@ -437,17 +643,22 @@ function normalizePlayerAccoladeRecord(player, options = {}) {
 function normalizePlayerAccoladeRecords(players, options = {}) {
   const statTitleRowsByPlayerId =
     options.statTitleRowsByPlayerId || buildStatTitleWinnerLookup(options.statTitleCache);
+  const brefStatTitleRowsByPlayerKey =
+    options.brefStatTitleRowsByPlayerKey || buildBrefStatTitleWinnerLookup(options.brefPerGameCache);
 
   return players.map((player) =>
     normalizePlayerAccoladeRecord(player, {
       ...options,
+      brefStatTitleRowsByPlayerKey,
       statTitleRowsByPlayerId,
     }),
   );
 }
 
 module.exports = {
+  buildBrefStatTitleWinnerLookup,
   buildStatTitleWinnerLookup,
+  derivedBrefStatTitleRows,
   derivedStatTitleRows,
   derivedThreePointContestRows,
   gamesStartedFromCareer,

@@ -2,6 +2,8 @@
 
 Basketball-Reference season URLs use the season end year:
 https://www.basketball-reference.com/leagues/NBA_2026_per_game.html
+https://www.basketball-reference.com/leagues/ABA_1976_per_game.html
+https://www.basketball-reference.com/leagues/BAA_1949_per_game.html
 
 The output is a B-Ref player id -> position record dictionary with the source
 display name, best primary slot, every traditional position seen in B-Ref
@@ -15,7 +17,7 @@ example:
     "primary_position": "SF",
     "positions": ["SG", "SF", "PF", "PG", "C"],
     "seasons": [
-      { "season": "2003-04", "team": "CLE", "games_played": 79 }
+      { "season": "2003-04", "team": "CLE", "source_league": "NBA", "games_played": 79 }
     ]
   }
 }
@@ -41,7 +43,11 @@ DEFAULT_OUTPUT_PATH = ROOT / "data" / "bref_positions.json"
 POSITION_ORDER = ["PG", "SG", "SF", "PF", "C"]
 VALID_POSITIONS = set(POSITION_ORDER)
 POSITION_PATTERN = re.compile(r"\b(?:PG|SG|SF|PF|C)\b", re.IGNORECASE)
-BASE_URL = "https://www.basketball-reference.com/leagues/NBA_{year}_per_game.html"
+BASE_URL = "https://www.basketball-reference.com/leagues/{league}_{year}_per_game.html"
+ABA_START_END_YEAR = 1968
+ABA_LAST_END_YEAR = 1976
+BAA_START_END_YEAR = 1947
+BAA_LAST_END_YEAR = 1949
 
 # B-Ref rejects many default script user agents. Keep this looking like a
 # normal browser request and retain the 4 second delay between season pages.
@@ -60,6 +66,7 @@ HEADERS = {
 class SeasonRecord(TypedDict):
     season: str
     team: str
+    source_league: str
     games_played: int
 
 
@@ -203,8 +210,22 @@ def find_per_game_table(html: str) -> BeautifulSoup | None:
     return None
 
 
-def fetch_year_html(session: requests.Session, year: int, timeout: int, retries: int, sleep_seconds: float) -> str:
-    url = BASE_URL.format(year=year)
+def league_codes_for_year(year: int) -> List[str]:
+    if BAA_START_END_YEAR <= year <= BAA_LAST_END_YEAR:
+        return ["BAA"]
+
+    return ["NBA", "ABA"] if ABA_START_END_YEAR <= year <= ABA_LAST_END_YEAR else ["NBA"]
+
+
+def fetch_year_html(
+    session: requests.Session,
+    year: int,
+    league: str,
+    timeout: int,
+    retries: int,
+    sleep_seconds: float,
+) -> str:
+    url = BASE_URL.format(league=league, year=year)
     last_error: Exception | None = None
 
     for attempt in range(1, retries + 1):
@@ -224,7 +245,7 @@ def fetch_year_html(session: requests.Session, year: int, timeout: int, retries:
             print(f"{year}: request failed ({exc}); retrying in {wait:.1f}s...")
             time.sleep(wait)
 
-    raise RuntimeError(f"{year}: failed to fetch {url}: {last_error}")
+    raise RuntimeError(f"{year} {league}: failed to fetch {url}: {last_error}")
 
 
 def best_primary_position(positions: List[str], weights: Dict[str, float]) -> str:
@@ -254,92 +275,107 @@ def scrape_positions(
 ) -> Dict[str, PositionRecord]:
     position_records: Dict[str, PositionRecord] = {}
     position_weights: Dict[str, Dict[str, float]] = {}
+    total_requests = sum(len(league_codes_for_year(year)) for year in range(start_year, end_year + 1))
+    request_index = 0
 
     with requests.Session() as session:
-        for index, year in enumerate(range(start_year, end_year + 1), start=1):
-            html = fetch_year_html(session, year, timeout, retries, sleep_seconds)
-            table = find_per_game_table(html)
+        for year in range(start_year, end_year + 1):
+            for league in league_codes_for_year(year):
+                request_index += 1
+                html = fetch_year_html(session, year, league, timeout, retries, sleep_seconds)
+                table = find_per_game_table(html)
 
-            if not table:
-                print(f"{year}: per_game_stats table not found; skipping.")
-            else:
-                added = 0
-                parsed_rows = []
-                for row in table.find_all("tr"):
-                    player_cell = player_cell_from_row(row)
-                    position_cell = row.find("td", attrs={"data-stat": "pos"})
+                if not table:
+                    print(f"{year} {league}: per_game_stats table not found; skipping.")
+                else:
+                    added = 0
+                    parsed_rows = []
+                    for row in table.find_all("tr"):
+                        player_cell = player_cell_from_row(row)
+                        position_cell = row.find("td", attrs={"data-stat": "pos"})
 
-                    if not player_cell or not position_cell:
-                        continue
+                        if not player_cell or not position_cell:
+                            continue
 
-                    name = clean_player_name(player_cell.get_text(" ", strip=True))
-                    player_id = bref_player_id(player_cell)
-                    row_positions = parse_positions(position_cell.get_text(" ", strip=True))
+                        name = clean_player_name(player_cell.get_text(" ", strip=True))
+                        player_id = bref_player_id(player_cell)
+                        row_positions = parse_positions(position_cell.get_text(" ", strip=True))
 
-                    if not name or not row_positions:
-                        continue
+                        if not name or not row_positions:
+                            continue
 
-                    parsed_rows.append(
-                        {
-                            "key": player_id or f"name:{name}",
-                            "bref_id": player_id,
-                            "name": name,
-                            "season": season_label(year),
-                            "positions": row_positions,
-                            "primary": row_positions[0],
-                            "team": cell_text_any(row, ["team_id", "team_name_abbr"]).upper(),
-                            "games_played": int(numeric_cell_any(row, ["g", "games"]) or 0),
-                            "weight": position_weight(row),
-                        }
-                    )
+                        parsed_rows.append(
+                            {
+                                "key": player_id or f"name:{name}",
+                                "bref_id": player_id,
+                                "name": name,
+                                "season": season_label(year),
+                                "source_league": league,
+                                "positions": row_positions,
+                                "primary": row_positions[0],
+                                "team": cell_text_any(row, ["team_id", "team_name_abbr"]).upper(),
+                                "games_played": int(numeric_cell_any(row, ["g", "games"]) or 0),
+                                "weight": position_weight(row),
+                            }
+                        )
 
-                player_seasons_with_totals = {
-                    (entry["key"], entry["season"]) for entry in parsed_rows if is_aggregate_team(entry["team"])
-                }
+                    player_seasons_with_totals = {
+                        (entry["key"], entry["season"], entry["source_league"])
+                        for entry in parsed_rows
+                        if is_aggregate_team(entry["team"])
+                    }
 
-                for entry in parsed_rows:
-                    key = entry["key"]
+                    for entry in parsed_rows:
+                        key = entry["key"]
 
-                    if key not in position_records:
-                        position_records[key] = {
-                            "name": entry["name"],
-                            "bref_id": entry["bref_id"],
-                            "primary_position": entry["primary"],
-                            "positions": [],
-                            "seasons": [],
-                        }
-                        position_weights[key] = {}
-                        added += 1
+                        if key not in position_records:
+                            position_records[key] = {
+                                "name": entry["name"],
+                                "bref_id": entry["bref_id"],
+                                "primary_position": entry["primary"],
+                                "positions": [],
+                                "seasons": [],
+                            }
+                            position_weights[key] = {}
+                            added += 1
 
-                    record = position_records[key]
-                    for position in entry["positions"]:
-                        if position not in record["positions"]:
-                            record["positions"].append(position)
+                        record = position_records[key]
+                        for position in entry["positions"]:
+                            if position not in record["positions"]:
+                                record["positions"].append(position)
 
-                    if not is_aggregate_team(entry["team"]):
-                        season_row = {
-                            "season": entry["season"],
-                            "team": entry["team"],
-                            "games_played": entry["games_played"],
-                        }
-                        season_key = f"{season_row['season']}:{season_row['team']}"
+                        if not is_aggregate_team(entry["team"]):
+                            season_row = {
+                                "season": entry["season"],
+                                "team": entry["team"],
+                                "source_league": entry["source_league"],
+                                "games_played": entry["games_played"],
+                            }
+                            season_key = f"{season_row['season']}:{season_row['source_league']}:{season_row['team']}"
 
-                        if not any(f"{row['season']}:{row['team']}" == season_key for row in record["seasons"]):
-                            record["seasons"].append(season_row)
+                            if not any(
+                                f"{row['season']}:{row.get('source_league', 'NBA')}:{row['team']}" == season_key
+                                for row in record["seasons"]
+                            ):
+                                record["seasons"].append(season_row)
 
-                    # For traded players, B-Ref includes a TOT row plus team
-                    # splits. Use only the aggregate row for primary weighting
-                    # so mid-season moves do not double-count minutes.
-                    if (key, entry["season"]) in player_seasons_with_totals and not is_aggregate_team(entry["team"]):
-                        continue
+                        # For traded players, B-Ref includes a TOT row plus team
+                        # splits. Use only the aggregate row for primary weighting
+                        # so mid-season moves do not double-count minutes.
+                        if (
+                            key,
+                            entry["season"],
+                            entry["source_league"],
+                        ) in player_seasons_with_totals and not is_aggregate_team(entry["team"]):
+                            continue
 
-                    weights = position_weights[key]
-                    weights[entry["primary"]] = weights.get(entry["primary"], 0.0) + entry["weight"]
+                        weights = position_weights[key]
+                        weights[entry["primary"]] = weights.get(entry["primary"], 0.0) + entry["weight"]
 
-                print(f"{year}: added {added} new player position records ({len(position_records)} total).")
+                    print(f"{year} {league}: added {added} new player position records ({len(position_records)} total).")
 
-            if index < (end_year - start_year + 1):
-                time.sleep(sleep_seconds)
+                if request_index < total_requests:
+                    time.sleep(sleep_seconds)
 
     for key, record in position_records.items():
         record["primary_position"] = best_primary_position(record["positions"], position_weights.get(key, {}))
@@ -360,7 +396,7 @@ def write_positions(output_path: Path, positions: Dict[str, PositionRecord]) -> 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Scrape Basketball-Reference player position records.")
-    parser.add_argument("--start-year", type=int, default=1950, help="First B-Ref season end year to scrape.")
+    parser.add_argument("--start-year", type=int, default=1947, help="First B-Ref season end year to scrape.")
     parser.add_argument("--end-year", type=int, default=default_end_year(), help="Last B-Ref season end year to scrape.")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT_PATH, help="Output JSON path.")
     parser.add_argument("--sleep", type=float, default=4.0, help="Delay between season requests, in seconds.")

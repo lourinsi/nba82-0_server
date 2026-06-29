@@ -2,12 +2,19 @@ const axios = require("axios");
 const fs = require("fs/promises");
 const path = require("path");
 const { seasonEndYear } = require("./seasonEras");
-const { normalizeTeamCodeForSeason } = require("./teamFranchises");
+const {
+  isAbaSeason,
+  normalizeSourceLeague,
+  normalizeTeamCodeForSeason,
+  normalizedRawTeamCode,
+  teamTranslationFields,
+  translateTeamForSeason,
+} = require("./teamFranchises");
 require("dotenv").config();
 
 const PLAYERS_PATH = path.join(__dirname, "data", "players_accolades.json");
 const ADVANCED_CACHE_PATH = path.join(__dirname, "data", "bref_advanced_stats_cache.json");
-const BREF_ADVANCED_URL_TEMPLATE = "https://www.basketball-reference.com/leagues/NBA_{year}_advanced.html";
+const BREF_ADVANCED_URL_TEMPLATE = "https://www.basketball-reference.com/leagues/{league}_{year}_advanced.html";
 const ADVANCED_STAT_KEYS = ["ts_pct", "ws_per_48", "minutes", "ows", "dws"];
 const FALLBACK_ADVANCED_STAT_KEYS = ["ts_pct", "ws_per_48"];
 const DEFAULT_ADVANCED_STAT_VALUES = {
@@ -174,6 +181,33 @@ function resolvePath(value, fallbackPath) {
   return path.resolve(process.cwd(), String(value));
 }
 
+function brefLeagueCodesForSeason(season) {
+  return isAbaSeason(season) ? ["NBA", "ABA"] : ["NBA"];
+}
+
+function brefLeagueUrl(urlTemplate, league, season) {
+  return urlTemplate
+    .replace("{league}", league)
+    .replace("{year}", String(seasonEndYear(season)));
+}
+
+function sourceLeagueForRow(row, fallback = null) {
+  return normalizeSourceLeague(row?.source_league || row?.sourceLeague || row?.league || fallback);
+}
+
+function translatedTeamForRow(rawTeam, season, sourceLeague) {
+  const translation = translateTeamForSeason(rawTeam, season, { sourceLeague });
+
+  if (!translation.team) {
+    return null;
+  }
+
+  return {
+    team: translation.team,
+    fields: teamTranslationFields(translation),
+  };
+}
+
 function normalizeName(value) {
   return String(value || "")
     .normalize("NFD")
@@ -255,7 +289,7 @@ function seasonLabelFromEndYear(endYear) {
   return `${endYear - 1}-${String(endYear).slice(-2)}`;
 }
 
-function parseAdvancedRows(html, season) {
+function parseAdvancedRows(html, season, sourceLeague = "NBA") {
   const table = extractTableHtml(html, "advanced");
 
   if (!table) {
@@ -267,9 +301,9 @@ function parseAdvancedRows(html, season) {
   for (const cells of parseTableRows(table)) {
     const playerCell = cells.player || cells.name_display;
     const rawTeam = cells.team_id?.text || cells.team_name_abbr?.text;
-    const team = normalizeTeamCodeForSeason(rawTeam, season);
+    const translated = translatedTeamForRow(rawTeam, season, sourceLeague);
 
-    if (!playerCell?.text || !team || isAggregateTeam(rawTeam)) {
+    if (!playerCell?.text || !translated || isAggregateTeam(rawTeam)) {
       continue;
     }
 
@@ -285,7 +319,8 @@ function parseAdvancedRows(html, season) {
 
     rows.push({
       season,
-      team,
+      team: translated.team,
+      ...translated.fields,
       player: playerCell.text.replace(/\*/g, "").trim(),
       bref_id: brefPlayerIdFromHtml(playerCell.html),
       games_played: positiveInteger(cells.g?.text || cells.games?.text, 0),
@@ -309,47 +344,93 @@ async function fetchAdvancedRowsForSeason(season, options) {
   const endYear = seasonEndYear(season);
 
   if (!endYear) {
-    return [];
+    return { rows: [], sources: [] };
   }
 
-  const url = BREF_ADVANCED_URL_TEMPLATE.replace("{year}", String(endYear));
-  const response = await getWithRetry({
-    label: `Basketball Reference advanced ${season}`,
-    retries: options.retries,
-    delayMs: options.delayMs,
-    retryStatuses: [403, 429, 500, 502, 503, 504],
-    request: () =>
-      axios.get(url, {
-        headers: BREF_HEADERS,
-        timeout: options.timeoutMs,
-      }),
-  });
+  const rows = [];
+  const sources = [];
+  const leagues = brefLeagueCodesForSeason(season);
+  let lastNotFoundError = null;
 
-  return parseAdvancedRows(response.data, season);
+  for (const [leagueIndex, league] of leagues.entries()) {
+    const url = brefLeagueUrl(BREF_ADVANCED_URL_TEMPLATE, league, season);
+
+    try {
+      const response = await getWithRetry({
+        label: `Basketball Reference advanced ${league} ${season}`,
+        retries: options.retries,
+        delayMs: options.delayMs,
+        retryStatuses: [403, 429, 500, 502, 503, 504],
+        request: () =>
+          axios.get(url, {
+            headers: BREF_HEADERS,
+            timeout: options.timeoutMs,
+          }),
+      });
+
+      rows.push(...parseAdvancedRows(response.data, season, league));
+      sources.push(url);
+    } catch (error) {
+      if (httpStatus(error) !== 404 || leagues.length === 1) {
+        throw error;
+      }
+
+      lastNotFoundError = error;
+    }
+
+    if (leagueIndex < leagues.length - 1) {
+      await sleep(options.delayMs);
+    }
+  }
+
+  if (!sources.length && lastNotFoundError) {
+    throw lastNotFoundError;
+  }
+
+  return { rows, sources };
 }
 
-function careerSeasonKey(season, team, playerName) {
-  const normalizedTeam = normalizeTeamCodeForSeason(team, season);
+function careerSeasonKey(season, team, playerName, options = {}) {
+  const normalizedTeam = normalizeTeamCodeForSeason(team, season, { sourceLeague: options.sourceLeague });
   const normalizedPlayer = normalizeName(playerName);
 
-  return season && normalizedTeam && normalizedPlayer ? `${season}:${normalizedTeam}:${normalizedPlayer}` : null;
+  return season && normalizedTeam && normalizedPlayer ? `${season}:team:${normalizedTeam}:${normalizedPlayer}` : null;
+}
+
+function careerSeasonSourceKey(season, originalTeam, sourceLeague, playerName) {
+  const normalizedSourceLeague = normalizeSourceLeague(sourceLeague);
+  const normalizedOriginalTeam = normalizedRawTeamCode(originalTeam);
+  const normalizedPlayer = normalizeName(playerName);
+
+  return season && normalizedSourceLeague && normalizedOriginalTeam && normalizedPlayer
+    ? `${season}:source:${normalizedSourceLeague}:${normalizedOriginalTeam}:${normalizedPlayer}`
+    : null;
+}
+
+function careerSeasonLookupKeys(row, playerName) {
+  const sourceLeague = sourceLeagueForRow(row);
+
+  return Array.from(
+    new Set(
+      [
+        careerSeasonSourceKey(row?.season, row?.original_team, sourceLeague, playerName),
+        careerSeasonKey(row?.season, row?.team, playerName, { sourceLeague }),
+      ].filter(Boolean),
+    ),
+  );
 }
 
 function buildAdvancedLookup(rows) {
   const lookup = new Map();
 
   for (const row of rows || []) {
-    const key = careerSeasonKey(row.season, row.team, row.player);
+    for (const key of careerSeasonLookupKeys(row, row.player)) {
+      if (!lookup.has(key)) {
+        lookup.set(key, []);
+      }
 
-    if (!key) {
-      continue;
+      lookup.get(key).push(row);
     }
-
-    if (!lookup.has(key)) {
-      lookup.set(key, []);
-    }
-
-    lookup.get(key).push(row);
   }
 
   return lookup;
@@ -438,8 +519,8 @@ function updatePlayerAdvancedStats(player, advancedLookup, options = {}) {
       return season;
     }
 
-    const key = careerSeasonKey(season?.season, season?.team, playerName);
-    const advancedRow = chooseAdvancedRow(key ? advancedLookup.get(key) : [], season);
+    const keys = careerSeasonLookupKeys(season, playerName);
+    const advancedRow = chooseAdvancedRow(keys.flatMap((key) => advancedLookup.get(key) || []), season);
 
     if (!advancedRow) {
       return season;
@@ -588,15 +669,15 @@ async function main() {
 
     await waitForRateLimit(lastFetchAt, delayMs);
     try {
-      const rows = await fetchAdvancedRowsForSeason(season, { delayMs, retries, timeoutMs });
+      const result = await fetchAdvancedRowsForSeason(season, { delayMs, retries, timeoutMs });
       lastFetchAt = Date.now();
       cache.seasons[season] = {
         fetched_at: new Date().toISOString(),
-        source: BREF_ADVANCED_URL_TEMPLATE.replace("{year}", String(seasonEndYear(season))),
-        rows,
+        source: result.sources.length === 1 ? result.sources[0] : result.sources,
+        rows: result.rows,
       };
       fetchedSeasons += 1;
-      console.log(`[${index + 1}/${seasons.length}] ${season}: fetched ${rows.length} advanced rows.`);
+      console.log(`[${index + 1}/${seasons.length}] ${season}: fetched ${result.rows.length} advanced rows.`);
     } catch (error) {
       lastFetchAt = Date.now();
 
@@ -606,7 +687,7 @@ async function main() {
 
       cache.seasons[season] = {
         fetched_at: new Date().toISOString(),
-        source: BREF_ADVANCED_URL_TEMPLATE.replace("{year}", String(seasonEndYear(season))),
+        source: brefLeagueCodesForSeason(season).map((league) => brefLeagueUrl(BREF_ADVANCED_URL_TEMPLATE, league, season)),
         unavailable: true,
         reason: "not-found",
         rows: [],
