@@ -6,9 +6,12 @@ const STAT_TITLE_DESCRIPTIONS = {
   scoring_titles: "NBA Scoring Title",
   assist_titles: "NBA Assist Title",
   rebound_titles: "NBA Rebound Title",
+  three_point_titles: "NBA Three-Point Title",
   steal_titles: "NBA Steal Title",
   block_titles: "NBA Block Title",
 };
+
+const THREE_POINT_CONTEST_DESCRIPTION = "NBA All-Star Three-Point Contest Winner";
 
 function createEmptyClassicAccolades() {
   return {
@@ -38,8 +41,10 @@ function createEmptyClassicAccolades() {
     scoring_titles: 0,
     assist_titles: 0,
     rebound_titles: 0,
+    three_point_titles: 0,
     steal_titles: 0,
     block_titles: 0,
+    three_point_contest_wins: 0,
     games_started: 0,
     games_won: 0,
     award_counts: {},
@@ -151,6 +156,8 @@ function applyAwardToAccolades(accolades, award) {
     accolades.olympic_silver_medals += 1;
   } else if (description.includes("olympic bronze medal")) {
     accolades.olympic_bronze_medals += 1;
+  } else if (/(three-point|3-point|three point|3pt).*(contest|shootout).*(winner|champion)/.test(description)) {
+    accolades.three_point_contest_wins += 1;
   } else if (description.includes("nba all-star")) {
     accolades.all_star_selections += 1;
   } else if (description.includes("all-nba")) {
@@ -169,6 +176,10 @@ function applyAwardToAccolades(accolades, award) {
     accolades.assist_titles += 1;
   } else if (/(rebound title|rebounding title|rebound leader|rebounds leader|rebounds champion)/.test(description)) {
     accolades.rebound_titles += 1;
+  } else if (
+    /(three-point title|three point title|3-point title|3 point title|three-point leader|three point leader|3-point leader|3 point leader|three-point champion|three point champion|3-point champion|3 point champion|three-pointers made leader|3-pointers made leader|3pm leader|fg3m leader)/.test(description)
+  ) {
+    accolades.three_point_titles += 1;
   } else if (/(steal title|steals leader|steals champion)/.test(description)) {
     accolades.steal_titles += 1;
   } else if (/(block title|blocks leader|blocks champion)/.test(description)) {
@@ -293,6 +304,7 @@ function applyClassicPointsToPlayers(players) {
 
 module.exports = {
   STAT_TITLE_DESCRIPTIONS,
+  THREE_POINT_CONTEST_DESCRIPTION,
   applyAwardToAccolades,
   applyClassicPointsToPlayers,
   buildClassicPointsByTeamEra,

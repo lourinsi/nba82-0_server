@@ -1,13 +1,17 @@
 const {
   STAT_TITLE_DESCRIPTIONS,
+  THREE_POINT_CONTEST_DESCRIPTION,
   applyAwardToAccolades,
   createEmptyClassicAccolades,
 } = require("./classicPoints");
+const { seasonEndYear } = require("./seasonEras");
+const { normalizeTeamCodeForSeason } = require("./teamFranchises");
 
 const STAT_TITLE_CATEGORY_TO_ACCOLADE = {
   PTS: "scoring_titles",
   AST: "assist_titles",
   REB: "rebound_titles",
+  FG3M: "three_point_titles",
   STL: "steal_titles",
   BLK: "block_titles",
 };
@@ -15,6 +19,16 @@ const STAT_TITLE_CATEGORY_TO_ACCOLADE = {
 function normalizedNumber(value) {
   const numeric = Number(value || 0);
   return Number.isFinite(numeric) && numeric > 0 ? numeric : 0;
+}
+
+function normalizeName(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ")
+    .toLowerCase();
 }
 
 function normalizeAwardRow(row) {
@@ -58,6 +72,21 @@ function hasAwardRow(rows, candidate) {
   return rows.some((row) => awardRowKey(row) === key);
 }
 
+function hasAwardDescriptionForSeason(rows, candidate) {
+  const normalizedCandidate = normalizeAwardRow(candidate);
+  const candidateSeason = String(normalizedCandidate.season || "");
+  const candidateDescription = normalizeName(normalizedCandidate.description);
+
+  return rows.some((row) => {
+    const normalizedRow = normalizeAwardRow(row);
+
+    return (
+      String(normalizedRow.season || "") === candidateSeason &&
+      normalizeName(normalizedRow.description) === candidateDescription
+    );
+  });
+}
+
 function buildStatTitleWinnerLookup(statTitleCache = null) {
   const rowsByPlayerId = new Map();
 
@@ -76,8 +105,9 @@ function buildStatTitleWinnerLookup(statTitleCache = null) {
 
       for (const winner of winners) {
         const playerId = Number(winner.player_id || 0);
+        const value = Number(winner.value || 0);
 
-        if (!playerId) {
+        if (!playerId || value <= 0) {
           continue;
         }
 
@@ -126,7 +156,7 @@ function derivedStatTitleRows(player, statTitleCache = null, statTitleRowsByPlay
 
       const winner = winners.find((candidate) => Number(candidate.player_id) === nbaStatsId);
 
-      if (!winner) {
+      if (!winner || Number(winner.value || 0) <= 0) {
         continue;
       }
 
@@ -140,6 +170,156 @@ function derivedStatTitleRows(player, statTitleCache = null, statTitleRowsByPlay
   }
 
   return rows;
+}
+
+function contestWinnersFromCache(threePointContestCache = null) {
+  if (Array.isArray(threePointContestCache?.winners)) {
+    return threePointContestCache.winners;
+  }
+
+  if (threePointContestCache?.winners && typeof threePointContestCache.winners === "object") {
+    return Object.values(threePointContestCache.winners).flat();
+  }
+
+  return [];
+}
+
+function playerBrefIds(player) {
+  const ids = new Set();
+
+  if (player.bref_id) {
+    ids.add(String(player.bref_id));
+  }
+
+  if (typeof player.id === "string" && player.id.startsWith("bref:")) {
+    ids.add(player.id.replace("bref:", ""));
+  }
+
+  const playerUrl = player.source?.basketball_reference_player;
+  const urlMatch = typeof playerUrl === "string" ? /\/players\/[a-z]\/([^/.]+)\.html/i.exec(playerUrl) : null;
+
+  if (urlMatch?.[1]) {
+    ids.add(urlMatch[1]);
+  }
+
+  return ids;
+}
+
+function contestWinnerMatchesPlayer(player, winner) {
+  const brefId = winner?.bref_id ? String(winner.bref_id) : "";
+  const nbaStatsId = Number(winner?.nba_stats_id || 0);
+  const season = winner?.season ? String(winner.season) : "";
+
+  if (brefId && playerBrefIds(player).has(brefId)) {
+    return true;
+  }
+
+  if (nbaStatsId && Number(player.nba_stats_id || 0) === nbaStatsId) {
+    return true;
+  }
+
+  if (normalizeName(player.name || `${player.first_name || ""} ${player.last_name || ""}`) !== normalizeName(winner?.player)) {
+    return false;
+  }
+
+  if ((player.career_seasons || []).some((row) => String(row?.season || "") === season)) {
+    return true;
+  }
+
+  const winnerEndYear = seasonEndYear(season);
+  const latestCareerEndYear = Math.max(
+    0,
+    ...(player.career_seasons || []).map((row) => seasonEndYear(row?.season)).filter(Boolean),
+  );
+
+  return Boolean(player.active && winnerEndYear && latestCareerEndYear && winnerEndYear - latestCareerEndYear === 1);
+}
+
+function awardTeamForSeason(player, season) {
+  const allStarAward = (player.awards_raw || []).find((award) => {
+    const description = normalizeName(award?.description);
+
+    return (
+      String(award?.season || "") === String(season || "") &&
+      award?.team &&
+      description.includes("all star")
+    );
+  });
+
+  if (allStarAward?.team) {
+    return allStarAward.team;
+  }
+
+  const seasonTeams = Array.from(
+    new Set(
+      (player.career_seasons || [])
+        .filter((row) => String(row?.season || "") === String(season || ""))
+        .map((row) => normalizeTeamCodeForSeason(row?.team, row?.season))
+        .filter((team) => team && team !== "TOT"),
+    ),
+  );
+
+  if (seasonTeams.length === 1) {
+    return seasonTeams[0];
+  }
+
+  const awardEndYear = seasonEndYear(season);
+  const latestCareerEndYear = Math.max(
+    0,
+    ...(player.career_seasons || []).map((row) => seasonEndYear(row?.season)).filter(Boolean),
+  );
+
+  if (player.active && player.current_team && awardEndYear && latestCareerEndYear && awardEndYear - latestCareerEndYear === 1) {
+    return normalizeTeamCodeForSeason(player.current_team, season);
+  }
+
+  return null;
+}
+
+function derivedThreePointContestRows(player, threePointContestCache = null) {
+  const rows = [];
+
+  for (const winner of contestWinnersFromCache(threePointContestCache)) {
+    if (!contestWinnerMatchesPlayer(player, winner)) {
+      continue;
+    }
+
+    rows.push({
+      season: winner.season || null,
+      team: winner.team || awardTeamForSeason(player, winner.season),
+      description: THREE_POINT_CONTEST_DESCRIPTION,
+      all_nba_team_number: null,
+    });
+  }
+
+  return rows;
+}
+
+function isThreePointContestAwardRow(row) {
+  return normalizeName(row?.description) === normalizeName(THREE_POINT_CONTEST_DESCRIPTION);
+}
+
+function shouldKeepExistingAwardRow(player, row, threePointContestCache = null) {
+  const contestWinners = contestWinnersFromCache(threePointContestCache);
+
+  if (!isThreePointContestAwardRow(row) || !contestWinners.length) {
+    return true;
+  }
+
+  return contestWinners.some(
+    (winner) => String(winner?.season || "") === String(row?.season || "") && contestWinnerMatchesPlayer(player, winner),
+  );
+}
+
+function fillDerivedAwardRowFields(player, row) {
+  if (isThreePointContestAwardRow(row) && !row.team) {
+    return {
+      ...row,
+      team: awardTeamForSeason(player, row.season),
+    };
+  }
+
+  return row;
 }
 
 function seasonsPlayedFromCareer(player) {
@@ -166,7 +346,13 @@ function gamesWonFromCareer(player) {
   );
 }
 
-function recalculateAccolades(player, awardRows) {
+function statTitleCacheHasCategory(statTitleCache, category) {
+  return Object.values(statTitleCache?.winners || {}).some((categories) =>
+    Object.prototype.hasOwnProperty.call(categories || {}, category),
+  );
+}
+
+function recalculateAccolades(player, awardRows, options = {}) {
   const existing = player.accolades || {};
   const accolades = createEmptyClassicAccolades();
 
@@ -194,6 +380,12 @@ function recalculateAccolades(player, awardRows) {
     if (key === "finals_mvp_count" && awardRows.length) {
       continue;
     }
+    if (key === "three_point_titles" && options.rebuildThreePointTitles) {
+      continue;
+    }
+    if (key === "three_point_contest_wins" && options.rebuildThreePointContestWins) {
+      continue;
+    }
 
     accolades[key] = Math.max(accolades[key], normalizedNumber(existing[key]));
   }
@@ -204,7 +396,9 @@ function recalculateAccolades(player, awardRows) {
 }
 
 function normalizePlayerAccoladeRecord(player, options = {}) {
-  const baseAwardRows = uniqueAwardRows(player.awards_raw || []);
+  const baseAwardRows = uniqueAwardRows(player.awards_raw || []).filter((row) =>
+    shouldKeepExistingAwardRow(player, row, options.threePointContestCache),
+  ).map((row) => fillDerivedAwardRowFields(player, row));
   const statTitleRows = derivedStatTitleRows(
     player,
     options.statTitleCache,
@@ -212,10 +406,19 @@ function normalizePlayerAccoladeRecord(player, options = {}) {
   ).filter(
     (row) => !hasAwardRow(baseAwardRows, row),
   );
-  const awardsRaw = uniqueAwardRows([...baseAwardRows, ...statTitleRows]);
+  const threePointContestRows = derivedThreePointContestRows(
+    player,
+    options.threePointContestCache,
+  ).filter(
+    (row) => !hasAwardDescriptionForSeason(baseAwardRows, row),
+  );
+  const awardsRaw = uniqueAwardRows([...baseAwardRows, ...statTitleRows, ...threePointContestRows]);
   const normalized = {
     ...player,
-    accolades: recalculateAccolades(player, awardsRaw),
+    accolades: recalculateAccolades(player, awardsRaw, {
+      rebuildThreePointContestWins: contestWinnersFromCache(options.threePointContestCache).length > 0,
+      rebuildThreePointTitles: statTitleCacheHasCategory(options.statTitleCache, "FG3M"),
+    }),
     awards_raw: awardsRaw,
   };
 
@@ -246,6 +449,7 @@ function normalizePlayerAccoladeRecords(players, options = {}) {
 module.exports = {
   buildStatTitleWinnerLookup,
   derivedStatTitleRows,
+  derivedThreePointContestRows,
   gamesStartedFromCareer,
   gamesWonFromCareer,
   normalizePlayerAccoladeRecord,

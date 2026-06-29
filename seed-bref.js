@@ -16,11 +16,16 @@ const FALLBACK_PLAYERS_PATH = path.join(__dirname, "data", "players_accolades.js
 const OUTPUT_PATH = path.join(__dirname, "data", "players_accolades_bref.json");
 const BREF_POSITIONS_PATH = path.join(__dirname, "data", "bref_positions.json");
 const BREF_PER_GAME_CACHE_PATH = path.join(__dirname, "data", "bref_per_game_stats_cache.json");
+const BREF_PER_100_CACHE_PATH = path.join(__dirname, "data", "bref_per_100_stats_cache.json");
 const BREF_ADVANCED_CACHE_PATH = path.join(__dirname, "data", "bref_advanced_stats_cache.json");
+const BREF_TEAM_ADVANCED_CACHE_PATH = path.join(__dirname, "data", "bref_team_advanced_cache.json");
 const STAT_TITLE_CACHE_PATH = path.join(__dirname, "data", "stat_title_winners.json");
+const THREE_POINT_CONTEST_CACHE_PATH = path.join(__dirname, "data", "three_point_contest_winners.json");
 
 const BREF_PER_GAME_URL_TEMPLATE = "https://www.basketball-reference.com/leagues/NBA_{year}_per_game.html";
+const BREF_PER_100_URL_TEMPLATE = "https://www.basketball-reference.com/leagues/NBA_{year}_per_poss.html";
 const BREF_ADVANCED_URL_TEMPLATE = "https://www.basketball-reference.com/leagues/NBA_{year}_advanced.html";
+const BREF_TEAM_ADVANCED_URL_TEMPLATE = "https://www.basketball-reference.com/leagues/NBA_{year}.html";
 const WRITE_RETRY_DELAYS_MS = [250, 500, 1000, 2000, 4000];
 const POSITION_ORDER = ["PG", "SG", "SF", "PF", "C"];
 const VALID_POSITIONS = new Set(POSITION_ORDER);
@@ -495,6 +500,7 @@ function parsePerGameRows(html, season) {
 
     const gamesPlayed = positiveInteger(cells.g?.text || cells.games?.text, 0);
     const gamesStarted = numberOrNull(cells.gs?.text || cells.games_started?.text);
+    const mpg = roundedNumber(cells.mp_per_g?.text);
 
     rows.push({
       season,
@@ -503,6 +509,8 @@ function parsePerGameRows(html, season) {
       bref_id: brefPlayerIdFromHtml(playerCell.html),
       games_played: gamesPlayed,
       games_started: gamesStarted === null ? null : Math.max(0, Math.floor(gamesStarted)),
+      mpg,
+      minutes: mpg !== null && gamesPlayed > 0 ? Number((mpg * gamesPlayed).toFixed(1)) : null,
       ppg: roundedNumber(cells.pts_per_g?.text),
       rpg: roundedNumber(cells.trb_per_g?.text),
       apg: roundedNumber(cells.ast_per_g?.text),
@@ -517,6 +525,87 @@ function parsePerGameRows(html, season) {
       a.team.localeCompare(b.team) ||
       normalizeName(a.player).localeCompare(normalizeName(b.player)),
   );
+}
+
+function parsePer100Rows(html, season) {
+  const table = extractTableHtml(html, "per_poss") || extractTableHtml(html, "per_poss_stats");
+
+  if (!table) {
+    return [];
+  }
+
+  const rows = [];
+
+  for (const cells of parseTableRows(table)) {
+    const playerCell = cells.player || cells.name_display;
+    const rawTeam = cells.team_id?.text || cells.team_name_abbr?.text;
+    const team = normalizeTeamCodeForSeason(rawTeam, season);
+
+    if (!playerCell?.text || !team || isAggregateTeam(rawTeam)) {
+      continue;
+    }
+
+    const per100Pts = roundedNumber(cells.pts_per_poss?.text);
+    const per100Reb = roundedNumber(cells.trb_per_poss?.text);
+    const per100Ast = roundedNumber(cells.ast_per_poss?.text);
+
+    if (per100Pts === null && per100Reb === null && per100Ast === null) {
+      continue;
+    }
+
+    rows.push({
+      season,
+      team,
+      player: playerCell.text.replace(/\*/g, "").trim(),
+      bref_id: brefPlayerIdFromHtml(playerCell.html),
+      games_played: positiveInteger(cells.g?.text || cells.games?.text, 0),
+      per100_pts: per100Pts,
+      per100_reb: per100Reb,
+      per100_ast: per100Ast,
+    });
+  }
+
+  return rows.sort(
+    (a, b) =>
+      a.season.localeCompare(b.season) ||
+      a.team.localeCompare(b.team) ||
+      normalizeName(a.player).localeCompare(normalizeName(b.player)),
+  );
+}
+
+function brefTeamIdFromHtml(html) {
+  const match = String(html || "").match(/href=["']\/teams\/([^/"']+)\/\d+\.html["']/i);
+
+  return match?.[1] || null;
+}
+
+function parseTeamAdvancedRows(html, season) {
+  const table = extractTableHtml(html, "advanced-team");
+
+  if (!table) {
+    return [];
+  }
+
+  const rows = [];
+
+  for (const cells of parseTableRows(table)) {
+    const teamCell = cells.team || cells.team_name;
+    const rawTeam = brefTeamIdFromHtml(teamCell?.html) || teamCell?.text;
+    const team = normalizeTeamCodeForSeason(rawTeam, season);
+    const pace = roundedNumber(cells.pace?.text);
+
+    if (!team || !pace || /league average/i.test(teamCell?.text || "")) {
+      continue;
+    }
+
+    rows.push({
+      season,
+      team,
+      pace,
+    });
+  }
+
+  return rows.sort((a, b) => a.season.localeCompare(b.season) || a.team.localeCompare(b.team));
 }
 
 async function fetchRowsForSeason(season, options) {
@@ -692,6 +781,32 @@ function perGameRowForSeason(record, season, perGameLookup) {
   ];
 
   return chooseClosestByGames(candidates, season.games_played);
+}
+
+function per100RowForSeason(record, season, per100Lookup) {
+  return perGameRowForSeason(record, season, per100Lookup);
+}
+
+function buildTeamPaceLookup(rows) {
+  const lookup = new Map();
+
+  for (const row of rows || []) {
+    const team = normalizeTeamCodeForSeason(row.team, row.season);
+
+    if (!row.season || !team || numberOrNull(row.pace) === null) {
+      continue;
+    }
+
+    lookup.set(`${row.season}:${team}`, row.pace);
+  }
+
+  return lookup;
+}
+
+function teamPaceForSeason(season, teamPaceLookup) {
+  const team = normalizeTeamCodeForSeason(season?.team, season?.season);
+
+  return season?.season && team ? teamPaceLookup.get(`${season.season}:${team}`) ?? null : null;
 }
 
 function careerSeasonKeys(careerSeasons = []) {
@@ -877,9 +992,24 @@ function assignNumberField(target, key, primary, fallback) {
   }
 }
 
-function buildCareerSeason(record, rawSeason, perGameRow, existingSeason) {
+function estimatedPer100FromPerGame(perGame, mpg, teamPace) {
+  const perGameValue = numberOrNull(perGame);
+  const mpgValue = numberOrNull(mpg);
+  const paceValue = numberOrNull(teamPace);
+
+  if (perGameValue === null || mpgValue === null || paceValue === null || mpgValue <= 0 || paceValue <= 0) {
+    return null;
+  }
+
+  const possessionsPerGame = (mpgValue / 48) * paceValue;
+
+  return possessionsPerGame > 0 ? Number(((perGameValue / possessionsPerGame) * 100).toFixed(3)) : null;
+}
+
+function buildCareerSeason(record, rawSeason, perGameRow, per100Row, teamPace, existingSeason) {
   const gamesPlayed =
     positiveInteger(perGameRow?.games_played, 0) ||
+    positiveInteger(per100Row?.games_played, 0) ||
     positiveInteger(rawSeason.games_played, 0) ||
     positiveInteger(existingSeason?.games_played, 0);
   const gamesStarted =
@@ -895,12 +1025,35 @@ function buildCareerSeason(record, rawSeason, perGameRow, existingSeason) {
   };
 
   assignNumberField(season, "games_won", null, existingSeason?.games_won);
+  assignNumberField(season, "minutes", perGameRow?.minutes, existingSeason?.minutes);
+  assignNumberField(season, "mpg", perGameRow?.mpg, existingSeason?.mpg);
   assignNumberField(season, "ppg", perGameRow?.ppg, existingSeason?.ppg);
   assignNumberField(season, "rpg", perGameRow?.rpg, existingSeason?.rpg);
   assignNumberField(season, "apg", perGameRow?.apg, existingSeason?.apg);
   assignNumberField(season, "spg", perGameRow?.spg, existingSeason?.spg);
   assignNumberField(season, "bpg", perGameRow?.bpg, existingSeason?.bpg);
+  assignNumberField(season, "per100_pts", per100Row?.per100_pts, existingSeason?.per100_pts);
+  assignNumberField(season, "per100_reb", per100Row?.per100_reb, existingSeason?.per100_reb);
+  assignNumberField(season, "per100_ast", per100Row?.per100_ast, existingSeason?.per100_ast);
+  assignNumberField(season, "team_pace", teamPace, existingSeason?.team_pace);
+
+  const mpg = numberOrNull(season.mpg);
+  const pace = numberOrNull(season.team_pace);
+  const estimatedPer100Pts = estimatedPer100FromPerGame(season.ppg, mpg, pace);
+  const estimatedPer100Reb = estimatedPer100FromPerGame(season.rpg, mpg, pace);
+  const estimatedPer100Ast = estimatedPer100FromPerGame(season.apg, mpg, pace);
+
+  assignNumberField(season, "per100_pts", season.per100_pts, estimatedPer100Pts);
+  assignNumberField(season, "per100_reb", season.per100_reb, estimatedPer100Reb);
+  assignNumberField(season, "per100_ast", season.per100_ast, estimatedPer100Ast);
+  assignNumberField(season, "per100_ppg", per100Row?.per100_pts, existingSeason?.per100_ppg ?? estimatedPer100Pts);
+  assignNumberField(season, "per100_rpg", per100Row?.per100_reb, existingSeason?.per100_rpg ?? estimatedPer100Reb);
+  assignNumberField(season, "per100_apg", per100Row?.per100_ast, existingSeason?.per100_apg ?? estimatedPer100Ast);
+
   assignNumberField(season, "ts_pct", null, existingSeason?.ts_pct);
+  assignNumberField(season, "ts_plus", null, existingSeason?.ts_plus);
+  assignNumberField(season, "ows", null, existingSeason?.ows);
+  assignNumberField(season, "dws", null, existingSeason?.dws);
   assignNumberField(season, "ws_per_48", null, existingSeason?.ws_per_48);
 
   if (!season.era) {
@@ -967,9 +1120,11 @@ function buildBrefPlayer(record, options) {
   const recordSeasons = record.seasons.length ? record.seasons : fallbackSeasonsFromExisting(existing);
   const careerSeasons = recordSeasons.map((season) => {
     const perGameRow = perGameRowForSeason(record, season, options.perGameLookup);
+    const per100Row = per100RowForSeason(record, season, options.per100Lookup);
+    const teamPace = teamPaceForSeason(season, options.teamPaceLookup);
     const existingSeason = existingSeasonFor(season, existing);
 
-    return buildCareerSeason(record, season, perGameRow, existingSeason);
+    return buildCareerSeason(record, season, perGameRow, per100Row, teamPace, existingSeason);
   });
   const seasonEndYears = careerSeasons.map((season) => seasonEndYear(season.season)).filter(Boolean);
   const lastSeasonEndYear = Math.max(0, ...seasonEndYears);
@@ -998,7 +1153,9 @@ function buildBrefPlayer(record, options) {
     source: compactObject({
       basketball_reference_player: basketballReferencePlayerUrl(record.bref_id),
       basketball_reference_per_game: BREF_PER_GAME_URL_TEMPLATE,
+      basketball_reference_per_100: BREF_PER_100_URL_TEMPLATE,
       basketball_reference_advanced: BREF_ADVANCED_URL_TEMPLATE,
+      basketball_reference_team_advanced: BREF_TEAM_ADVANCED_URL_TEMPLATE,
       nba_stats_awards: existing?.source?.nba_stats_awards ?? null,
       nba_stats_career: existing?.source?.nba_stats_career ?? null,
       nba_stats_game_finder: existing?.source?.nba_stats_game_finder ?? null,
@@ -1053,12 +1210,17 @@ async function main(argv = process.argv) {
   );
   const brefPositionsPath = resolvePath(args.brefPositions, BREF_POSITIONS_PATH);
   const perGameCachePath = resolvePath(args.perGameCache, BREF_PER_GAME_CACHE_PATH);
+  const per100CachePath = resolvePath(args.per100Cache, BREF_PER_100_CACHE_PATH);
   const advancedCachePath = resolvePath(args.advancedCache, BREF_ADVANCED_CACHE_PATH);
+  const teamAdvancedCachePath = resolvePath(args.teamAdvancedCache, BREF_TEAM_ADVANCED_CACHE_PATH);
   const statTitleCachePath = resolvePath(args.statTitleCache, STAT_TITLE_CACHE_PATH);
+  const threePointContestCachePath = resolvePath(args.threePointContestCache, THREE_POINT_CONTEST_CACHE_PATH);
   const replace = flagEnabled(args.replace) || flagEnabled(args.rebuild) || flagEnabled(args.deleteFirst);
   const dryRun = flagEnabled(args.dryRun);
   const refreshPerGame = flagEnabled(args.refreshPerGame) || flagEnabled(args.refreshPerGameCache);
+  const refreshPer100 = flagEnabled(args.refreshPer100) || flagEnabled(args.refreshPer100Cache);
   const refreshAdvanced = flagEnabled(args.refreshAdvanced) || flagEnabled(args.refreshAdvancedCache);
+  const refreshTeamAdvanced = flagEnabled(args.refreshTeamAdvanced) || flagEnabled(args.refreshTeamAdvancedCache);
   const skipFetch = flagEnabled(args.skipFetch) || flagEnabled(args.cacheOnly);
   const offset = positiveInteger(args.offset || process.env.SEED_OFFSET, 0);
   const limit = args.limit ? positiveInteger(args.limit) : null;
@@ -1077,15 +1239,21 @@ async function main(argv = process.argv) {
     fallbackPlayers,
     rawBrefPositions,
     rawPerGameCache,
+    rawPer100Cache,
     rawAdvancedCache,
+    rawTeamAdvancedCache,
     statTitleCache,
+    threePointContestCache,
   ] = await Promise.all([
     readJsonIfExists(outputPath),
     readJsonIfExists(fallbackPlayersPath),
     readJsonIfExists(brefPositionsPath),
     readJsonIfExists(perGameCachePath),
+    readJsonIfExists(per100CachePath),
     readJsonIfExists(advancedCachePath),
+    readJsonIfExists(teamAdvancedCachePath),
     readJsonIfExists(statTitleCachePath),
+    readJsonIfExists(threePointContestCachePath),
   ]);
   console.timeEnd("seed:bref read inputs");
 
@@ -1148,6 +1316,25 @@ async function main(argv = process.argv) {
   });
   console.timeEnd("seed:bref fetch per-game");
 
+  console.time("seed:bref fetch per-100");
+  const per100Result = await populateSeasonCache({
+    cache: rawPer100Cache,
+    cachePath: per100CachePath,
+    cacheLabel: "per-100",
+    label: "Basketball Reference per-100",
+    seasons,
+    urlTemplate: BREF_PER_100_URL_TEMPLATE,
+    parseRows: parsePer100Rows,
+    refresh: refreshPer100,
+    skipFetch,
+    dryRun,
+    delayMs,
+    retries,
+    timeoutMs,
+    saveEvery,
+  });
+  console.timeEnd("seed:bref fetch per-100");
+
   console.time("seed:bref fetch advanced");
   const advancedResult = await populateSeasonCache({
     cache: rawAdvancedCache,
@@ -1167,13 +1354,38 @@ async function main(argv = process.argv) {
   });
   console.timeEnd("seed:bref fetch advanced");
 
+  console.time("seed:bref fetch team advanced");
+  const teamAdvancedResult = await populateSeasonCache({
+    cache: rawTeamAdvancedCache,
+    cachePath: teamAdvancedCachePath,
+    cacheLabel: "team-advanced",
+    label: "Basketball Reference team advanced",
+    seasons,
+    urlTemplate: BREF_TEAM_ADVANCED_URL_TEMPLATE,
+    parseRows: parseTeamAdvancedRows,
+    refresh: refreshTeamAdvanced,
+    skipFetch,
+    dryRun,
+    delayMs,
+    retries,
+    timeoutMs,
+    saveEvery,
+  });
+  console.timeEnd("seed:bref fetch team advanced");
+
   logCacheStats("Per-game cache", perGameResult.stats);
+  logCacheStats("Per-100 cache", per100Result.stats);
   logCacheStats("Advanced cache", advancedResult.stats);
+  logCacheStats("Team advanced cache", teamAdvancedResult.stats);
 
   const perGameRows = seasonRowsFromCache(perGameResult.cache, seasons);
+  const per100Rows = seasonRowsFromCache(per100Result.cache, seasons);
   const advancedRows = seasonRowsFromCache(advancedResult.cache, seasons);
+  const teamAdvancedRows = seasonRowsFromCache(teamAdvancedResult.cache, seasons);
   const perGameLookup = buildPerGameLookup(perGameRows);
+  const per100Lookup = buildPerGameLookup(per100Rows);
   const advancedLookup = buildAdvancedLookup(advancedRows);
+  const teamPaceLookup = buildTeamPaceLookup(teamAdvancedRows);
   const existingLookup = buildExistingLookup(existingRoster);
 
   let matchedExisting = 0;
@@ -1193,6 +1405,8 @@ async function main(argv = process.argv) {
     const basePlayer = buildBrefPlayer(record, {
       existingRecord,
       perGameLookup,
+      per100Lookup,
+      teamPaceLookup,
       latestEndYear,
     });
     const advancedResultForPlayer = updatePlayerAdvancedStats(basePlayer, advancedLookup, { force: true });
@@ -1211,6 +1425,7 @@ async function main(argv = process.argv) {
   const outputPlayers = applyLegacyScoringPipeline(rebuiltPlayers, {
     brefPositions: rawBrefPositions,
     statTitleCache,
+    threePointContestCache,
   });
   console.timeEnd("seed:bref legacy/classic pipeline");
 
@@ -1219,7 +1434,9 @@ async function main(argv = process.argv) {
   } else {
     console.time("seed:bref write");
     await writeJsonAtomically(perGameCachePath, { ...perGameResult.cache, fetched_at: new Date().toISOString() });
+    await writeJsonAtomically(per100CachePath, { ...per100Result.cache, fetched_at: new Date().toISOString() });
     await writeJsonAtomically(advancedCachePath, { ...advancedResult.cache, fetched_at: new Date().toISOString() });
+    await writeJsonAtomically(teamAdvancedCachePath, { ...teamAdvancedResult.cache, fetched_at: new Date().toISOString() });
     await writeJsonAtomically(outputPath, outputPlayers);
     console.timeEnd("seed:bref write");
     console.log(`Rebuilt ${outputPlayers.length} B-Ref-primary players at ${outputPath}.`);
@@ -1237,7 +1454,10 @@ if (require.main === module) {
 
 module.exports = {
   buildPerGameLookup,
+  buildTeamPaceLookup,
   main,
   normalizeBrefRecords,
   parsePerGameRows,
+  parsePer100Rows,
+  parseTeamAdvancedRows,
 };

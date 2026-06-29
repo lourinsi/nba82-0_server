@@ -12,6 +12,7 @@ const { normalizePlayerTeams } = require("./teamFranchises");
 const OUTPUT_PATH = path.join(__dirname, "data", "players_accolades_bref.json");
 const BREF_POSITIONS_PATH = path.join(__dirname, "data", "bref_positions.json");
 const STAT_TITLE_CACHE_PATH = path.join(__dirname, "data", "stat_title_winners.json");
+const THREE_POINT_CONTEST_CACHE_PATH = path.join(__dirname, "data", "three_point_contest_winners.json");
 
 async function readJsonIfExists(filePath) {
   try {
@@ -43,6 +44,7 @@ function applyLegacyScoringPipeline(players, options = {}) {
   const normalizedPlayers = normalizePlayerAccoladeRecords(players, {
     statTitleCache: options.statTitleCache,
     statTitleRowsByPlayerId,
+    threePointContestCache: options.threePointContestCache,
   });
   const positionedPlayers = options.brefPositions
     ? applyBrefPrimaryPositions(normalizedPlayers, options.brefPositions)
@@ -59,10 +61,11 @@ async function main() {
   console.log(`Using legacy engine factors: ${JSON.stringify(LEGACY_ENGINE_FACTORS)}`);
 
   console.time("legacy-points: read");
-  const [players, brefPositions, statTitleCache] = await Promise.all([
+  const [players, brefPositions, statTitleCache, threePointContestCache] = await Promise.all([
     JSON.parse(await fs.readFile(OUTPUT_PATH, "utf8")),
     readJsonIfExists(BREF_POSITIONS_PATH),
     readJsonIfExists(STAT_TITLE_CACHE_PATH),
+    readJsonIfExists(THREE_POINT_CONTEST_CACHE_PATH),
   ]);
   console.timeEnd("legacy-points: read");
 
@@ -70,6 +73,7 @@ async function main() {
   const outputPlayers = applyLegacyScoringPipeline(players, {
     brefPositions,
     statTitleCache,
+    threePointContestCache,
   });
   console.timeEnd("legacy-points: in-memory pipeline");
 

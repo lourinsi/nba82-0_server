@@ -8,7 +8,8 @@ require("dotenv").config();
 const PLAYERS_PATH = path.join(__dirname, "data", "players_accolades.json");
 const ADVANCED_CACHE_PATH = path.join(__dirname, "data", "bref_advanced_stats_cache.json");
 const BREF_ADVANCED_URL_TEMPLATE = "https://www.basketball-reference.com/leagues/NBA_{year}_advanced.html";
-const ADVANCED_STAT_KEYS = ["ts_pct", "ws_per_48"];
+const ADVANCED_STAT_KEYS = ["ts_pct", "ws_per_48", "minutes", "ows", "dws"];
+const FALLBACK_ADVANCED_STAT_KEYS = ["ts_pct", "ws_per_48"];
 const DEFAULT_ADVANCED_STAT_VALUES = {
   ts_pct: 0.5,
   ws_per_48: 0.1,
@@ -274,8 +275,11 @@ function parseAdvancedRows(html, season) {
 
     const tsPct = numberOrNull(cells.ts_pct?.text);
     const wsPer48 = numberOrNull(cells.ws_per_48?.text);
+    const minutes = numberOrNull(cells.mp?.text);
+    const ows = numberOrNull(cells.ows?.text);
+    const dws = numberOrNull(cells.dws?.text);
 
-    if (tsPct === null && wsPer48 === null) {
+    if (tsPct === null && wsPer48 === null && minutes === null && ows === null && dws === null) {
       continue;
     }
 
@@ -287,6 +291,9 @@ function parseAdvancedRows(html, season) {
       games_played: positiveInteger(cells.g?.text || cells.games?.text, 0),
       ts_pct: tsPct,
       ws_per_48: wsPer48,
+      minutes,
+      ows,
+      dws,
     });
   }
 
@@ -409,7 +416,7 @@ function roundedAdvancedAverage(values) {
 function advancedStatFallbacks(careerSeasons = []) {
   const fallbacks = {};
 
-  for (const key of ADVANCED_STAT_KEYS) {
+  for (const key of FALLBACK_ADVANCED_STAT_KEYS) {
     const values = careerSeasons
       .map((season) => numberOrNull(season?.[key]))
       .filter((value) => value !== null);
@@ -468,12 +475,20 @@ function updatePlayerAdvancedStats(player, advancedLookup, options = {}) {
     let changed = false;
     const nextSeason = { ...season };
 
-    for (const key of ADVANCED_STAT_KEYS) {
+    for (const key of FALLBACK_ADVANCED_STAT_KEYS) {
       if (numberOrNull(nextSeason[key]) !== null) {
         continue;
       }
 
       nextSeason[key] = fallbacks[key];
+      changed = true;
+    }
+
+    const minutes = numberOrNull(nextSeason.minutes);
+    const gamesPlayed = positiveInteger(nextSeason.games_played ?? nextSeason.gamesPlayed ?? nextSeason.g, 0);
+
+    if (minutes !== null && gamesPlayed > 0 && numberOrNull(nextSeason.mpg) === null) {
+      nextSeason.mpg = Number((minutes / gamesPlayed).toFixed(1));
       changed = true;
     }
 

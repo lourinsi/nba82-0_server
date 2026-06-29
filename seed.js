@@ -26,11 +26,13 @@ const GAME_WINS_CACHE_PATH = path.join(__dirname, "data", "nba_stats_game_wins_c
 const MANUAL_ID_MAP_PATH = path.join(__dirname, "data", "nba_stats_id_map.json");
 const NBA_PLAYER_DIRECTORY_CACHE_PATH = path.join(__dirname, "data", "nba_stats_player_directory.json");
 const STAT_TITLE_CACHE_PATH = path.join(__dirname, "data", "stat_title_winners.json");
+const THREE_POINT_CONTEST_CACHE_PATH = path.join(__dirname, "data", "three_point_contest_winners.json");
 
 const STAT_TITLE_CONFIGS = [
   { accoladeKey: "scoring_titles", category: "PTS" },
   { accoladeKey: "assist_titles", category: "AST" },
   { accoladeKey: "rebound_titles", category: "REB" },
+  { accoladeKey: "three_point_titles", category: "FG3M", perMode: "Totals" },
   { accoladeKey: "steal_titles", category: "STL" },
   { accoladeKey: "block_titles", category: "BLK" },
 ];
@@ -271,8 +273,10 @@ function createEmptyAccolades() {
     scoring_titles: 0,
     assist_titles: 0,
     rebound_titles: 0,
+    three_point_titles: 0,
     steal_titles: 0,
     block_titles: 0,
+    three_point_contest_wins: 0,
     games_started: 0,
     games_won: 0,
     award_counts: {},
@@ -445,6 +449,7 @@ async function loadSeedInputs(idMapPath) {
     gameWinsCache,
     idMap,
     statTitleCache,
+    threePointContestCache,
     playerDirectoryCache,
   ] = await Promise.all([
     readJsonIfExists(OUTPUT_PATH),
@@ -453,6 +458,7 @@ async function loadSeedInputs(idMapPath) {
     readJsonIfExists(GAME_WINS_CACHE_PATH),
     readJsonIfExists(resolvedIdMapPath),
     readJsonIfExists(STAT_TITLE_CACHE_PATH),
+    readJsonIfExists(THREE_POINT_CONTEST_CACHE_PATH),
     readJsonIfExists(NBA_PLAYER_DIRECTORY_CACHE_PATH),
   ]);
 
@@ -464,6 +470,7 @@ async function loadSeedInputs(idMapPath) {
     playerDirectoryCache,
     rawExistingPlayers: Array.isArray(rawExistingPlayers) ? rawExistingPlayers : [],
     statTitleCache: statTitleCache?.winners ? statTitleCache : { fetched_at: null, winners: {} },
+    threePointContestCache,
   };
 }
 
@@ -764,7 +771,7 @@ async function saveStatTitleCache(cache) {
   });
 }
 
-async function fetchStatTitleWinners(season, category, { retries, delayMs, timeoutMs }) {
+async function fetchStatTitleWinners(season, category, { retries, delayMs, timeoutMs, perMode = "PerGame" }) {
   const response = await getWithRetry({
     label: `NBA Stats league leaders ${season} ${category}`,
     retries,
@@ -775,7 +782,7 @@ async function fetchStatTitleWinners(season, category, { retries, delayMs, timeo
         headers: NBA_STATS_HEADERS,
         params: {
           LeagueID: "00",
-          PerMode: "PerGame",
+          PerMode: perMode,
           Scope: "S",
           Season: season,
           SeasonType: "Regular Season",
@@ -792,6 +799,7 @@ async function fetchStatTitleWinners(season, category, { retries, delayMs, timeo
   return rows
     .map(mapRow)
     .filter((row) => Number(row.RANK) === 1)
+    .filter((row) => Number(row[category]) > 0)
     .map((row) => ({
       player_id: Number(row.PLAYER_ID),
       player: row.PLAYER,
@@ -801,11 +809,16 @@ async function fetchStatTitleWinners(season, category, { retries, delayMs, timeo
     }));
 }
 
-async function getStatTitleWinners(season, category, cache, fetchOptions) {
+async function getStatTitleWinners(season, config, cache, fetchOptions) {
+  const { category, perMode } = config;
+
   cache.winners[season] ||= {};
 
   if (!cache.winners[season][category]) {
-    cache.winners[season][category] = await fetchStatTitleWinners(season, category, fetchOptions);
+    cache.winners[season][category] = await fetchStatTitleWinners(season, category, {
+      ...fetchOptions,
+      perMode,
+    });
     await sleep(fetchOptions.delayMs);
   }
 
@@ -821,7 +834,7 @@ async function applyStatTitles(accolades, career, nbaStatsId, statTitleCache, fe
 
   for (const season of seasons) {
     for (const config of STAT_TITLE_CONFIGS) {
-      const winners = await getStatTitleWinners(season, config.category, statTitleCache, fetchOptions);
+      const winners = await getStatTitleWinners(season, config, statTitleCache, fetchOptions);
 
       if (winners.some((winner) => winner.player_id === Number(nbaStatsId))) {
         accolades[config.accoladeKey] += 1;
@@ -853,6 +866,11 @@ function countStatTitle(accolades, description) {
   }
   if (/(rebound title|rebounding title|rebound leader|rebounds leader|rebounds champion)/.test(description)) {
     accolades.rebound_titles += 1;
+  }
+  if (
+    /(three-point title|three point title|3-point title|3 point title|three-point leader|three point leader|3-point leader|3 point leader|three-point champion|three point champion|3-point champion|3 point champion|three-pointers made leader|3-pointers made leader|3pm leader|fg3m leader)/.test(description)
+  ) {
+    accolades.three_point_titles += 1;
   }
   if (/(steal title|steals leader|steals champion)/.test(description)) {
     accolades.steal_titles += 1;
@@ -947,6 +965,8 @@ function parseAwards(resultSet) {
       accolades.olympic_silver_medals += 1;
     } else if (description.includes("olympic bronze medal")) {
       accolades.olympic_bronze_medals += 1;
+    } else if (/(three-point|3-point|three point|3pt).*(contest|shootout).*(winner|champion)/.test(description)) {
+      accolades.three_point_contest_wins += 1;
     } else if (description.includes("nba all-star")) {
       accolades.all_star_selections += 1;
     } else if (description.includes("all-nba")) {
@@ -1417,11 +1437,12 @@ function timedStep(label, callback) {
   }
 }
 
-function buildPlayersOutput(players, { brefPositions, statTitleCache }, labelPrefix = "seed: pipeline") {
+function buildPlayersOutput(players, { brefPositions, statTitleCache, threePointContestCache }, labelPrefix = "seed: pipeline") {
   return timedStep(`${labelPrefix}: legacy/classic`, () =>
     applyLegacyScoringPipeline(players, {
       brefPositions,
       statTitleCache,
+      threePointContestCache,
     }),
   );
 }
@@ -1858,6 +1879,7 @@ async function main() {
     playerDirectoryCache,
     rawExistingPlayers,
     statTitleCache,
+    threePointContestCache,
   } = await loadSeedInputs(idMapPath);
   console.timeEnd("seed: load inputs");
 
@@ -1974,7 +1996,7 @@ async function main() {
         : updatedPlayers;
       const checkpointPlayers = buildPlayersOutput(
         checkpointBasePlayers,
-        { brefPositions, statTitleCache },
+        { brefPositions, statTitleCache, threePointContestCache },
         `seed: checkpoint ${index + 1}`,
       );
 
@@ -2003,7 +2025,11 @@ async function main() {
   const baseOutputPlayers = mergeOutput
     ? mergeUpdatedPlayers(existingPlayers, updatedPlayers)
     : updatedPlayers;
-  const outputPlayers = buildPlayersOutput(baseOutputPlayers, { brefPositions, statTitleCache }, "seed: final pipeline");
+  const outputPlayers = buildPlayersOutput(
+    baseOutputPlayers,
+    { brefPositions, statTitleCache, threePointContestCache },
+    "seed: final pipeline",
+  );
 
   console.time("seed: write output");
   await writePlayersOutput(outputPlayers);

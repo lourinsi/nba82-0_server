@@ -1,0 +1,286 @@
+{
+  "fetched_at": "2026-06-28T10:16:10.752Z",
+  "source": "https://www.basketball-reference.com/allstar/contest.html",
+  "winners": [
+    {
+      "year": 1986,
+      "season": "1985-86",
+      "player": "Larry Bird",
+      "bref_id": "birdla01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 1987,
+      "season": "1986-87",
+      "player": "Larry Bird",
+      "bref_id": "birdla01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 1988,
+      "season": "1987-88",
+      "player": "Larry Bird",
+      "bref_id": "birdla01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 1989,
+      "season": "1988-89",
+      "player": "Dale Ellis",
+      "bref_id": "ellisda01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 1990,
+      "season": "1989-90",
+      "player": "Craig Hodges",
+      "bref_id": "hodgecr01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 1991,
+      "season": "1990-91",
+      "player": "Craig Hodges",
+      "bref_id": "hodgecr01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 1992,
+      "season": "1991-92",
+      "player": "Craig Hodges",
+      "bref_id": "hodgecr01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 1993,
+      "season": "1992-93",
+      "player": "Mark Price",
+      "bref_id": "pricema01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 1994,
+      "season": "1993-94",
+      "player": "Mark Price",
+      "bref_id": "pricema01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 1995,
+      "season": "1994-95",
+      "player": "Glen Rice",
+      "bref_id": "ricegl01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 1996,
+      "season": "1995-96",
+      "player": "Tim Legler",
+      "bref_id": "legleti01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 1997,
+      "season": "1996-97",
+      "player": "Steve Kerr",
+      "bref_id": "kerrst01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 1998,
+      "season": "1997-98",
+      "player": "Jeff Hornacek",
+      "bref_id": "hornaje01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2000,
+      "season": "1999-00",
+      "player": "Jeff Hornacek",
+      "bref_id": "hornaje01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2001,
+      "season": "2000-01",
+      "player": "Ray Allen",
+      "bref_id": "allenra02",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2002,
+      "season": "2001-02",
+      "player": "Peja Stojaković",
+      "bref_id": "stojape01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2003,
+      "season": "2002-03",
+      "player": "Peja Stojaković",
+      "bref_id": "stojape01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2004,
+      "season": "2003-04",
+      "player": "Voshon Lenard",
+      "bref_id": "lenarvo01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2005,
+      "season": "2004-05",
+      "player": "Quentin Richardson",
+      "bref_id": "richaqu01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2006,
+      "season": "2005-06",
+      "player": "Dirk Nowitzki",
+      "bref_id": "nowitdi01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2007,
+      "season": "2006-07",
+      "player": "Jason Kapono",
+      "bref_id": "kaponja01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2008,
+      "season": "2007-08",
+      "player": "Jason Kapono",
+      "bref_id": "kaponja01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2009,
+      "season": "2008-09",
+      "player": "Daequan Cook",
+      "bref_id": "cookda02",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2010,
+      "season": "2009-10",
+      "player": "Paul Pierce",
+      "bref_id": "piercpa01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2011,
+      "season": "2010-11",
+      "player": "James Jones",
+      "bref_id": "jonesja02",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2012,
+      "season": "2011-12",
+      "player": "Kevin Love",
+      "bref_id": "loveke01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2013,
+      "season": "2012-13",
+      "player": "Kyrie Irving",
+      "bref_id": "irvinky01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2014,
+      "season": "2013-14",
+      "player": "Marco Belinelli",
+      "bref_id": "belinma01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2015,
+      "season": "2014-15",
+      "player": "Stephen Curry",
+      "bref_id": "curryst01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2016,
+      "season": "2015-16",
+      "player": "Klay Thompson",
+      "bref_id": "thompkl01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2017,
+      "season": "2016-17",
+      "player": "Eric Gordon",
+      "bref_id": "gordoer01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2018,
+      "season": "2017-18",
+      "player": "Devin Booker",
+      "bref_id": "bookede01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2019,
+      "season": "2018-19",
+      "player": "Joe Harris",
+      "bref_id": "harrijo01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2020,
+      "season": "2019-20",
+      "player": "Buddy Hield",
+      "bref_id": "hieldbu01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2021,
+      "season": "2020-21",
+      "player": "Stephen Curry",
+      "bref_id": "curryst01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2022,
+      "season": "2021-22",
+      "player": "Karl-Anthony Towns",
+      "bref_id": "townska01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2023,
+      "season": "2022-23",
+      "player": "Damian Lillard",
+      "bref_id": "lillada01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2024,
+      "season": "2023-24",
+      "player": "Damian Lillard",
+      "bref_id": "lillada01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2025,
+      "season": "2024-25",
+      "player": "Tyler Herro",
+      "bref_id": "herroty01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    },
+    {
+      "year": 2026,
+      "season": "2025-26",
+      "player": "Damian Lillard",
+      "bref_id": "lillada01",
+      "description": "NBA All-Star Three-Point Contest Winner"
+    }
+  ]
+}

@@ -204,6 +204,9 @@ Overwrites stored positions and primary_position from data/bref_positions.json f
 npm run seed:legacy-points
 Recalculates legacy_points from stored accolades without refetching NBA APIs.
 
+npm run seed:three-point-accolades
+Backfills regular-season three-point titles from NBA Stats FG3M leaders and All-Star 3-Point Contest winners from Basketball Reference into `data/players_accolades.json`, then recalculates legacy/classic scores. Use `npm run seed:three-point-accolades:bref` for `data/players_accolades_bref.json`.
+
 npm run seed:classic-points
 Recalculates Classic Mode team-era points from era-relative per-season stats.
 
@@ -532,24 +535,26 @@ Current weighted fields:
 
 ```text
 mvp_count: 8
-finals_mvp_count: 7
+finals_mvp_count: 7.1
 all_nba_1st: 7
 all_nba_2nd: 5.5
 all_nba_3rd: 4
-championship_rings: 2.5
 dpoy_count: 2.5
+championship_rings: 2.4
 all_def_1st: 2
 all_def_2nd: 1.5
 scoring_titles: 3
 assist_titles: 3
 rebound_titles: 2
+three_point_titles: 2.5
 steal_titles: 1.5
 block_titles: 1.5
-all_star_mvp_count: 1
+all_star_mvp_count: 1.1
+three_point_contest_wins: 1
 all_star_selections: 1
 6moy: 1
 most_improved: 1
-roy_won: 1
+roy_won: 1.1
 all_rookie_1st: 1
 all_rookie_2nd: 0.75
 seasons_played: 0.25

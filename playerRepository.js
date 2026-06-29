@@ -6,11 +6,76 @@ const { normalizePlayerTeams } = require("./teamFranchises");
 const { getPrismaClient } = require("./db");
 
 const DEFAULT_PLAYER_DATA_PATH = path.join(__dirname, "data", "players_accolades_bref.json");
+const CAREER_SEASON_ENRICHMENT_FIELDS = [
+  "minutes",
+  "mp",
+  "MP",
+  "total_minutes",
+  "minutes_played",
+  "minutesPlayed",
+  "mpg",
+  "MPG",
+  "mp_per_g",
+  "minutes_per_game",
+  "minutesPerGame",
+  "team_pace",
+  "teamPace",
+  "pace",
+  "Pace",
+  "PACE",
+  "ts_pct",
+  "TS_PCT",
+  "TS%",
+  "true_shooting_pct",
+  "trueShootingPct",
+  "ts_plus",
+  "TS_PLUS",
+  "tsPlus",
+  "ts_pct_plus",
+  "tsPctPlus",
+  "TS+",
+  "ows",
+  "OWS",
+  "offensive_win_shares",
+  "offensiveWinShares",
+  "dws",
+  "DWS",
+  "defensive_win_shares",
+  "defensiveWinShares",
+  "ws_per_48",
+  "ws_48",
+  "WS/48",
+  "ws48",
+  "per100PTS",
+  "per_100_pts",
+  "per100_pts",
+  "per100_ppg",
+  "pts_per_100",
+  "ptsPer100",
+  "pts_per_poss",
+  "per100AST",
+  "per_100_ast",
+  "per100_ast",
+  "per100_apg",
+  "ast_per_100",
+  "astPer100",
+  "ast_per_poss",
+  "per100REB",
+  "per_100_reb",
+  "per100_reb",
+  "per100_rpg",
+  "trb_per_100",
+  "rebPer100",
+  "trb_per_poss",
+];
 
 let warnedAboutDatabaseRead = false;
+let warnedAboutJsonEnrichment = false;
 let databasePlayersCache = null;
 let databasePlayersCacheLoadedAt = 0;
 let databasePlayersLoadPromise = null;
+let jsonEnrichmentCache = null;
+let jsonEnrichmentCachePath = null;
 
 function databaseCacheTtlMs() {
   const configured = Number(process.env.PLAYER_DB_CACHE_MS);
@@ -52,6 +117,147 @@ function stringOrNull(value) {
 
 function stringOrEmpty(value) {
   return stringOrNull(value) || "";
+}
+
+function lowerKey(value) {
+  return stringOrEmpty(value).toLowerCase();
+}
+
+function fieldIsMissing(value) {
+  return value === null || value === undefined || value === "";
+}
+
+function playerLookupKeys(player) {
+  return [
+    ["id", player?.id],
+    ["bref", player?.bref_id],
+    ["name", player?.name],
+  ]
+    .map(([label, value]) => {
+      const key = lowerKey(value);
+
+      return key ? `${label}:${key}` : null;
+    })
+    .filter(Boolean);
+}
+
+function seasonLookupKey(season) {
+  const team = lowerKey(season?.team);
+  const seasonLabel = lowerKey(season?.season);
+
+  return team && seasonLabel ? `${team}:${seasonLabel}` : null;
+}
+
+async function readJsonEnrichmentPlayers() {
+  const filePath = getPlayerDataPath();
+
+  if (jsonEnrichmentCache && jsonEnrichmentCachePath === filePath) {
+    return jsonEnrichmentCache;
+  }
+
+  try {
+    jsonEnrichmentCache = await readJson(filePath);
+    jsonEnrichmentCachePath = filePath;
+  } catch (error) {
+    jsonEnrichmentCache = [];
+    jsonEnrichmentCachePath = filePath;
+
+    if (!warnedAboutJsonEnrichment) {
+      warnedAboutJsonEnrichment = true;
+      console.warn(`JSON player enrichment failed; using database payloads as-is. ${error.message}`);
+    }
+  }
+
+  return jsonEnrichmentCache;
+}
+
+function buildPlayerFallbackLookup(players) {
+  const lookup = new Map();
+
+  for (const player of players) {
+    for (const key of playerLookupKeys(player)) {
+      if (!lookup.has(key)) {
+        lookup.set(key, player);
+      }
+    }
+  }
+
+  return lookup;
+}
+
+function enrichCareerSeason(season, fallbackSeason) {
+  let changed = false;
+  const enriched = { ...season };
+
+  for (const field of CAREER_SEASON_ENRICHMENT_FIELDS) {
+    if (
+      Object.prototype.hasOwnProperty.call(fallbackSeason, field) &&
+      fieldIsMissing(enriched[field]) &&
+      !fieldIsMissing(fallbackSeason[field])
+    ) {
+      enriched[field] = fallbackSeason[field];
+      changed = true;
+    }
+  }
+
+  return changed ? enriched : season;
+}
+
+function enrichPlayerWithFallback(player, fallbackPlayer) {
+  if (!fallbackPlayer || !Array.isArray(fallbackPlayer.career_seasons)) {
+    return player;
+  }
+
+  if (!Array.isArray(player.career_seasons) || !player.career_seasons.length) {
+    return {
+      ...player,
+      career_seasons: fallbackPlayer.career_seasons,
+    };
+  }
+
+  const fallbackSeasons = new Map();
+
+  for (const season of fallbackPlayer.career_seasons) {
+    const key = seasonLookupKey(season);
+
+    if (key && !fallbackSeasons.has(key)) {
+      fallbackSeasons.set(key, season);
+    }
+  }
+
+  let changed = false;
+  const careerSeasons = player.career_seasons.map((season) => {
+    const fallbackSeason = fallbackSeasons.get(seasonLookupKey(season));
+
+    if (!fallbackSeason) {
+      return season;
+    }
+
+    const enriched = enrichCareerSeason(season, fallbackSeason);
+    changed = changed || enriched !== season;
+
+    return enriched;
+  });
+
+  return changed ? { ...player, career_seasons: careerSeasons } : player;
+}
+
+async function enrichPlayersWithJsonFallback(players) {
+  const fallbackPlayers = await readJsonEnrichmentPlayers();
+
+  if (!fallbackPlayers.length) {
+    return players;
+  }
+
+  const fallbackLookup = buildPlayerFallbackLookup(fallbackPlayers);
+
+  return players.map((player) => {
+    const fallbackPlayer = playerLookupKeys(player)
+      .map((key) => fallbackLookup.get(key))
+      .find(Boolean);
+
+    return enrichPlayerWithFallback(player, fallbackPlayer);
+  });
 }
 
 function integerOrNull(value) {
@@ -194,7 +400,8 @@ async function readPlayersFromDatabase() {
       orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
     });
 
-    const players = await normalizePlayersForApi(rows.map((row) => row.payload));
+    const enrichedPlayers = await enrichPlayersWithJsonFallback(rows.map((row) => row.payload));
+    const players = await normalizePlayersForApi(enrichedPlayers);
     databasePlayersCache = players;
     databasePlayersCacheLoadedAt = Date.now();
 

@@ -1,0 +1,8796 @@
+{
+  "fetched_at": "2026-06-29T01:46:49.883Z",
+  "seasons": {
+    "1949-50": {
+      "fetched_at": "2026-06-29T01:41:18.649Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1950.html",
+      "rows": []
+    },
+    "1950-51": {
+      "fetched_at": "2026-06-29T01:41:23.019Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1951.html",
+      "rows": [
+        {
+          "season": "1950-51",
+          "team": "BOS",
+          "pace": 95.9
+        },
+        {
+          "season": "1950-51",
+          "team": "DET",
+          "pace": 102.4
+        },
+        {
+          "season": "1950-51",
+          "team": "GSW",
+          "pace": 99.3
+        },
+        {
+          "season": "1950-51",
+          "team": "LAL",
+          "pace": 94.8
+        },
+        {
+          "season": "1950-51",
+          "team": "NYK",
+          "pace": 94.8
+        },
+        {
+          "season": "1950-51",
+          "team": "PHI",
+          "pace": 98.1
+        },
+        {
+          "season": "1950-51",
+          "team": "SAC",
+          "pace": 92.3
+        }
+      ]
+    },
+    "1951-52": {
+      "fetched_at": "2026-06-29T01:41:27.373Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1952.html",
+      "rows": [
+        {
+          "season": "1951-52",
+          "team": "ATL",
+          "pace": 90.7
+        },
+        {
+          "season": "1951-52",
+          "team": "BOS",
+          "pace": 100
+        },
+        {
+          "season": "1951-52",
+          "team": "DET",
+          "pace": 90.1
+        },
+        {
+          "season": "1951-52",
+          "team": "GSW",
+          "pace": 95.5
+        },
+        {
+          "season": "1951-52",
+          "team": "LAL",
+          "pace": 97.2
+        },
+        {
+          "season": "1951-52",
+          "team": "NYK",
+          "pace": 94.9
+        },
+        {
+          "season": "1951-52",
+          "team": "PHI",
+          "pace": 96.1
+        },
+        {
+          "season": "1951-52",
+          "team": "SAC",
+          "pace": 92.7
+        }
+      ]
+    },
+    "1952-53": {
+      "fetched_at": "2026-06-29T01:41:31.759Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1953.html",
+      "rows": [
+        {
+          "season": "1952-53",
+          "team": "ATL",
+          "pace": 87.2
+        },
+        {
+          "season": "1952-53",
+          "team": "BOS",
+          "pace": 94.7
+        },
+        {
+          "season": "1952-53",
+          "team": "DET",
+          "pace": 91.1
+        },
+        {
+          "season": "1952-53",
+          "team": "GSW",
+          "pace": 93.4
+        },
+        {
+          "season": "1952-53",
+          "team": "LAL",
+          "pace": 93.7
+        },
+        {
+          "season": "1952-53",
+          "team": "NYK",
+          "pace": 93.1
+        },
+        {
+          "season": "1952-53",
+          "team": "PHI",
+          "pace": 92.8
+        },
+        {
+          "season": "1952-53",
+          "team": "SAC",
+          "pace": 94.1
+        }
+      ]
+    },
+    "1953-54": {
+      "fetched_at": "2026-06-29T01:41:36.136Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1954.html",
+      "rows": [
+        {
+          "season": "1953-54",
+          "team": "ATL",
+          "pace": 84.2
+        },
+        {
+          "season": "1953-54",
+          "team": "BOS",
+          "pace": 93
+        },
+        {
+          "season": "1953-54",
+          "team": "DET",
+          "pace": 86.9
+        },
+        {
+          "season": "1953-54",
+          "team": "GSW",
+          "pace": 89.4
+        },
+        {
+          "season": "1953-54",
+          "team": "LAL",
+          "pace": 93.5
+        },
+        {
+          "season": "1953-54",
+          "team": "NYK",
+          "pace": 87.4
+        },
+        {
+          "season": "1953-54",
+          "team": "PHI",
+          "pace": 93.5
+        },
+        {
+          "season": "1953-54",
+          "team": "SAC",
+          "pace": 90.9
+        }
+      ]
+    },
+    "1954-55": {
+      "fetched_at": "2026-06-29T01:41:40.490Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1955.html",
+      "rows": [
+        {
+          "season": "1954-55",
+          "team": "ATL",
+          "pace": 100.5
+        },
+        {
+          "season": "1954-55",
+          "team": "BOS",
+          "pace": 108.6
+        },
+        {
+          "season": "1954-55",
+          "team": "DET",
+          "pace": 100.7
+        },
+        {
+          "season": "1954-55",
+          "team": "GSW",
+          "pace": 104
+        },
+        {
+          "season": "1954-55",
+          "team": "LAL",
+          "pace": 105.5
+        },
+        {
+          "season": "1954-55",
+          "team": "NYK",
+          "pace": 101.8
+        },
+        {
+          "season": "1954-55",
+          "team": "PHI",
+          "pace": 103.6
+        },
+        {
+          "season": "1954-55",
+          "team": "SAC",
+          "pace": 99.5
+        }
+      ]
+    },
+    "1955-56": {
+      "fetched_at": "2026-06-29T01:41:44.883Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1956.html",
+      "rows": [
+        {
+          "season": "1955-56",
+          "team": "ATL",
+          "pace": 109.4
+        },
+        {
+          "season": "1955-56",
+          "team": "BOS",
+          "pace": 114.5
+        },
+        {
+          "season": "1955-56",
+          "team": "DET",
+          "pace": 103.2
+        },
+        {
+          "season": "1955-56",
+          "team": "GSW",
+          "pace": 108.5
+        },
+        {
+          "season": "1955-56",
+          "team": "LAL",
+          "pace": 108
+        },
+        {
+          "season": "1955-56",
+          "team": "NYK",
+          "pace": 106.5
+        },
+        {
+          "season": "1955-56",
+          "team": "PHI",
+          "pace": 108.5
+        },
+        {
+          "season": "1955-56",
+          "team": "SAC",
+          "pace": 111.7
+        }
+      ]
+    },
+    "1956-57": {
+      "fetched_at": "2026-06-29T01:41:49.249Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1957.html",
+      "rows": [
+        {
+          "season": "1956-57",
+          "team": "ATL",
+          "pace": 108.3
+        },
+        {
+          "season": "1956-57",
+          "team": "BOS",
+          "pace": 118
+        },
+        {
+          "season": "1956-57",
+          "team": "DET",
+          "pace": 107.7
+        },
+        {
+          "season": "1956-57",
+          "team": "GSW",
+          "pace": 108
+        },
+        {
+          "season": "1956-57",
+          "team": "LAL",
+          "pace": 114.8
+        },
+        {
+          "season": "1956-57",
+          "team": "NYK",
+          "pace": 110.5
+        },
+        {
+          "season": "1956-57",
+          "team": "PHI",
+          "pace": 112.3
+        },
+        {
+          "season": "1956-57",
+          "team": "SAC",
+          "pace": 109.4
+        }
+      ]
+    },
+    "1957-58": {
+      "fetched_at": "2026-06-29T01:41:53.680Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1958.html",
+      "rows": [
+        {
+          "season": "1957-58",
+          "team": "ATL",
+          "pace": 119.5
+        },
+        {
+          "season": "1957-58",
+          "team": "BOS",
+          "pace": 124.8
+        },
+        {
+          "season": "1957-58",
+          "team": "DET",
+          "pace": 118.8
+        },
+        {
+          "season": "1957-58",
+          "team": "GSW",
+          "pace": 117.8
+        },
+        {
+          "season": "1957-58",
+          "team": "LAL",
+          "pace": 118.8
+        },
+        {
+          "season": "1957-58",
+          "team": "NYK",
+          "pace": 121.5
+        },
+        {
+          "season": "1957-58",
+          "team": "PHI",
+          "pace": 119.1
+        },
+        {
+          "season": "1957-58",
+          "team": "SAC",
+          "pace": 117.3
+        }
+      ]
+    },
+    "1958-59": {
+      "fetched_at": "2026-06-29T01:41:58.051Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1959.html",
+      "rows": [
+        {
+          "season": "1958-59",
+          "team": "ATL",
+          "pace": 115.6
+        },
+        {
+          "season": "1958-59",
+          "team": "BOS",
+          "pace": 128.7
+        },
+        {
+          "season": "1958-59",
+          "team": "DET",
+          "pace": 117.8
+        },
+        {
+          "season": "1958-59",
+          "team": "GSW",
+          "pace": 118.4
+        },
+        {
+          "season": "1958-59",
+          "team": "LAL",
+          "pace": 115.5
+        },
+        {
+          "season": "1958-59",
+          "team": "NYK",
+          "pace": 118
+        },
+        {
+          "season": "1958-59",
+          "team": "PHI",
+          "pace": 121
+        },
+        {
+          "season": "1958-59",
+          "team": "SAC",
+          "pace": 116.4
+        }
+      ]
+    },
+    "1959-60": {
+      "fetched_at": "2026-06-29T01:42:02.406Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1960.html",
+      "rows": [
+        {
+          "season": "1959-60",
+          "team": "ATL",
+          "pace": 120
+        },
+        {
+          "season": "1959-60",
+          "team": "BOS",
+          "pace": 136.3
+        },
+        {
+          "season": "1959-60",
+          "team": "DET",
+          "pace": 123.1
+        },
+        {
+          "season": "1959-60",
+          "team": "GSW",
+          "pace": 133.3
+        },
+        {
+          "season": "1959-60",
+          "team": "LAL",
+          "pace": 121.2
+        },
+        {
+          "season": "1959-60",
+          "team": "NYK",
+          "pace": 125.9
+        },
+        {
+          "season": "1959-60",
+          "team": "PHI",
+          "pace": 127.2
+        },
+        {
+          "season": "1959-60",
+          "team": "SAC",
+          "pace": 121.6
+        }
+      ]
+    },
+    "1960-61": {
+      "fetched_at": "2026-06-29T01:42:06.555Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1961.html",
+      "rows": [
+        {
+          "season": "1960-61",
+          "team": "ATL",
+          "pace": 129.1
+        },
+        {
+          "season": "1960-61",
+          "team": "BOS",
+          "pace": 134.5
+        },
+        {
+          "season": "1960-61",
+          "team": "DET",
+          "pace": 126
+        },
+        {
+          "season": "1960-61",
+          "team": "GSW",
+          "pace": 132
+        },
+        {
+          "season": "1960-61",
+          "team": "LAL",
+          "pace": 124.9
+        },
+        {
+          "season": "1960-61",
+          "team": "NYK",
+          "pace": 123.2
+        },
+        {
+          "season": "1960-61",
+          "team": "PHI",
+          "pace": 129.1
+        },
+        {
+          "season": "1960-61",
+          "team": "SAC",
+          "pace": 122.8
+        }
+      ]
+    },
+    "1961-62": {
+      "fetched_at": "2026-06-29T01:42:10.665Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1962.html",
+      "rows": [
+        {
+          "season": "1961-62",
+          "team": "ATL",
+          "pace": 124.6
+        },
+        {
+          "season": "1961-62",
+          "team": "BOS",
+          "pace": 130.8
+        },
+        {
+          "season": "1961-62",
+          "team": "DET",
+          "pace": 124.1
+        },
+        {
+          "season": "1961-62",
+          "team": "GSW",
+          "pace": 131.1
+        },
+        {
+          "season": "1961-62",
+          "team": "LAL",
+          "pace": 123.3
+        },
+        {
+          "season": "1961-62",
+          "team": "NYK",
+          "pace": 125.6
+        },
+        {
+          "season": "1961-62",
+          "team": "PHI",
+          "pace": 128.8
+        },
+        {
+          "season": "1961-62",
+          "team": "SAC",
+          "pace": 124.9
+        },
+        {
+          "season": "1961-62",
+          "team": "WAS",
+          "pace": 122.9
+        }
+      ]
+    },
+    "1962-63": {
+      "fetched_at": "2026-06-29T01:42:14.782Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1963.html",
+      "rows": [
+        {
+          "season": "1962-63",
+          "team": "ATL",
+          "pace": 115.6
+        },
+        {
+          "season": "1962-63",
+          "team": "BOS",
+          "pace": 127.3
+        },
+        {
+          "season": "1962-63",
+          "team": "DET",
+          "pace": 120.3
+        },
+        {
+          "season": "1962-63",
+          "team": "GSW",
+          "pace": 123.2
+        },
+        {
+          "season": "1962-63",
+          "team": "LAL",
+          "pace": 117.8
+        },
+        {
+          "season": "1962-63",
+          "team": "NYK",
+          "pace": 117.5
+        },
+        {
+          "season": "1962-63",
+          "team": "PHI",
+          "pace": 123.3
+        },
+        {
+          "season": "1962-63",
+          "team": "SAC",
+          "pace": 119
+        },
+        {
+          "season": "1962-63",
+          "team": "WAS",
+          "pace": 112.2
+        }
+      ]
+    },
+    "1963-64": {
+      "fetched_at": "2026-06-29T01:42:19.148Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1964.html",
+      "rows": [
+        {
+          "season": "1963-64",
+          "team": "ATL",
+          "pace": 114.6
+        },
+        {
+          "season": "1963-64",
+          "team": "BOS",
+          "pace": 125
+        },
+        {
+          "season": "1963-64",
+          "team": "DET",
+          "pace": 115.9
+        },
+        {
+          "season": "1963-64",
+          "team": "GSW",
+          "pace": 115.1
+        },
+        {
+          "season": "1963-64",
+          "team": "LAL",
+          "pace": 111.6
+        },
+        {
+          "season": "1963-64",
+          "team": "NYK",
+          "pace": 117.1
+        },
+        {
+          "season": "1963-64",
+          "team": "PHI",
+          "pace": 119.4
+        },
+        {
+          "season": "1963-64",
+          "team": "SAC",
+          "pace": 115.9
+        },
+        {
+          "season": "1963-64",
+          "team": "WAS",
+          "pace": 117
+        }
+      ]
+    },
+    "1964-65": {
+      "fetched_at": "2026-06-29T01:42:23.482Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1965.html",
+      "rows": [
+        {
+          "season": "1964-65",
+          "team": "ATL",
+          "pace": 115.1
+        },
+        {
+          "season": "1964-65",
+          "team": "BOS",
+          "pace": 123.6
+        },
+        {
+          "season": "1964-65",
+          "team": "DET",
+          "pace": 119.2
+        },
+        {
+          "season": "1964-65",
+          "team": "GSW",
+          "pace": 119.7
+        },
+        {
+          "season": "1964-65",
+          "team": "LAL",
+          "pace": 113.9
+        },
+        {
+          "season": "1964-65",
+          "team": "NYK",
+          "pace": 113.5
+        },
+        {
+          "season": "1964-65",
+          "team": "PHI",
+          "pace": 119.1
+        },
+        {
+          "season": "1964-65",
+          "team": "SAC",
+          "pace": 115.8
+        },
+        {
+          "season": "1964-65",
+          "team": "WAS",
+          "pace": 116.2
+        }
+      ]
+    },
+    "1965-66": {
+      "fetched_at": "2026-06-29T01:42:27.603Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1966.html",
+      "rows": [
+        {
+          "season": "1965-66",
+          "team": "ATL",
+          "pace": 116.6
+        },
+        {
+          "season": "1965-66",
+          "team": "BOS",
+          "pace": 122
+        },
+        {
+          "season": "1965-66",
+          "team": "DET",
+          "pace": 123.4
+        },
+        {
+          "season": "1965-66",
+          "team": "GSW",
+          "pace": 124.6
+        },
+        {
+          "season": "1965-66",
+          "team": "LAL",
+          "pace": 121.2
+        },
+        {
+          "season": "1965-66",
+          "team": "NYK",
+          "pace": 118.9
+        },
+        {
+          "season": "1965-66",
+          "team": "PHI",
+          "pace": 122.8
+        },
+        {
+          "season": "1965-66",
+          "team": "SAC",
+          "pace": 120.4
+        },
+        {
+          "season": "1965-66",
+          "team": "WAS",
+          "pace": 123.1
+        }
+      ]
+    },
+    "1966-67": {
+      "fetched_at": "2026-06-29T01:42:31.738Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1967.html",
+      "rows": [
+        {
+          "season": "1966-67",
+          "team": "ATL",
+          "pace": 117.7
+        },
+        {
+          "season": "1966-67",
+          "team": "BOS",
+          "pace": 121.2
+        },
+        {
+          "season": "1966-67",
+          "team": "CHI",
+          "pace": 122.2
+        },
+        {
+          "season": "1966-67",
+          "team": "DET",
+          "pace": 121.5
+        },
+        {
+          "season": "1966-67",
+          "team": "GSW",
+          "pace": 127.4
+        },
+        {
+          "season": "1966-67",
+          "team": "LAL",
+          "pace": 123
+        },
+        {
+          "season": "1966-67",
+          "team": "NYK",
+          "pace": 118.5
+        },
+        {
+          "season": "1966-67",
+          "team": "PHI",
+          "pace": 122.9
+        },
+        {
+          "season": "1966-67",
+          "team": "SAC",
+          "pace": 118.6
+        },
+        {
+          "season": "1966-67",
+          "team": "WAS",
+          "pace": 123
+        }
+      ]
+    },
+    "1967-68": {
+      "fetched_at": "2026-06-29T01:42:35.885Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1968.html",
+      "rows": [
+        {
+          "season": "1967-68",
+          "team": "ATL",
+          "pace": 113.7
+        },
+        {
+          "season": "1967-68",
+          "team": "BOS",
+          "pace": 121.1
+        },
+        {
+          "season": "1967-68",
+          "team": "CHI",
+          "pace": 115.7
+        },
+        {
+          "season": "1967-68",
+          "team": "DET",
+          "pace": 122
+        },
+        {
+          "season": "1967-68",
+          "team": "GSW",
+          "pace": 123.6
+        },
+        {
+          "season": "1967-68",
+          "team": "HOU",
+          "pace": 121.9
+        },
+        {
+          "season": "1967-68",
+          "team": "LAL",
+          "pace": 118.1
+        },
+        {
+          "season": "1967-68",
+          "team": "NYK",
+          "pace": 117.2
+        },
+        {
+          "season": "1967-68",
+          "team": "OKC",
+          "pace": 123.9
+        },
+        {
+          "season": "1967-68",
+          "team": "PHI",
+          "pace": 124.3
+        },
+        {
+          "season": "1967-68",
+          "team": "SAC",
+          "pace": 114.6
+        },
+        {
+          "season": "1967-68",
+          "team": "WAS",
+          "pace": 121.5
+        }
+      ]
+    },
+    "1968-69": {
+      "fetched_at": "2026-06-29T01:42:40.244Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1969.html",
+      "rows": [
+        {
+          "season": "1968-69",
+          "team": "ATL",
+          "pace": 113.9
+        },
+        {
+          "season": "1968-69",
+          "team": "BOS",
+          "pace": 117.5
+        },
+        {
+          "season": "1968-69",
+          "team": "CHI",
+          "pace": 113.4
+        },
+        {
+          "season": "1968-69",
+          "team": "DET",
+          "pace": 116.8
+        },
+        {
+          "season": "1968-69",
+          "team": "GSW",
+          "pace": 117.1
+        },
+        {
+          "season": "1968-69",
+          "team": "HOU",
+          "pace": 123.8
+        },
+        {
+          "season": "1968-69",
+          "team": "LAL",
+          "pace": 112.6
+        },
+        {
+          "season": "1968-69",
+          "team": "MIL",
+          "pace": 117.5
+        },
+        {
+          "season": "1968-69",
+          "team": "NYK",
+          "pace": 112.4
+        },
+        {
+          "season": "1968-69",
+          "team": "OKC",
+          "pace": 117.4
+        },
+        {
+          "season": "1968-69",
+          "team": "PHI",
+          "pace": 120.4
+        },
+        {
+          "season": "1968-69",
+          "team": "PHX",
+          "pace": 118.4
+        },
+        {
+          "season": "1968-69",
+          "team": "SAC",
+          "pace": 113.6
+        },
+        {
+          "season": "1968-69",
+          "team": "WAS",
+          "pace": 121.8
+        }
+      ]
+    },
+    "1969-70": {
+      "fetched_at": "2026-06-29T01:42:44.373Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1970.html",
+      "rows": [
+        {
+          "season": "1969-70",
+          "team": "ATL",
+          "pace": 114.4
+        },
+        {
+          "season": "1969-70",
+          "team": "BOS",
+          "pace": 117.5
+        },
+        {
+          "season": "1969-70",
+          "team": "CHI",
+          "pace": 116.5
+        },
+        {
+          "season": "1969-70",
+          "team": "DET",
+          "pace": 111.6
+        },
+        {
+          "season": "1969-70",
+          "team": "GSW",
+          "pace": 116.3
+        },
+        {
+          "season": "1969-70",
+          "team": "HOU",
+          "pace": 125.1
+        },
+        {
+          "season": "1969-70",
+          "team": "LAL",
+          "pace": 113.9
+        },
+        {
+          "season": "1969-70",
+          "team": "MIL",
+          "pace": 115.8
+        },
+        {
+          "season": "1969-70",
+          "team": "NYK",
+          "pace": 114.3
+        },
+        {
+          "season": "1969-70",
+          "team": "OKC",
+          "pace": 116.4
+        },
+        {
+          "season": "1969-70",
+          "team": "PHI",
+          "pace": 120.9
+        },
+        {
+          "season": "1969-70",
+          "team": "PHX",
+          "pace": 116.7
+        },
+        {
+          "season": "1969-70",
+          "team": "SAC",
+          "pace": 118.5
+        },
+        {
+          "season": "1969-70",
+          "team": "WAS",
+          "pace": 121
+        }
+      ]
+    },
+    "1970-71": {
+      "fetched_at": "2026-06-29T01:42:48.721Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1971.html",
+      "rows": [
+        {
+          "season": "1970-71",
+          "team": "ATL",
+          "pace": 117.2
+        },
+        {
+          "season": "1970-71",
+          "team": "BOS",
+          "pace": 120.2
+        },
+        {
+          "season": "1970-71",
+          "team": "CHI",
+          "pace": 109.7
+        },
+        {
+          "season": "1970-71",
+          "team": "CLE",
+          "pace": 110.6
+        },
+        {
+          "season": "1970-71",
+          "team": "DET",
+          "pace": 111.3
+        },
+        {
+          "season": "1970-71",
+          "team": "GSW",
+          "pace": 113.5
+        },
+        {
+          "season": "1970-71",
+          "team": "HOU",
+          "pace": 118.5
+        },
+        {
+          "season": "1970-71",
+          "team": "LAC",
+          "pace": 111.9
+        },
+        {
+          "season": "1970-71",
+          "team": "LAL",
+          "pace": 115.7
+        },
+        {
+          "season": "1970-71",
+          "team": "MIL",
+          "pace": 113.4
+        },
+        {
+          "season": "1970-71",
+          "team": "NYK",
+          "pace": 112.2
+        },
+        {
+          "season": "1970-71",
+          "team": "OKC",
+          "pace": 116.5
+        },
+        {
+          "season": "1970-71",
+          "team": "PHI",
+          "pace": 115.7
+        },
+        {
+          "season": "1970-71",
+          "team": "PHX",
+          "pace": 115.3
+        },
+        {
+          "season": "1970-71",
+          "team": "POR",
+          "pace": 120.6
+        },
+        {
+          "season": "1970-71",
+          "team": "SAC",
+          "pace": 118.5
+        },
+        {
+          "season": "1970-71",
+          "team": "WAS",
+          "pace": 116.5
+        }
+      ]
+    },
+    "1971-72": {
+      "fetched_at": "2026-06-29T01:42:53.085Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1972.html",
+      "rows": [
+        {
+          "season": "1971-72",
+          "team": "ATL",
+          "pace": 110.7
+        },
+        {
+          "season": "1971-72",
+          "team": "BOS",
+          "pace": 116.1
+        },
+        {
+          "season": "1971-72",
+          "team": "CHI",
+          "pace": 108.6
+        },
+        {
+          "season": "1971-72",
+          "team": "CLE",
+          "pace": 111.5
+        },
+        {
+          "season": "1971-72",
+          "team": "DET",
+          "pace": 112.8
+        },
+        {
+          "season": "1971-72",
+          "team": "GSW",
+          "pace": 113
+        },
+        {
+          "season": "1971-72",
+          "team": "HOU",
+          "pace": 114.7
+        },
+        {
+          "season": "1971-72",
+          "team": "LAC",
+          "pace": 108.3
+        },
+        {
+          "season": "1971-72",
+          "team": "LAL",
+          "pace": 116.9
+        },
+        {
+          "season": "1971-72",
+          "team": "MIL",
+          "pace": 111.2
+        },
+        {
+          "season": "1971-72",
+          "team": "NYK",
+          "pace": 108
+        },
+        {
+          "season": "1971-72",
+          "team": "OKC",
+          "pace": 110.5
+        },
+        {
+          "season": "1971-72",
+          "team": "PHI",
+          "pace": 115.8
+        },
+        {
+          "season": "1971-72",
+          "team": "PHX",
+          "pace": 113.7
+        },
+        {
+          "season": "1971-72",
+          "team": "POR",
+          "pace": 112.3
+        },
+        {
+          "season": "1971-72",
+          "team": "SAC",
+          "pace": 109.5
+        },
+        {
+          "season": "1971-72",
+          "team": "WAS",
+          "pace": 110.5
+        }
+      ]
+    },
+    "1972-73": {
+      "fetched_at": "2026-06-29T01:42:57.434Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1973.html",
+      "rows": [
+        {
+          "season": "1972-73",
+          "team": "ATL",
+          "pace": 113.8
+        },
+        {
+          "season": "1972-73",
+          "team": "BOS",
+          "pace": 114.5
+        },
+        {
+          "season": "1972-73",
+          "team": "CHI",
+          "pace": 104.5
+        },
+        {
+          "season": "1972-73",
+          "team": "CLE",
+          "pace": 108.3
+        },
+        {
+          "season": "1972-73",
+          "team": "DET",
+          "pace": 111.5
+        },
+        {
+          "season": "1972-73",
+          "team": "GSW",
+          "pace": 112.2
+        },
+        {
+          "season": "1972-73",
+          "team": "HOU",
+          "pace": 115.2
+        },
+        {
+          "season": "1972-73",
+          "team": "LAC",
+          "pace": 110.9
+        },
+        {
+          "season": "1972-73",
+          "team": "LAL",
+          "pace": 112
+        },
+        {
+          "season": "1972-73",
+          "team": "MIL",
+          "pace": 108.3
+        },
+        {
+          "season": "1972-73",
+          "team": "NYK",
+          "pace": 105.9
+        },
+        {
+          "season": "1972-73",
+          "team": "OKC",
+          "pace": 110
+        },
+        {
+          "season": "1972-73",
+          "team": "PHI",
+          "pace": 115.2
+        },
+        {
+          "season": "1972-73",
+          "team": "PHX",
+          "pace": 113
+        },
+        {
+          "season": "1972-73",
+          "team": "POR",
+          "pace": 110.4
+        },
+        {
+          "season": "1972-73",
+          "team": "SAC",
+          "pace": 107.3
+        },
+        {
+          "season": "1972-73",
+          "team": "WAS",
+          "pace": 108.7
+        }
+      ]
+    },
+    "1973-74": {
+      "fetched_at": "2026-06-29T01:43:01.758Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1974.html",
+      "rows": [
+        {
+          "season": "1973-74",
+          "team": "ATL",
+          "pace": 110.8
+        },
+        {
+          "season": "1973-74",
+          "team": "BOS",
+          "pace": 110
+        },
+        {
+          "season": "1973-74",
+          "team": "CHI",
+          "pace": 105
+        },
+        {
+          "season": "1973-74",
+          "team": "CLE",
+          "pace": 104.1
+        },
+        {
+          "season": "1973-74",
+          "team": "DET",
+          "pace": 106.5
+        },
+        {
+          "season": "1973-74",
+          "team": "GSW",
+          "pace": 108.9
+        },
+        {
+          "season": "1973-74",
+          "team": "HOU",
+          "pace": 106.1
+        },
+        {
+          "season": "1973-74",
+          "team": "LAC",
+          "pace": 111.6
+        },
+        {
+          "season": "1973-74",
+          "team": "LAL",
+          "pace": 111.7
+        },
+        {
+          "season": "1973-74",
+          "team": "MIL",
+          "pace": 105.4
+        },
+        {
+          "season": "1973-74",
+          "team": "NYK",
+          "pace": 103.5
+        },
+        {
+          "season": "1973-74",
+          "team": "OKC",
+          "pace": 110.2
+        },
+        {
+          "season": "1973-74",
+          "team": "PHI",
+          "pace": 108.3
+        },
+        {
+          "season": "1973-74",
+          "team": "PHX",
+          "pace": 109.6
+        },
+        {
+          "season": "1973-74",
+          "team": "POR",
+          "pace": 108.5
+        },
+        {
+          "season": "1973-74",
+          "team": "SAC",
+          "pace": 106.1
+        },
+        {
+          "season": "1973-74",
+          "team": "WAS",
+          "pace": 106.3
+        }
+      ]
+    },
+    "1974-75": {
+      "fetched_at": "2026-06-29T01:43:06.122Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1975.html",
+      "rows": [
+        {
+          "season": "1974-75",
+          "team": "ATL",
+          "pace": 106.3
+        },
+        {
+          "season": "1974-75",
+          "team": "BOS",
+          "pace": 106.1
+        },
+        {
+          "season": "1974-75",
+          "team": "CHI",
+          "pace": 99.7
+        },
+        {
+          "season": "1974-75",
+          "team": "CLE",
+          "pace": 100.4
+        },
+        {
+          "season": "1974-75",
+          "team": "DET",
+          "pace": 100.5
+        },
+        {
+          "season": "1974-75",
+          "team": "GSW",
+          "pace": 107.6
+        },
+        {
+          "season": "1974-75",
+          "team": "HOU",
+          "pace": 102.9
+        },
+        {
+          "season": "1974-75",
+          "team": "LAC",
+          "pace": 107.7
+        },
+        {
+          "season": "1974-75",
+          "team": "LAL",
+          "pace": 106.4
+        },
+        {
+          "season": "1974-75",
+          "team": "MIL",
+          "pace": 102.1
+        },
+        {
+          "season": "1974-75",
+          "team": "NYK",
+          "pace": 103.1
+        },
+        {
+          "season": "1974-75",
+          "team": "OKC",
+          "pace": 105.5
+        },
+        {
+          "season": "1974-75",
+          "team": "PHI",
+          "pace": 103.4
+        },
+        {
+          "season": "1974-75",
+          "team": "PHX",
+          "pace": 104.3
+        },
+        {
+          "season": "1974-75",
+          "team": "POR",
+          "pace": 104.7
+        },
+        {
+          "season": "1974-75",
+          "team": "SAC",
+          "pace": 104.4
+        },
+        {
+          "season": "1974-75",
+          "team": "UTA",
+          "pace": 109.4
+        },
+        {
+          "season": "1974-75",
+          "team": "WAS",
+          "pace": 106.1
+        }
+      ]
+    },
+    "1975-76": {
+      "fetched_at": "2026-06-29T01:43:10.420Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1976.html",
+      "rows": [
+        {
+          "season": "1975-76",
+          "team": "ATL",
+          "pace": 103.6
+        },
+        {
+          "season": "1975-76",
+          "team": "BOS",
+          "pace": 106.9
+        },
+        {
+          "season": "1975-76",
+          "team": "CHI",
+          "pace": 100.3
+        },
+        {
+          "season": "1975-76",
+          "team": "CLE",
+          "pace": 101.6
+        },
+        {
+          "season": "1975-76",
+          "team": "DET",
+          "pace": 105.2
+        },
+        {
+          "season": "1975-76",
+          "team": "GSW",
+          "pace": 108.3
+        },
+        {
+          "season": "1975-76",
+          "team": "HOU",
+          "pace": 104.7
+        },
+        {
+          "season": "1975-76",
+          "team": "LAC",
+          "pace": 108.2
+        },
+        {
+          "season": "1975-76",
+          "team": "LAL",
+          "pace": 108
+        },
+        {
+          "season": "1975-76",
+          "team": "MIL",
+          "pace": 103.9
+        },
+        {
+          "season": "1975-76",
+          "team": "NYK",
+          "pace": 104.1
+        },
+        {
+          "season": "1975-76",
+          "team": "OKC",
+          "pace": 107.7
+        },
+        {
+          "season": "1975-76",
+          "team": "PHI",
+          "pace": 107.5
+        },
+        {
+          "season": "1975-76",
+          "team": "PHX",
+          "pace": 105.6
+        },
+        {
+          "season": "1975-76",
+          "team": "POR",
+          "pace": 107.7
+        },
+        {
+          "season": "1975-76",
+          "team": "SAC",
+          "pace": 105.7
+        },
+        {
+          "season": "1975-76",
+          "team": "UTA",
+          "pace": 106.7
+        },
+        {
+          "season": "1975-76",
+          "team": "WAS",
+          "pace": 104.3
+        }
+      ]
+    },
+    "1976-77": {
+      "fetched_at": "2026-06-29T01:43:14.825Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1977.html",
+      "rows": [
+        {
+          "season": "1976-77",
+          "team": "ATL",
+          "pace": 104.6
+        },
+        {
+          "season": "1976-77",
+          "team": "BKN",
+          "pace": 103.7
+        },
+        {
+          "season": "1976-77",
+          "team": "BOS",
+          "pace": 107.5
+        },
+        {
+          "season": "1976-77",
+          "team": "CHI",
+          "pace": 100
+        },
+        {
+          "season": "1976-77",
+          "team": "CLE",
+          "pace": 101.5
+        },
+        {
+          "season": "1976-77",
+          "team": "DEN",
+          "pace": 111.2
+        },
+        {
+          "season": "1976-77",
+          "team": "DET",
+          "pace": 108.8
+        },
+        {
+          "season": "1976-77",
+          "team": "GSW",
+          "pace": 107.8
+        },
+        {
+          "season": "1976-77",
+          "team": "HOU",
+          "pace": 101.3
+        },
+        {
+          "season": "1976-77",
+          "team": "IND",
+          "pace": 107.1
+        },
+        {
+          "season": "1976-77",
+          "team": "LAC",
+          "pace": 107.3
+        },
+        {
+          "season": "1976-77",
+          "team": "LAL",
+          "pace": 104.7
+        },
+        {
+          "season": "1976-77",
+          "team": "MIL",
+          "pace": 108.3
+        },
+        {
+          "season": "1976-77",
+          "team": "NYK",
+          "pace": 108.1
+        },
+        {
+          "season": "1976-77",
+          "team": "OKC",
+          "pace": 106.8
+        },
+        {
+          "season": "1976-77",
+          "team": "PHI",
+          "pace": 108.3
+        },
+        {
+          "season": "1976-77",
+          "team": "PHX",
+          "pace": 106.6
+        },
+        {
+          "season": "1976-77",
+          "team": "POR",
+          "pace": 108
+        },
+        {
+          "season": "1976-77",
+          "team": "SAC",
+          "pace": 106.4
+        },
+        {
+          "season": "1976-77",
+          "team": "SAS",
+          "pace": 111.8
+        },
+        {
+          "season": "1976-77",
+          "team": "UTA",
+          "pace": 107.2
+        },
+        {
+          "season": "1976-77",
+          "team": "WAS",
+          "pace": 105.9
+        }
+      ]
+    },
+    "1977-78": {
+      "fetched_at": "2026-06-29T01:43:19.165Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1978.html",
+      "rows": [
+        {
+          "season": "1977-78",
+          "team": "ATL",
+          "pace": 103.3
+        },
+        {
+          "season": "1977-78",
+          "team": "BKN",
+          "pace": 110.9
+        },
+        {
+          "season": "1977-78",
+          "team": "BOS",
+          "pace": 105.9
+        },
+        {
+          "season": "1977-78",
+          "team": "CHI",
+          "pace": 101.5
+        },
+        {
+          "season": "1977-78",
+          "team": "CLE",
+          "pace": 103.5
+        },
+        {
+          "season": "1977-78",
+          "team": "DEN",
+          "pace": 108.5
+        },
+        {
+          "season": "1977-78",
+          "team": "DET",
+          "pace": 107.7
+        },
+        {
+          "season": "1977-78",
+          "team": "GSW",
+          "pace": 106
+        },
+        {
+          "season": "1977-78",
+          "team": "HOU",
+          "pace": 101.3
+        },
+        {
+          "season": "1977-78",
+          "team": "IND",
+          "pace": 108.2
+        },
+        {
+          "season": "1977-78",
+          "team": "LAC",
+          "pace": 104.3
+        },
+        {
+          "season": "1977-78",
+          "team": "LAL",
+          "pace": 106.1
+        },
+        {
+          "season": "1977-78",
+          "team": "MIL",
+          "pace": 108.7
+        },
+        {
+          "season": "1977-78",
+          "team": "NYK",
+          "pace": 109.7
+        },
+        {
+          "season": "1977-78",
+          "team": "OKC",
+          "pace": 104.8
+        },
+        {
+          "season": "1977-78",
+          "team": "PHI",
+          "pace": 108.4
+        },
+        {
+          "season": "1977-78",
+          "team": "PHX",
+          "pace": 111.4
+        },
+        {
+          "season": "1977-78",
+          "team": "POR",
+          "pace": 104.2
+        },
+        {
+          "season": "1977-78",
+          "team": "SAC",
+          "pace": 108.2
+        },
+        {
+          "season": "1977-78",
+          "team": "SAS",
+          "pace": 109
+        },
+        {
+          "season": "1977-78",
+          "team": "UTA",
+          "pace": 108.3
+        },
+        {
+          "season": "1977-78",
+          "team": "WAS",
+          "pace": 108.1
+        }
+      ]
+    },
+    "1978-79": {
+      "fetched_at": "2026-06-29T01:43:23.551Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1979.html",
+      "rows": [
+        {
+          "season": "1978-79",
+          "team": "ATL",
+          "pace": 102.5
+        },
+        {
+          "season": "1978-79",
+          "team": "BKN",
+          "pace": 109.5
+        },
+        {
+          "season": "1978-79",
+          "team": "BOS",
+          "pace": 106.5
+        },
+        {
+          "season": "1978-79",
+          "team": "CHI",
+          "pace": 102.9
+        },
+        {
+          "season": "1978-79",
+          "team": "CLE",
+          "pace": 102.7
+        },
+        {
+          "season": "1978-79",
+          "team": "DEN",
+          "pace": 105.9
+        },
+        {
+          "season": "1978-79",
+          "team": "DET",
+          "pace": 107.2
+        },
+        {
+          "season": "1978-79",
+          "team": "GSW",
+          "pace": 102.2
+        },
+        {
+          "season": "1978-79",
+          "team": "HOU",
+          "pace": 103.8
+        },
+        {
+          "season": "1978-79",
+          "team": "IND",
+          "pace": 105.3
+        },
+        {
+          "season": "1978-79",
+          "team": "LAC",
+          "pace": 106.3
+        },
+        {
+          "season": "1978-79",
+          "team": "LAL",
+          "pace": 105.9
+        },
+        {
+          "season": "1978-79",
+          "team": "MIL",
+          "pace": 106.5
+        },
+        {
+          "season": "1978-79",
+          "team": "NYK",
+          "pace": 104.9
+        },
+        {
+          "season": "1978-79",
+          "team": "OKC",
+          "pace": 103.4
+        },
+        {
+          "season": "1978-79",
+          "team": "PHI",
+          "pace": 106.7
+        },
+        {
+          "season": "1978-79",
+          "team": "PHX",
+          "pace": 108.5
+        },
+        {
+          "season": "1978-79",
+          "team": "POR",
+          "pace": 103.4
+        },
+        {
+          "season": "1978-79",
+          "team": "SAC",
+          "pace": 107.3
+        },
+        {
+          "season": "1978-79",
+          "team": "SAS",
+          "pace": 110.6
+        },
+        {
+          "season": "1978-79",
+          "team": "UTA",
+          "pace": 108.6
+        },
+        {
+          "season": "1978-79",
+          "team": "WAS",
+          "pace": 106.5
+        }
+      ]
+    },
+    "1979-80": {
+      "fetched_at": "2026-06-29T01:43:27.922Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1980.html",
+      "rows": [
+        {
+          "season": "1979-80",
+          "team": "ATL",
+          "pace": 98.9
+        },
+        {
+          "season": "1979-80",
+          "team": "BKN",
+          "pace": 106.1
+        },
+        {
+          "season": "1979-80",
+          "team": "BOS",
+          "pace": 102.6
+        },
+        {
+          "season": "1979-80",
+          "team": "CHI",
+          "pace": 101.8
+        },
+        {
+          "season": "1979-80",
+          "team": "CLE",
+          "pace": 105.6
+        },
+        {
+          "season": "1979-80",
+          "team": "DEN",
+          "pace": 103.9
+        },
+        {
+          "season": "1979-80",
+          "team": "DET",
+          "pace": 107.1
+        },
+        {
+          "season": "1979-80",
+          "team": "GSW",
+          "pace": 100.5
+        },
+        {
+          "season": "1979-80",
+          "team": "HOU",
+          "pace": 101.2
+        },
+        {
+          "season": "1979-80",
+          "team": "IND",
+          "pace": 104.4
+        },
+        {
+          "season": "1979-80",
+          "team": "LAC",
+          "pace": 101.4
+        },
+        {
+          "season": "1979-80",
+          "team": "LAL",
+          "pace": 104.1
+        },
+        {
+          "season": "1979-80",
+          "team": "MIL",
+          "pace": 102.4
+        },
+        {
+          "season": "1979-80",
+          "team": "NYK",
+          "pace": 106.5
+        },
+        {
+          "season": "1979-80",
+          "team": "OKC",
+          "pace": 101.8
+        },
+        {
+          "season": "1979-80",
+          "team": "PHI",
+          "pace": 103
+        },
+        {
+          "season": "1979-80",
+          "team": "PHX",
+          "pace": 104.8
+        },
+        {
+          "season": "1979-80",
+          "team": "POR",
+          "pace": 98.6
+        },
+        {
+          "season": "1979-80",
+          "team": "SAC",
+          "pace": 103.2
+        },
+        {
+          "season": "1979-80",
+          "team": "SAS",
+          "pace": 109.5
+        },
+        {
+          "season": "1979-80",
+          "team": "UTA",
+          "pace": 97.6
+        },
+        {
+          "season": "1979-80",
+          "team": "WAS",
+          "pace": 102.6
+        }
+      ]
+    },
+    "1980-81": {
+      "fetched_at": "2026-06-29T01:43:32.094Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1981.html",
+      "rows": [
+        {
+          "season": "1980-81",
+          "team": "ATL",
+          "pace": 99.4
+        },
+        {
+          "season": "1980-81",
+          "team": "BKN",
+          "pace": 105.2
+        },
+        {
+          "season": "1980-81",
+          "team": "BOS",
+          "pace": 100.8
+        },
+        {
+          "season": "1980-81",
+          "team": "CHI",
+          "pace": 100.6
+        },
+        {
+          "season": "1980-81",
+          "team": "CLE",
+          "pace": 100.8
+        },
+        {
+          "season": "1980-81",
+          "team": "DAL",
+          "pace": 98.6
+        },
+        {
+          "season": "1980-81",
+          "team": "DEN",
+          "pace": 109.8
+        },
+        {
+          "season": "1980-81",
+          "team": "DET",
+          "pace": 101.2
+        },
+        {
+          "season": "1980-81",
+          "team": "GSW",
+          "pace": 101
+        },
+        {
+          "season": "1980-81",
+          "team": "HOU",
+          "pace": 100.5
+        },
+        {
+          "season": "1980-81",
+          "team": "IND",
+          "pace": 100.9
+        },
+        {
+          "season": "1980-81",
+          "team": "LAC",
+          "pace": 100.2
+        },
+        {
+          "season": "1980-81",
+          "team": "LAL",
+          "pace": 102.7
+        },
+        {
+          "season": "1980-81",
+          "team": "MIL",
+          "pace": 103.6
+        },
+        {
+          "season": "1980-81",
+          "team": "NYK",
+          "pace": 101
+        },
+        {
+          "season": "1980-81",
+          "team": "OKC",
+          "pace": 100.3
+        },
+        {
+          "season": "1980-81",
+          "team": "PHI",
+          "pace": 103.4
+        },
+        {
+          "season": "1980-81",
+          "team": "PHX",
+          "pace": 104.7
+        },
+        {
+          "season": "1980-81",
+          "team": "POR",
+          "pace": 103
+        },
+        {
+          "season": "1980-81",
+          "team": "SAC",
+          "pace": 101.3
+        },
+        {
+          "season": "1980-81",
+          "team": "SAS",
+          "pace": 102.9
+        },
+        {
+          "season": "1980-81",
+          "team": "UTA",
+          "pace": 97.7
+        },
+        {
+          "season": "1980-81",
+          "team": "WAS",
+          "pace": 102.4
+        }
+      ]
+    },
+    "1981-82": {
+      "fetched_at": "2026-06-29T01:43:36.550Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1982.html",
+      "rows": [
+        {
+          "season": "1981-82",
+          "team": "ATL",
+          "pace": 95.1
+        },
+        {
+          "season": "1981-82",
+          "team": "BKN",
+          "pace": 103.1
+        },
+        {
+          "season": "1981-82",
+          "team": "BOS",
+          "pace": 101.5
+        },
+        {
+          "season": "1981-82",
+          "team": "CHI",
+          "pace": 99
+        },
+        {
+          "season": "1981-82",
+          "team": "CLE",
+          "pace": 99.3
+        },
+        {
+          "season": "1981-82",
+          "team": "DAL",
+          "pace": 98.5
+        },
+        {
+          "season": "1981-82",
+          "team": "DEN",
+          "pace": 109.8
+        },
+        {
+          "season": "1981-82",
+          "team": "DET",
+          "pace": 104.3
+        },
+        {
+          "season": "1981-82",
+          "team": "GSW",
+          "pace": 101.4
+        },
+        {
+          "season": "1981-82",
+          "team": "HOU",
+          "pace": 97.2
+        },
+        {
+          "season": "1981-82",
+          "team": "IND",
+          "pace": 98.7
+        },
+        {
+          "season": "1981-82",
+          "team": "LAC",
+          "pace": 101.4
+        },
+        {
+          "season": "1981-82",
+          "team": "LAL",
+          "pace": 103.1
+        },
+        {
+          "season": "1981-82",
+          "team": "MIL",
+          "pace": 100
+        },
+        {
+          "season": "1981-82",
+          "team": "NYK",
+          "pace": 99.5
+        },
+        {
+          "season": "1981-82",
+          "team": "OKC",
+          "pace": 100
+        },
+        {
+          "season": "1981-82",
+          "team": "PHI",
+          "pace": 100.6
+        },
+        {
+          "season": "1981-82",
+          "team": "PHX",
+          "pace": 99.5
+        },
+        {
+          "season": "1981-82",
+          "team": "POR",
+          "pace": 100.5
+        },
+        {
+          "season": "1981-82",
+          "team": "SAC",
+          "pace": 101.8
+        },
+        {
+          "season": "1981-82",
+          "team": "SAS",
+          "pace": 102.5
+        },
+        {
+          "season": "1981-82",
+          "team": "UTA",
+          "pace": 103.9
+        },
+        {
+          "season": "1981-82",
+          "team": "WAS",
+          "pace": 99.4
+        }
+      ]
+    },
+    "1982-83": {
+      "fetched_at": "2026-06-29T01:43:40.910Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1983.html",
+      "rows": [
+        {
+          "season": "1982-83",
+          "team": "ATL",
+          "pace": 98.9
+        },
+        {
+          "season": "1982-83",
+          "team": "BKN",
+          "pace": 104
+        },
+        {
+          "season": "1982-83",
+          "team": "BOS",
+          "pace": 104
+        },
+        {
+          "season": "1982-83",
+          "team": "CHI",
+          "pace": 106.1
+        },
+        {
+          "season": "1982-83",
+          "team": "CLE",
+          "pace": 97.6
+        },
+        {
+          "season": "1982-83",
+          "team": "DAL",
+          "pace": 102.8
+        },
+        {
+          "season": "1982-83",
+          "team": "DEN",
+          "pace": 112.1
+        },
+        {
+          "season": "1982-83",
+          "team": "DET",
+          "pace": 105.8
+        },
+        {
+          "season": "1982-83",
+          "team": "GSW",
+          "pace": 104
+        },
+        {
+          "season": "1982-83",
+          "team": "HOU",
+          "pace": 102.2
+        },
+        {
+          "season": "1982-83",
+          "team": "IND",
+          "pace": 103.9
+        },
+        {
+          "season": "1982-83",
+          "team": "LAC",
+          "pace": 103
+        },
+        {
+          "season": "1982-83",
+          "team": "LAL",
+          "pace": 103.8
+        },
+        {
+          "season": "1982-83",
+          "team": "MIL",
+          "pace": 100
+        },
+        {
+          "season": "1982-83",
+          "team": "NYK",
+          "pace": 97
+        },
+        {
+          "season": "1982-83",
+          "team": "OKC",
+          "pace": 103.2
+        },
+        {
+          "season": "1982-83",
+          "team": "PHI",
+          "pace": 102.7
+        },
+        {
+          "season": "1982-83",
+          "team": "PHX",
+          "pace": 101.6
+        },
+        {
+          "season": "1982-83",
+          "team": "POR",
+          "pace": 101
+        },
+        {
+          "season": "1982-83",
+          "team": "SAC",
+          "pace": 106.6
+        },
+        {
+          "season": "1982-83",
+          "team": "SAS",
+          "pace": 103.3
+        },
+        {
+          "season": "1982-83",
+          "team": "UTA",
+          "pace": 107.3
+        },
+        {
+          "season": "1982-83",
+          "team": "WAS",
+          "pace": 99.4
+        }
+      ]
+    },
+    "1983-84": {
+      "fetched_at": "2026-06-29T01:43:45.071Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1984.html",
+      "rows": [
+        {
+          "season": "1983-84",
+          "team": "ATL",
+          "pace": 95.3
+        },
+        {
+          "season": "1983-84",
+          "team": "BKN",
+          "pace": 103
+        },
+        {
+          "season": "1983-84",
+          "team": "BOS",
+          "pace": 99.7
+        },
+        {
+          "season": "1983-84",
+          "team": "CHI",
+          "pace": 99.8
+        },
+        {
+          "season": "1983-84",
+          "team": "CLE",
+          "pace": 97.4
+        },
+        {
+          "season": "1983-84",
+          "team": "DAL",
+          "pace": 99
+        },
+        {
+          "season": "1983-84",
+          "team": "DEN",
+          "pace": 110.5
+        },
+        {
+          "season": "1983-84",
+          "team": "DET",
+          "pace": 103.8
+        },
+        {
+          "season": "1983-84",
+          "team": "GSW",
+          "pace": 103.3
+        },
+        {
+          "season": "1983-84",
+          "team": "HOU",
+          "pace": 104.7
+        },
+        {
+          "season": "1983-84",
+          "team": "IND",
+          "pace": 102.1
+        },
+        {
+          "season": "1983-84",
+          "team": "LAC",
+          "pace": 101.1
+        },
+        {
+          "season": "1983-84",
+          "team": "LAL",
+          "pace": 103.7
+        },
+        {
+          "season": "1983-84",
+          "team": "MIL",
+          "pace": 96.9
+        },
+        {
+          "season": "1983-84",
+          "team": "NYK",
+          "pace": 99
+        },
+        {
+          "season": "1983-84",
+          "team": "OKC",
+          "pace": 99.7
+        },
+        {
+          "season": "1983-84",
+          "team": "PHI",
+          "pace": 99.6
+        },
+        {
+          "season": "1983-84",
+          "team": "PHX",
+          "pace": 101.4
+        },
+        {
+          "season": "1983-84",
+          "team": "POR",
+          "pace": 101.1
+        },
+        {
+          "season": "1983-84",
+          "team": "SAC",
+          "pace": 102.9
+        },
+        {
+          "season": "1983-84",
+          "team": "SAS",
+          "pace": 106.5
+        },
+        {
+          "season": "1983-84",
+          "team": "UTA",
+          "pace": 104.9
+        },
+        {
+          "season": "1983-84",
+          "team": "WAS",
+          "pace": 97.4
+        }
+      ]
+    },
+    "1984-85": {
+      "fetched_at": "2026-06-29T01:43:49.417Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1985.html",
+      "rows": [
+        {
+          "season": "1984-85",
+          "team": "ATL",
+          "pace": 99.8
+        },
+        {
+          "season": "1984-85",
+          "team": "BKN",
+          "pace": 101.1
+        },
+        {
+          "season": "1984-85",
+          "team": "BOS",
+          "pace": 101.6
+        },
+        {
+          "season": "1984-85",
+          "team": "CHI",
+          "pace": 99.4
+        },
+        {
+          "season": "1984-85",
+          "team": "CLE",
+          "pace": 101.9
+        },
+        {
+          "season": "1984-85",
+          "team": "DAL",
+          "pace": 98.8
+        },
+        {
+          "season": "1984-85",
+          "team": "DEN",
+          "pace": 107.6
+        },
+        {
+          "season": "1984-85",
+          "team": "DET",
+          "pace": 105
+        },
+        {
+          "season": "1984-85",
+          "team": "GSW",
+          "pace": 103.2
+        },
+        {
+          "season": "1984-85",
+          "team": "HOU",
+          "pace": 102.2
+        },
+        {
+          "season": "1984-85",
+          "team": "IND",
+          "pace": 105.1
+        },
+        {
+          "season": "1984-85",
+          "team": "LAC",
+          "pace": 101
+        },
+        {
+          "season": "1984-85",
+          "team": "LAL",
+          "pace": 103.2
+        },
+        {
+          "season": "1984-85",
+          "team": "MIL",
+          "pace": 99.7
+        },
+        {
+          "season": "1984-85",
+          "team": "NYK",
+          "pace": 99.5
+        },
+        {
+          "season": "1984-85",
+          "team": "OKC",
+          "pace": 99.3
+        },
+        {
+          "season": "1984-85",
+          "team": "PHI",
+          "pace": 100.8
+        },
+        {
+          "season": "1984-85",
+          "team": "PHX",
+          "pace": 102.5
+        },
+        {
+          "season": "1984-85",
+          "team": "POR",
+          "pace": 103.6
+        },
+        {
+          "season": "1984-85",
+          "team": "SAC",
+          "pace": 104.4
+        },
+        {
+          "season": "1984-85",
+          "team": "SAS",
+          "pace": 103.9
+        },
+        {
+          "season": "1984-85",
+          "team": "UTA",
+          "pace": 105.1
+        },
+        {
+          "season": "1984-85",
+          "team": "WAS",
+          "pace": 100.3
+        }
+      ]
+    },
+    "1985-86": {
+      "fetched_at": "2026-06-29T01:43:53.821Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1986.html",
+      "rows": [
+        {
+          "season": "1985-86",
+          "team": "ATL",
+          "pace": 100
+        },
+        {
+          "season": "1985-86",
+          "team": "BKN",
+          "pace": 103.3
+        },
+        {
+          "season": "1985-86",
+          "team": "BOS",
+          "pace": 101.2
+        },
+        {
+          "season": "1985-86",
+          "team": "CHI",
+          "pace": 99.7
+        },
+        {
+          "season": "1985-86",
+          "team": "CLE",
+          "pace": 101.6
+        },
+        {
+          "season": "1985-86",
+          "team": "DAL",
+          "pace": 102.2
+        },
+        {
+          "season": "1985-86",
+          "team": "DEN",
+          "pace": 106.7
+        },
+        {
+          "season": "1985-86",
+          "team": "DET",
+          "pace": 104.2
+        },
+        {
+          "season": "1985-86",
+          "team": "GSW",
+          "pace": 104.2
+        },
+        {
+          "season": "1985-86",
+          "team": "HOU",
+          "pace": 103.5
+        },
+        {
+          "season": "1985-86",
+          "team": "IND",
+          "pace": 100.9
+        },
+        {
+          "season": "1985-86",
+          "team": "LAC",
+          "pace": 102.7
+        },
+        {
+          "season": "1985-86",
+          "team": "LAL",
+          "pace": 102.7
+        },
+        {
+          "season": "1985-86",
+          "team": "MIL",
+          "pace": 102.1
+        },
+        {
+          "season": "1985-86",
+          "team": "NYK",
+          "pace": 98.6
+        },
+        {
+          "season": "1985-86",
+          "team": "OKC",
+          "pace": 97.4
+        },
+        {
+          "season": "1985-86",
+          "team": "PHI",
+          "pace": 100.5
+        },
+        {
+          "season": "1985-86",
+          "team": "PHX",
+          "pace": 104.8
+        },
+        {
+          "season": "1985-86",
+          "team": "POR",
+          "pace": 104.5
+        },
+        {
+          "season": "1985-86",
+          "team": "SAC",
+          "pace": 102
+        },
+        {
+          "season": "1985-86",
+          "team": "SAS",
+          "pace": 103.8
+        },
+        {
+          "season": "1985-86",
+          "team": "UTA",
+          "pace": 103.3
+        },
+        {
+          "season": "1985-86",
+          "team": "WAS",
+          "pace": 99.1
+        }
+      ]
+    },
+    "1986-87": {
+      "fetched_at": "2026-06-29T01:43:58.271Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1987.html",
+      "rows": [
+        {
+          "season": "1986-87",
+          "team": "ATL",
+          "pace": 97.4
+        },
+        {
+          "season": "1986-87",
+          "team": "BKN",
+          "pace": 101.8
+        },
+        {
+          "season": "1986-87",
+          "team": "BOS",
+          "pace": 98.6
+        },
+        {
+          "season": "1986-87",
+          "team": "CHI",
+          "pace": 95.8
+        },
+        {
+          "season": "1986-87",
+          "team": "CLE",
+          "pace": 101.3
+        },
+        {
+          "season": "1986-87",
+          "team": "DAL",
+          "pace": 100.5
+        },
+        {
+          "season": "1986-87",
+          "team": "DEN",
+          "pace": 106.2
+        },
+        {
+          "season": "1986-87",
+          "team": "DET",
+          "pace": 101
+        },
+        {
+          "season": "1986-87",
+          "team": "GSW",
+          "pace": 101.7
+        },
+        {
+          "season": "1986-87",
+          "team": "HOU",
+          "pace": 99.9
+        },
+        {
+          "season": "1986-87",
+          "team": "IND",
+          "pace": 98.8
+        },
+        {
+          "season": "1986-87",
+          "team": "LAC",
+          "pace": 102.7
+        },
+        {
+          "season": "1986-87",
+          "team": "LAL",
+          "pace": 101.6
+        },
+        {
+          "season": "1986-87",
+          "team": "MIL",
+          "pace": 100.3
+        },
+        {
+          "season": "1986-87",
+          "team": "NYK",
+          "pace": 98.5
+        },
+        {
+          "season": "1986-87",
+          "team": "OKC",
+          "pace": 101.8
+        },
+        {
+          "season": "1986-87",
+          "team": "PHI",
+          "pace": 97.3
+        },
+        {
+          "season": "1986-87",
+          "team": "PHX",
+          "pace": 102
+        },
+        {
+          "season": "1986-87",
+          "team": "POR",
+          "pace": 105
+        },
+        {
+          "season": "1986-87",
+          "team": "SAC",
+          "pace": 101.3
+        },
+        {
+          "season": "1986-87",
+          "team": "SAS",
+          "pace": 101.7
+        },
+        {
+          "season": "1986-87",
+          "team": "UTA",
+          "pace": 103.2
+        },
+        {
+          "season": "1986-87",
+          "team": "WAS",
+          "pace": 100.2
+        }
+      ]
+    },
+    "1987-88": {
+      "fetched_at": "2026-06-29T01:44:02.415Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1988.html",
+      "rows": [
+        {
+          "season": "1987-88",
+          "team": "ATL",
+          "pace": 96.4
+        },
+        {
+          "season": "1987-88",
+          "team": "BKN",
+          "pace": 98.6
+        },
+        {
+          "season": "1987-88",
+          "team": "BOS",
+          "pace": 97.9
+        },
+        {
+          "season": "1987-88",
+          "team": "CHI",
+          "pace": 95.5
+        },
+        {
+          "season": "1987-88",
+          "team": "CLE",
+          "pace": 97.3
+        },
+        {
+          "season": "1987-88",
+          "team": "DAL",
+          "pace": 97
+        },
+        {
+          "season": "1987-88",
+          "team": "DEN",
+          "pace": 105.5
+        },
+        {
+          "season": "1987-88",
+          "team": "DET",
+          "pace": 98.3
+        },
+        {
+          "season": "1987-88",
+          "team": "GSW",
+          "pace": 101.6
+        },
+        {
+          "season": "1987-88",
+          "team": "HOU",
+          "pace": 101.8
+        },
+        {
+          "season": "1987-88",
+          "team": "IND",
+          "pace": 98
+        },
+        {
+          "season": "1987-88",
+          "team": "LAC",
+          "pace": 100.8
+        },
+        {
+          "season": "1987-88",
+          "team": "LAL",
+          "pace": 99.1
+        },
+        {
+          "season": "1987-88",
+          "team": "MIL",
+          "pace": 97.6
+        },
+        {
+          "season": "1987-88",
+          "team": "NYK",
+          "pace": 99.1
+        },
+        {
+          "season": "1987-88",
+          "team": "OKC",
+          "pace": 100.2
+        },
+        {
+          "season": "1987-88",
+          "team": "PHI",
+          "pace": 96
+        },
+        {
+          "season": "1987-88",
+          "team": "PHX",
+          "pace": 101.2
+        },
+        {
+          "season": "1987-88",
+          "team": "POR",
+          "pace": 103.6
+        },
+        {
+          "season": "1987-88",
+          "team": "SAC",
+          "pace": 100.9
+        },
+        {
+          "season": "1987-88",
+          "team": "SAS",
+          "pace": 104.4
+        },
+        {
+          "season": "1987-88",
+          "team": "UTA",
+          "pace": 101.5
+        },
+        {
+          "season": "1987-88",
+          "team": "WAS",
+          "pace": 98.1
+        }
+      ]
+    },
+    "1988-89": {
+      "fetched_at": "2026-06-29T01:44:06.814Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1989.html",
+      "rows": [
+        {
+          "season": "1988-89",
+          "team": "ATL",
+          "pace": 98.3
+        },
+        {
+          "season": "1988-89",
+          "team": "BKN",
+          "pace": 100.1
+        },
+        {
+          "season": "1988-89",
+          "team": "BOS",
+          "pace": 98.1
+        },
+        {
+          "season": "1988-89",
+          "team": "CHA",
+          "pace": 100.3
+        },
+        {
+          "season": "1988-89",
+          "team": "CHI",
+          "pace": 97
+        },
+        {
+          "season": "1988-89",
+          "team": "CLE",
+          "pace": 98
+        },
+        {
+          "season": "1988-89",
+          "team": "DAL",
+          "pace": 95.9
+        },
+        {
+          "season": "1988-89",
+          "team": "DEN",
+          "pace": 107.5
+        },
+        {
+          "season": "1988-89",
+          "team": "DET",
+          "pace": 95.5
+        },
+        {
+          "season": "1988-89",
+          "team": "GSW",
+          "pace": 107.3
+        },
+        {
+          "season": "1988-89",
+          "team": "HOU",
+          "pace": 101.8
+        },
+        {
+          "season": "1988-89",
+          "team": "IND",
+          "pace": 99.2
+        },
+        {
+          "season": "1988-89",
+          "team": "LAC",
+          "pace": 104.4
+        },
+        {
+          "season": "1988-89",
+          "team": "LAL",
+          "pace": 100.1
+        },
+        {
+          "season": "1988-89",
+          "team": "MIA",
+          "pace": 99.1
+        },
+        {
+          "season": "1988-89",
+          "team": "MIL",
+          "pace": 98.6
+        },
+        {
+          "season": "1988-89",
+          "team": "NYK",
+          "pace": 104.4
+        },
+        {
+          "season": "1988-89",
+          "team": "OKC",
+          "pace": 100.1
+        },
+        {
+          "season": "1988-89",
+          "team": "PHI",
+          "pace": 98.5
+        },
+        {
+          "season": "1988-89",
+          "team": "PHX",
+          "pace": 104.5
+        },
+        {
+          "season": "1988-89",
+          "team": "POR",
+          "pace": 103.9
+        },
+        {
+          "season": "1988-89",
+          "team": "SAC",
+          "pace": 100.5
+        },
+        {
+          "season": "1988-89",
+          "team": "SAS",
+          "pace": 104.1
+        },
+        {
+          "season": "1988-89",
+          "team": "UTA",
+          "pace": 98
+        },
+        {
+          "season": "1988-89",
+          "team": "WAS",
+          "pace": 100.8
+        }
+      ]
+    },
+    "1989-90": {
+      "fetched_at": "2026-06-29T01:44:11.211Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1990.html",
+      "rows": [
+        {
+          "season": "1989-90",
+          "team": "ATL",
+          "pace": 95.8
+        },
+        {
+          "season": "1989-90",
+          "team": "BKN",
+          "pace": 99.3
+        },
+        {
+          "season": "1989-90",
+          "team": "BOS",
+          "pace": 98.2
+        },
+        {
+          "season": "1989-90",
+          "team": "CHA",
+          "pace": 98.1
+        },
+        {
+          "season": "1989-90",
+          "team": "CHI",
+          "pace": 96.7
+        },
+        {
+          "season": "1989-90",
+          "team": "CLE",
+          "pace": 95
+        },
+        {
+          "season": "1989-90",
+          "team": "DAL",
+          "pace": 94.5
+        },
+        {
+          "season": "1989-90",
+          "team": "DEN",
+          "pace": 105.4
+        },
+        {
+          "season": "1989-90",
+          "team": "DET",
+          "pace": 94.4
+        },
+        {
+          "season": "1989-90",
+          "team": "GSW",
+          "pace": 105.9
+        },
+        {
+          "season": "1989-90",
+          "team": "HOU",
+          "pace": 101.2
+        },
+        {
+          "season": "1989-90",
+          "team": "IND",
+          "pace": 97
+        },
+        {
+          "season": "1989-90",
+          "team": "LAC",
+          "pace": 99.2
+        },
+        {
+          "season": "1989-90",
+          "team": "LAL",
+          "pace": 96.3
+        },
+        {
+          "season": "1989-90",
+          "team": "MIA",
+          "pace": 101
+        },
+        {
+          "season": "1989-90",
+          "team": "MIL",
+          "pace": 98
+        },
+        {
+          "season": "1989-90",
+          "team": "MIN",
+          "pace": 91.1
+        },
+        {
+          "season": "1989-90",
+          "team": "NYK",
+          "pace": 98.2
+        },
+        {
+          "season": "1989-90",
+          "team": "OKC",
+          "pace": 95.3
+        },
+        {
+          "season": "1989-90",
+          "team": "ORL",
+          "pace": 104.1
+        },
+        {
+          "season": "1989-90",
+          "team": "PHI",
+          "pace": 96.5
+        },
+        {
+          "season": "1989-90",
+          "team": "PHX",
+          "pace": 100.7
+        },
+        {
+          "season": "1989-90",
+          "team": "POR",
+          "pace": 102.3
+        },
+        {
+          "season": "1989-90",
+          "team": "SAC",
+          "pace": 96.7
+        },
+        {
+          "season": "1989-90",
+          "team": "SAS",
+          "pace": 98.5
+        },
+        {
+          "season": "1989-90",
+          "team": "UTA",
+          "pace": 96.1
+        },
+        {
+          "season": "1989-90",
+          "team": "WAS",
+          "pace": 99.4
+        }
+      ]
+    },
+    "1990-91": {
+      "fetched_at": "2026-06-29T01:44:15.362Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1991.html",
+      "rows": [
+        {
+          "season": "1990-91",
+          "team": "ATL",
+          "pace": 98.6
+        },
+        {
+          "season": "1990-91",
+          "team": "BKN",
+          "pace": 99.3
+        },
+        {
+          "season": "1990-91",
+          "team": "BOS",
+          "pace": 98.5
+        },
+        {
+          "season": "1990-91",
+          "team": "CHA",
+          "pace": 97.3
+        },
+        {
+          "season": "1990-91",
+          "team": "CHI",
+          "pace": 95.6
+        },
+        {
+          "season": "1990-91",
+          "team": "CLE",
+          "pace": 95.1
+        },
+        {
+          "season": "1990-91",
+          "team": "DAL",
+          "pace": 94.2
+        },
+        {
+          "season": "1990-91",
+          "team": "DEN",
+          "pace": 113.7
+        },
+        {
+          "season": "1990-91",
+          "team": "DET",
+          "pace": 91.9
+        },
+        {
+          "season": "1990-91",
+          "team": "GSW",
+          "pace": 103.6
+        },
+        {
+          "season": "1990-91",
+          "team": "HOU",
+          "pace": 98.5
+        },
+        {
+          "season": "1990-91",
+          "team": "IND",
+          "pace": 99.4
+        },
+        {
+          "season": "1990-91",
+          "team": "LAC",
+          "pace": 99.9
+        },
+        {
+          "season": "1990-91",
+          "team": "LAL",
+          "pace": 94.1
+        },
+        {
+          "season": "1990-91",
+          "team": "MIA",
+          "pace": 99.3
+        },
+        {
+          "season": "1990-91",
+          "team": "MIL",
+          "pace": 96.1
+        },
+        {
+          "season": "1990-91",
+          "team": "MIN",
+          "pace": 92.3
+        },
+        {
+          "season": "1990-91",
+          "team": "NYK",
+          "pace": 95
+        },
+        {
+          "season": "1990-91",
+          "team": "OKC",
+          "pace": 96.2
+        },
+        {
+          "season": "1990-91",
+          "team": "ORL",
+          "pace": 99.5
+        },
+        {
+          "season": "1990-91",
+          "team": "PHI",
+          "pace": 95.7
+        },
+        {
+          "season": "1990-91",
+          "team": "PHX",
+          "pace": 101
+        },
+        {
+          "season": "1990-91",
+          "team": "POR",
+          "pace": 100.5
+        },
+        {
+          "season": "1990-91",
+          "team": "SAC",
+          "pace": 94.7
+        },
+        {
+          "season": "1990-91",
+          "team": "SAS",
+          "pace": 98.6
+        },
+        {
+          "season": "1990-91",
+          "team": "UTA",
+          "pace": 95.3
+        },
+        {
+          "season": "1990-91",
+          "team": "WAS",
+          "pace": 97.5
+        }
+      ]
+    },
+    "1991-92": {
+      "fetched_at": "2026-06-29T01:44:19.728Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1992.html",
+      "rows": [
+        {
+          "season": "1991-92",
+          "team": "ATL",
+          "pace": 97.8
+        },
+        {
+          "season": "1991-92",
+          "team": "BKN",
+          "pace": 98
+        },
+        {
+          "season": "1991-92",
+          "team": "BOS",
+          "pace": 95.8
+        },
+        {
+          "season": "1991-92",
+          "team": "CHA",
+          "pace": 101.7
+        },
+        {
+          "season": "1991-92",
+          "team": "CHI",
+          "pace": 94.4
+        },
+        {
+          "season": "1991-92",
+          "team": "CLE",
+          "pace": 95
+        },
+        {
+          "season": "1991-92",
+          "team": "DAL",
+          "pace": 94.4
+        },
+        {
+          "season": "1991-92",
+          "team": "DEN",
+          "pace": 98.6
+        },
+        {
+          "season": "1991-92",
+          "team": "DET",
+          "pace": 91.6
+        },
+        {
+          "season": "1991-92",
+          "team": "GSW",
+          "pace": 103.4
+        },
+        {
+          "season": "1991-92",
+          "team": "HOU",
+          "pace": 95.1
+        },
+        {
+          "season": "1991-92",
+          "team": "IND",
+          "pace": 99
+        },
+        {
+          "season": "1991-92",
+          "team": "LAC",
+          "pace": 96.5
+        },
+        {
+          "season": "1991-92",
+          "team": "LAL",
+          "pace": 92.5
+        },
+        {
+          "season": "1991-92",
+          "team": "MIA",
+          "pace": 97.7
+        },
+        {
+          "season": "1991-92",
+          "team": "MIL",
+          "pace": 95.5
+        },
+        {
+          "season": "1991-92",
+          "team": "MIN",
+          "pace": 95.1
+        },
+        {
+          "season": "1991-92",
+          "team": "NYK",
+          "pace": 92.9
+        },
+        {
+          "season": "1991-92",
+          "team": "OKC",
+          "pace": 95.4
+        },
+        {
+          "season": "1991-92",
+          "team": "ORL",
+          "pace": 98
+        },
+        {
+          "season": "1991-92",
+          "team": "PHI",
+          "pace": 93.7
+        },
+        {
+          "season": "1991-92",
+          "team": "PHX",
+          "pace": 99.4
+        },
+        {
+          "season": "1991-92",
+          "team": "POR",
+          "pace": 99
+        },
+        {
+          "season": "1991-92",
+          "team": "SAC",
+          "pace": 99.6
+        },
+        {
+          "season": "1991-92",
+          "team": "SAS",
+          "pace": 96.2
+        },
+        {
+          "season": "1991-92",
+          "team": "UTA",
+          "pace": 95.5
+        },
+        {
+          "season": "1991-92",
+          "team": "WAS",
+          "pace": 97.7
+        }
+      ]
+    },
+    "1992-93": {
+      "fetched_at": "2026-06-29T01:44:24.125Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1993.html",
+      "rows": [
+        {
+          "season": "1992-93",
+          "team": "ATL",
+          "pace": 97.6
+        },
+        {
+          "season": "1992-93",
+          "team": "BKN",
+          "pace": 96
+        },
+        {
+          "season": "1992-93",
+          "team": "BOS",
+          "pace": 94.9
+        },
+        {
+          "season": "1992-93",
+          "team": "CHA",
+          "pace": 100.2
+        },
+        {
+          "season": "1992-93",
+          "team": "CHI",
+          "pace": 92.5
+        },
+        {
+          "season": "1992-93",
+          "team": "CLE",
+          "pace": 94.8
+        },
+        {
+          "season": "1992-93",
+          "team": "DAL",
+          "pace": 99.5
+        },
+        {
+          "season": "1992-93",
+          "team": "DEN",
+          "pace": 99.8
+        },
+        {
+          "season": "1992-93",
+          "team": "DET",
+          "pace": 93.2
+        },
+        {
+          "season": "1992-93",
+          "team": "GSW",
+          "pace": 99.5
+        },
+        {
+          "season": "1992-93",
+          "team": "HOU",
+          "pace": 94.4
+        },
+        {
+          "season": "1992-93",
+          "team": "IND",
+          "pace": 96
+        },
+        {
+          "season": "1992-93",
+          "team": "LAC",
+          "pace": 99.1
+        },
+        {
+          "season": "1992-93",
+          "team": "LAL",
+          "pace": 96.2
+        },
+        {
+          "season": "1992-93",
+          "team": "MIA",
+          "pace": 94.6
+        },
+        {
+          "season": "1992-93",
+          "team": "MIL",
+          "pace": 96.1
+        },
+        {
+          "season": "1992-93",
+          "team": "MIN",
+          "pace": 93.8
+        },
+        {
+          "season": "1992-93",
+          "team": "NYK",
+          "pace": 94.5
+        },
+        {
+          "season": "1992-93",
+          "team": "OKC",
+          "pace": 96
+        },
+        {
+          "season": "1992-93",
+          "team": "ORL",
+          "pace": 96.3
+        },
+        {
+          "season": "1992-93",
+          "team": "PHI",
+          "pace": 98.5
+        },
+        {
+          "season": "1992-93",
+          "team": "PHX",
+          "pace": 99.8
+        },
+        {
+          "season": "1992-93",
+          "team": "POR",
+          "pace": 99.1
+        },
+        {
+          "season": "1992-93",
+          "team": "SAC",
+          "pace": 100.8
+        },
+        {
+          "season": "1992-93",
+          "team": "SAS",
+          "pace": 95.4
+        },
+        {
+          "season": "1992-93",
+          "team": "UTA",
+          "pace": 96.5
+        },
+        {
+          "season": "1992-93",
+          "team": "WAS",
+          "pace": 97.7
+        }
+      ]
+    },
+    "1993-94": {
+      "fetched_at": "2026-06-29T01:44:28.271Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1994.html",
+      "rows": [
+        {
+          "season": "1993-94",
+          "team": "ATL",
+          "pace": 94.2
+        },
+        {
+          "season": "1993-94",
+          "team": "BKN",
+          "pace": 95.5
+        },
+        {
+          "season": "1993-94",
+          "team": "BOS",
+          "pace": 95.6
+        },
+        {
+          "season": "1993-94",
+          "team": "CHA",
+          "pace": 97.5
+        },
+        {
+          "season": "1993-94",
+          "team": "CHI",
+          "pace": 91.9
+        },
+        {
+          "season": "1993-94",
+          "team": "CLE",
+          "pace": 91.7
+        },
+        {
+          "season": "1993-94",
+          "team": "DAL",
+          "pace": 94.5
+        },
+        {
+          "season": "1993-94",
+          "team": "DEN",
+          "pace": 96.1
+        },
+        {
+          "season": "1993-94",
+          "team": "DET",
+          "pace": 94.2
+        },
+        {
+          "season": "1993-94",
+          "team": "GSW",
+          "pace": 99.1
+        },
+        {
+          "season": "1993-94",
+          "team": "HOU",
+          "pace": 95
+        },
+        {
+          "season": "1993-94",
+          "team": "IND",
+          "pace": 93.3
+        },
+        {
+          "season": "1993-94",
+          "team": "LAC",
+          "pace": 99.6
+        },
+        {
+          "season": "1993-94",
+          "team": "LAL",
+          "pace": 95.5
+        },
+        {
+          "season": "1993-94",
+          "team": "MIA",
+          "pace": 93.8
+        },
+        {
+          "season": "1993-94",
+          "team": "MIL",
+          "pace": 94.5
+        },
+        {
+          "season": "1993-94",
+          "team": "MIN",
+          "pace": 94.7
+        },
+        {
+          "season": "1993-94",
+          "team": "NYK",
+          "pace": 92.8
+        },
+        {
+          "season": "1993-94",
+          "team": "OKC",
+          "pace": 95.1
+        },
+        {
+          "season": "1993-94",
+          "team": "ORL",
+          "pace": 95.2
+        },
+        {
+          "season": "1993-94",
+          "team": "PHI",
+          "pace": 95.7
+        },
+        {
+          "season": "1993-94",
+          "team": "PHX",
+          "pace": 96.7
+        },
+        {
+          "season": "1993-94",
+          "team": "POR",
+          "pace": 98.8
+        },
+        {
+          "season": "1993-94",
+          "team": "SAC",
+          "pace": 97.5
+        },
+        {
+          "season": "1993-94",
+          "team": "SAS",
+          "pace": 90.1
+        },
+        {
+          "season": "1993-94",
+          "team": "UTA",
+          "pace": 93.1
+        },
+        {
+          "season": "1993-94",
+          "team": "WAS",
+          "pace": 95.9
+        }
+      ]
+    },
+    "1994-95": {
+      "fetched_at": "2026-06-29T01:44:32.413Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1995.html",
+      "rows": [
+        {
+          "season": "1994-95",
+          "team": "ATL",
+          "pace": 89.8
+        },
+        {
+          "season": "1994-95",
+          "team": "BKN",
+          "pace": 92.3
+        },
+        {
+          "season": "1994-95",
+          "team": "BOS",
+          "pace": 94
+        },
+        {
+          "season": "1994-95",
+          "team": "CHA",
+          "pace": 91.2
+        },
+        {
+          "season": "1994-95",
+          "team": "CHI",
+          "pace": 92
+        },
+        {
+          "season": "1994-95",
+          "team": "CLE",
+          "pace": 84.8
+        },
+        {
+          "season": "1994-95",
+          "team": "DAL",
+          "pace": 94.7
+        },
+        {
+          "season": "1994-95",
+          "team": "DEN",
+          "pace": 91.5
+        },
+        {
+          "season": "1994-95",
+          "team": "DET",
+          "pace": 93.2
+        },
+        {
+          "season": "1994-95",
+          "team": "GSW",
+          "pace": 97.9
+        },
+        {
+          "season": "1994-95",
+          "team": "HOU",
+          "pace": 94.2
+        },
+        {
+          "season": "1994-95",
+          "team": "IND",
+          "pace": 90
+        },
+        {
+          "season": "1994-95",
+          "team": "LAC",
+          "pace": 94.3
+        },
+        {
+          "season": "1994-95",
+          "team": "LAL",
+          "pace": 95.2
+        },
+        {
+          "season": "1994-95",
+          "team": "MIA",
+          "pace": 92.9
+        },
+        {
+          "season": "1994-95",
+          "team": "MIL",
+          "pace": 92.7
+        },
+        {
+          "season": "1994-95",
+          "team": "MIN",
+          "pace": 91.4
+        },
+        {
+          "season": "1994-95",
+          "team": "NYK",
+          "pace": 91.2
+        },
+        {
+          "season": "1994-95",
+          "team": "OKC",
+          "pace": 95.5
+        },
+        {
+          "season": "1994-95",
+          "team": "ORL",
+          "pace": 95.1
+        },
+        {
+          "season": "1994-95",
+          "team": "PHI",
+          "pace": 91
+        },
+        {
+          "season": "1994-95",
+          "team": "PHX",
+          "pace": 95.9
+        },
+        {
+          "season": "1994-95",
+          "team": "POR",
+          "pace": 93.8
+        },
+        {
+          "season": "1994-95",
+          "team": "SAC",
+          "pace": 92.3
+        },
+        {
+          "season": "1994-95",
+          "team": "SAS",
+          "pace": 94.6
+        },
+        {
+          "season": "1994-95",
+          "team": "UTA",
+          "pace": 92.6
+        },
+        {
+          "season": "1994-95",
+          "team": "WAS",
+          "pace": 94.5
+        }
+      ]
+    },
+    "1995-96": {
+      "fetched_at": "2026-06-29T01:44:36.877Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1996.html",
+      "rows": [
+        {
+          "season": "1995-96",
+          "team": "ATL",
+          "pace": 89.6
+        },
+        {
+          "season": "1995-96",
+          "team": "BKN",
+          "pace": 90.9
+        },
+        {
+          "season": "1995-96",
+          "team": "BOS",
+          "pace": 96.2
+        },
+        {
+          "season": "1995-96",
+          "team": "CHA",
+          "pace": 91.6
+        },
+        {
+          "season": "1995-96",
+          "team": "CHI",
+          "pace": 91.1
+        },
+        {
+          "season": "1995-96",
+          "team": "CLE",
+          "pace": 82.3
+        },
+        {
+          "season": "1995-96",
+          "team": "DAL",
+          "pace": 95.4
+        },
+        {
+          "season": "1995-96",
+          "team": "DEN",
+          "pace": 92.2
+        },
+        {
+          "season": "1995-96",
+          "team": "DET",
+          "pace": 87.7
+        },
+        {
+          "season": "1995-96",
+          "team": "GSW",
+          "pace": 93.4
+        },
+        {
+          "season": "1995-96",
+          "team": "HOU",
+          "pace": 93.2
+        },
+        {
+          "season": "1995-96",
+          "team": "IND",
+          "pace": 89.3
+        },
+        {
+          "season": "1995-96",
+          "team": "LAC",
+          "pace": 93.2
+        },
+        {
+          "season": "1995-96",
+          "team": "LAL",
+          "pace": 92.4
+        },
+        {
+          "season": "1995-96",
+          "team": "MEM",
+          "pace": 91
+        },
+        {
+          "season": "1995-96",
+          "team": "MIA",
+          "pace": 91.1
+        },
+        {
+          "season": "1995-96",
+          "team": "MIL",
+          "pace": 90.2
+        },
+        {
+          "season": "1995-96",
+          "team": "MIN",
+          "pace": 93.5
+        },
+        {
+          "season": "1995-96",
+          "team": "NYK",
+          "pace": 91
+        },
+        {
+          "season": "1995-96",
+          "team": "OKC",
+          "pace": 93.8
+        },
+        {
+          "season": "1995-96",
+          "team": "ORL",
+          "pace": 91.8
+        },
+        {
+          "season": "1995-96",
+          "team": "PHI",
+          "pace": 92.2
+        },
+        {
+          "season": "1995-96",
+          "team": "PHX",
+          "pace": 93.2
+        },
+        {
+          "season": "1995-96",
+          "team": "POR",
+          "pace": 92.6
+        },
+        {
+          "season": "1995-96",
+          "team": "SAC",
+          "pace": 93.4
+        },
+        {
+          "season": "1995-96",
+          "team": "SAS",
+          "pace": 93.3
+        },
+        {
+          "season": "1995-96",
+          "team": "TOR",
+          "pace": 93.2
+        },
+        {
+          "season": "1995-96",
+          "team": "UTA",
+          "pace": 90
+        },
+        {
+          "season": "1995-96",
+          "team": "WAS",
+          "pace": 93.7
+        }
+      ]
+    },
+    "1996-97": {
+      "fetched_at": "2026-06-29T01:44:41.024Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1997.html",
+      "rows": [
+        {
+          "season": "1996-97",
+          "team": "ATL",
+          "pace": 86.8
+        },
+        {
+          "season": "1996-97",
+          "team": "BKN",
+          "pace": 92.4
+        },
+        {
+          "season": "1996-97",
+          "team": "BOS",
+          "pace": 95.8
+        },
+        {
+          "season": "1996-97",
+          "team": "CHA",
+          "pace": 88.6
+        },
+        {
+          "season": "1996-97",
+          "team": "CHI",
+          "pace": 90
+        },
+        {
+          "season": "1996-97",
+          "team": "CLE",
+          "pace": 82.9
+        },
+        {
+          "season": "1996-97",
+          "team": "DAL",
+          "pace": 89
+        },
+        {
+          "season": "1996-97",
+          "team": "DEN",
+          "pace": 92.4
+        },
+        {
+          "season": "1996-97",
+          "team": "DET",
+          "pace": 84.5
+        },
+        {
+          "season": "1996-97",
+          "team": "GSW",
+          "pace": 91.9
+        },
+        {
+          "season": "1996-97",
+          "team": "HOU",
+          "pace": 91.6
+        },
+        {
+          "season": "1996-97",
+          "team": "IND",
+          "pace": 89
+        },
+        {
+          "season": "1996-97",
+          "team": "LAC",
+          "pace": 91.3
+        },
+        {
+          "season": "1996-97",
+          "team": "LAL",
+          "pace": 91.1
+        },
+        {
+          "season": "1996-97",
+          "team": "MEM",
+          "pace": 88.4
+        },
+        {
+          "season": "1996-97",
+          "team": "MIA",
+          "pace": 88.2
+        },
+        {
+          "season": "1996-97",
+          "team": "MIL",
+          "pace": 89.5
+        },
+        {
+          "season": "1996-97",
+          "team": "MIN",
+          "pace": 90.7
+        },
+        {
+          "season": "1996-97",
+          "team": "NYK",
+          "pace": 90.5
+        },
+        {
+          "season": "1996-97",
+          "team": "OKC",
+          "pace": 90.3
+        },
+        {
+          "season": "1996-97",
+          "team": "ORL",
+          "pace": 88.3
+        },
+        {
+          "season": "1996-97",
+          "team": "PHI",
+          "pace": 95.3
+        },
+        {
+          "season": "1996-97",
+          "team": "PHX",
+          "pace": 93.2
+        },
+        {
+          "season": "1996-97",
+          "team": "POR",
+          "pace": 90.9
+        },
+        {
+          "season": "1996-97",
+          "team": "SAC",
+          "pace": 91
+        },
+        {
+          "season": "1996-97",
+          "team": "SAS",
+          "pace": 87.3
+        },
+        {
+          "season": "1996-97",
+          "team": "TOR",
+          "pace": 90.6
+        },
+        {
+          "season": "1996-97",
+          "team": "UTA",
+          "pace": 90
+        },
+        {
+          "season": "1996-97",
+          "team": "WAS",
+          "pace": 92.4
+        }
+      ]
+    },
+    "1997-98": {
+      "fetched_at": "2026-06-29T01:44:45.417Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1998.html",
+      "rows": [
+        {
+          "season": "1997-98",
+          "team": "ATL",
+          "pace": 87.7
+        },
+        {
+          "season": "1997-98",
+          "team": "BKN",
+          "pace": 91
+        },
+        {
+          "season": "1997-98",
+          "team": "BOS",
+          "pace": 93.3
+        },
+        {
+          "season": "1997-98",
+          "team": "CHA",
+          "pace": 89.4
+        },
+        {
+          "season": "1997-98",
+          "team": "CHI",
+          "pace": 89
+        },
+        {
+          "season": "1997-98",
+          "team": "CLE",
+          "pace": 89.9
+        },
+        {
+          "season": "1997-98",
+          "team": "DAL",
+          "pace": 89.9
+        },
+        {
+          "season": "1997-98",
+          "team": "DEN",
+          "pace": 89.7
+        },
+        {
+          "season": "1997-98",
+          "team": "DET",
+          "pace": 88.2
+        },
+        {
+          "season": "1997-98",
+          "team": "GSW",
+          "pace": 91.4
+        },
+        {
+          "season": "1997-98",
+          "team": "HOU",
+          "pace": 91
+        },
+        {
+          "season": "1997-98",
+          "team": "IND",
+          "pace": 87.9
+        },
+        {
+          "season": "1997-98",
+          "team": "LAC",
+          "pace": 92.4
+        },
+        {
+          "season": "1997-98",
+          "team": "LAL",
+          "pace": 93.6
+        },
+        {
+          "season": "1997-98",
+          "team": "MEM",
+          "pace": 92.1
+        },
+        {
+          "season": "1997-98",
+          "team": "MIA",
+          "pace": 87.9
+        },
+        {
+          "season": "1997-98",
+          "team": "MIL",
+          "pace": 90.2
+        },
+        {
+          "season": "1997-98",
+          "team": "MIN",
+          "pace": 92.6
+        },
+        {
+          "season": "1997-98",
+          "team": "NYK",
+          "pace": 88.2
+        },
+        {
+          "season": "1997-98",
+          "team": "OKC",
+          "pace": 89.8
+        },
+        {
+          "season": "1997-98",
+          "team": "ORL",
+          "pace": 87.1
+        },
+        {
+          "season": "1997-98",
+          "team": "PHI",
+          "pace": 90.5
+        },
+        {
+          "season": "1997-98",
+          "team": "PHX",
+          "pace": 91.4
+        },
+        {
+          "season": "1997-98",
+          "team": "POR",
+          "pace": 90
+        },
+        {
+          "season": "1997-98",
+          "team": "SAC",
+          "pace": 92.1
+        },
+        {
+          "season": "1997-98",
+          "team": "SAS",
+          "pace": 88.4
+        },
+        {
+          "season": "1997-98",
+          "team": "TOR",
+          "pace": 92.6
+        },
+        {
+          "season": "1997-98",
+          "team": "UTA",
+          "pace": 89.2
+        },
+        {
+          "season": "1997-98",
+          "team": "WAS",
+          "pace": 91.8
+        }
+      ]
+    },
+    "1998-99": {
+      "fetched_at": "2026-06-29T01:44:49.820Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_1999.html",
+      "rows": [
+        {
+          "season": "1998-99",
+          "team": "ATL",
+          "pace": 85.3
+        },
+        {
+          "season": "1998-99",
+          "team": "BKN",
+          "pace": 91.5
+        },
+        {
+          "season": "1998-99",
+          "team": "BOS",
+          "pace": 91.5
+        },
+        {
+          "season": "1998-99",
+          "team": "CHA",
+          "pace": 89.7
+        },
+        {
+          "season": "1998-99",
+          "team": "CHI",
+          "pace": 88.1
+        },
+        {
+          "season": "1998-99",
+          "team": "CLE",
+          "pace": 86.4
+        },
+        {
+          "season": "1998-99",
+          "team": "DAL",
+          "pace": 89
+        },
+        {
+          "season": "1998-99",
+          "team": "DEN",
+          "pace": 90.5
+        },
+        {
+          "season": "1998-99",
+          "team": "DET",
+          "pace": 86.3
+        },
+        {
+          "season": "1998-99",
+          "team": "GSW",
+          "pace": 88.9
+        },
+        {
+          "season": "1998-99",
+          "team": "HOU",
+          "pace": 88.8
+        },
+        {
+          "season": "1998-99",
+          "team": "IND",
+          "pace": 86.4
+        },
+        {
+          "season": "1998-99",
+          "team": "LAC",
+          "pace": 89.5
+        },
+        {
+          "season": "1998-99",
+          "team": "LAL",
+          "pace": 91.6
+        },
+        {
+          "season": "1998-99",
+          "team": "MEM",
+          "pace": 89
+        },
+        {
+          "season": "1998-99",
+          "team": "MIA",
+          "pace": 84.8
+        },
+        {
+          "season": "1998-99",
+          "team": "MIL",
+          "pace": 87
+        },
+        {
+          "season": "1998-99",
+          "team": "MIN",
+          "pace": 91
+        },
+        {
+          "season": "1998-99",
+          "team": "NYK",
+          "pace": 86.9
+        },
+        {
+          "season": "1998-99",
+          "team": "OKC",
+          "pace": 89.6
+        },
+        {
+          "season": "1998-99",
+          "team": "ORL",
+          "pace": 88.8
+        },
+        {
+          "season": "1998-99",
+          "team": "PHI",
+          "pace": 88.6
+        },
+        {
+          "season": "1998-99",
+          "team": "PHX",
+          "pace": 90
+        },
+        {
+          "season": "1998-99",
+          "team": "POR",
+          "pace": 89.2
+        },
+        {
+          "season": "1998-99",
+          "team": "SAC",
+          "pace": 96
+        },
+        {
+          "season": "1998-99",
+          "team": "SAS",
+          "pace": 88.6
+        },
+        {
+          "season": "1998-99",
+          "team": "TOR",
+          "pace": 88.8
+        },
+        {
+          "season": "1998-99",
+          "team": "UTA",
+          "pace": 87
+        },
+        {
+          "season": "1998-99",
+          "team": "WAS",
+          "pace": 89.8
+        }
+      ]
+    },
+    "1999-00": {
+      "fetched_at": "2026-06-29T01:44:54.228Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2000.html",
+      "rows": [
+        {
+          "season": "1999-00",
+          "team": "ATL",
+          "pace": 91.7
+        },
+        {
+          "season": "1999-00",
+          "team": "BKN",
+          "pace": 92.5
+        },
+        {
+          "season": "1999-00",
+          "team": "BOS",
+          "pace": 94.6
+        },
+        {
+          "season": "1999-00",
+          "team": "CHA",
+          "pace": 93.9
+        },
+        {
+          "season": "1999-00",
+          "team": "CHI",
+          "pace": 89.4
+        },
+        {
+          "season": "1999-00",
+          "team": "CLE",
+          "pace": 95.7
+        },
+        {
+          "season": "1999-00",
+          "team": "DAL",
+          "pace": 94.9
+        },
+        {
+          "season": "1999-00",
+          "team": "DEN",
+          "pace": 94.7
+        },
+        {
+          "season": "1999-00",
+          "team": "DET",
+          "pace": 95.7
+        },
+        {
+          "season": "1999-00",
+          "team": "GSW",
+          "pace": 95.4
+        },
+        {
+          "season": "1999-00",
+          "team": "HOU",
+          "pace": 94.2
+        },
+        {
+          "season": "1999-00",
+          "team": "IND",
+          "pace": 93.1
+        },
+        {
+          "season": "1999-00",
+          "team": "LAC",
+          "pace": 93.9
+        },
+        {
+          "season": "1999-00",
+          "team": "LAL",
+          "pace": 93.3
+        },
+        {
+          "season": "1999-00",
+          "team": "MEM",
+          "pace": 91
+        },
+        {
+          "season": "1999-00",
+          "team": "MIA",
+          "pace": 89.7
+        },
+        {
+          "season": "1999-00",
+          "team": "MIL",
+          "pace": 92.7
+        },
+        {
+          "season": "1999-00",
+          "team": "MIN",
+          "pace": 91.8
+        },
+        {
+          "season": "1999-00",
+          "team": "NYK",
+          "pace": 89.2
+        },
+        {
+          "season": "1999-00",
+          "team": "OKC",
+          "pace": 93.4
+        },
+        {
+          "season": "1999-00",
+          "team": "ORL",
+          "pace": 97.3
+        },
+        {
+          "season": "1999-00",
+          "team": "PHI",
+          "pace": 92.7
+        },
+        {
+          "season": "1999-00",
+          "team": "PHX",
+          "pace": 94
+        },
+        {
+          "season": "1999-00",
+          "team": "POR",
+          "pace": 89.9
+        },
+        {
+          "season": "1999-00",
+          "team": "SAC",
+          "pace": 99.3
+        },
+        {
+          "season": "1999-00",
+          "team": "SAS",
+          "pace": 90.8
+        },
+        {
+          "season": "1999-00",
+          "team": "TOR",
+          "pace": 92.5
+        },
+        {
+          "season": "1999-00",
+          "team": "UTA",
+          "pace": 89.6
+        },
+        {
+          "season": "1999-00",
+          "team": "WAS",
+          "pace": 92.7
+        }
+      ]
+    },
+    "2000-01": {
+      "fetched_at": "2026-06-29T01:44:58.643Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2001.html",
+      "rows": [
+        {
+          "season": "2000-01",
+          "team": "ATL",
+          "pace": 91.9
+        },
+        {
+          "season": "2000-01",
+          "team": "BKN",
+          "pace": 91.8
+        },
+        {
+          "season": "2000-01",
+          "team": "BOS",
+          "pace": 92.6
+        },
+        {
+          "season": "2000-01",
+          "team": "CHA",
+          "pace": 89.4
+        },
+        {
+          "season": "2000-01",
+          "team": "CHI",
+          "pace": 89.3
+        },
+        {
+          "season": "2000-01",
+          "team": "CLE",
+          "pace": 91.2
+        },
+        {
+          "season": "2000-01",
+          "team": "DAL",
+          "pace": 93.2
+        },
+        {
+          "season": "2000-01",
+          "team": "DEN",
+          "pace": 92.6
+        },
+        {
+          "season": "2000-01",
+          "team": "DET",
+          "pace": 94.7
+        },
+        {
+          "season": "2000-01",
+          "team": "GSW",
+          "pace": 94.1
+        },
+        {
+          "season": "2000-01",
+          "team": "HOU",
+          "pace": 90.4
+        },
+        {
+          "season": "2000-01",
+          "team": "IND",
+          "pace": 89.4
+        },
+        {
+          "season": "2000-01",
+          "team": "LAC",
+          "pace": 89.6
+        },
+        {
+          "season": "2000-01",
+          "team": "LAL",
+          "pace": 91.7
+        },
+        {
+          "season": "2000-01",
+          "team": "MEM",
+          "pace": 91.7
+        },
+        {
+          "season": "2000-01",
+          "team": "MIA",
+          "pace": 87.1
+        },
+        {
+          "season": "2000-01",
+          "team": "MIL",
+          "pace": 92.1
+        },
+        {
+          "season": "2000-01",
+          "team": "MIN",
+          "pace": 91.8
+        },
+        {
+          "season": "2000-01",
+          "team": "NYK",
+          "pace": 86.7
+        },
+        {
+          "season": "2000-01",
+          "team": "OKC",
+          "pace": 91.6
+        },
+        {
+          "season": "2000-01",
+          "team": "ORL",
+          "pace": 93.2
+        },
+        {
+          "season": "2000-01",
+          "team": "PHI",
+          "pace": 90.6
+        },
+        {
+          "season": "2000-01",
+          "team": "PHX",
+          "pace": 93.1
+        },
+        {
+          "season": "2000-01",
+          "team": "POR",
+          "pace": 89.1
+        },
+        {
+          "season": "2000-01",
+          "team": "SAC",
+          "pace": 94.4
+        },
+        {
+          "season": "2000-01",
+          "team": "SAS",
+          "pace": 89.6
+        },
+        {
+          "season": "2000-01",
+          "team": "TOR",
+          "pace": 90.9
+        },
+        {
+          "season": "2000-01",
+          "team": "UTA",
+          "pace": 89.8
+        },
+        {
+          "season": "2000-01",
+          "team": "WAS",
+          "pace": 92.7
+        }
+      ]
+    },
+    "2001-02": {
+      "fetched_at": "2026-06-29T01:45:03.043Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2002.html",
+      "rows": [
+        {
+          "season": "2001-02",
+          "team": "ATL",
+          "pace": 91.9
+        },
+        {
+          "season": "2001-02",
+          "team": "BKN",
+          "pace": 91.8
+        },
+        {
+          "season": "2001-02",
+          "team": "BOS",
+          "pace": 92.5
+        },
+        {
+          "season": "2001-02",
+          "team": "CHA",
+          "pace": 89.7
+        },
+        {
+          "season": "2001-02",
+          "team": "CHI",
+          "pace": 90.5
+        },
+        {
+          "season": "2001-02",
+          "team": "CLE",
+          "pace": 90.3
+        },
+        {
+          "season": "2001-02",
+          "team": "DAL",
+          "pace": 92.8
+        },
+        {
+          "season": "2001-02",
+          "team": "DEN",
+          "pace": 90.4
+        },
+        {
+          "season": "2001-02",
+          "team": "DET",
+          "pace": 90
+        },
+        {
+          "season": "2001-02",
+          "team": "GSW",
+          "pace": 94.5
+        },
+        {
+          "season": "2001-02",
+          "team": "HOU",
+          "pace": 88.2
+        },
+        {
+          "season": "2001-02",
+          "team": "IND",
+          "pace": 91.9
+        },
+        {
+          "season": "2001-02",
+          "team": "LAC",
+          "pace": 90.1
+        },
+        {
+          "season": "2001-02",
+          "team": "LAL",
+          "pace": 92.1
+        },
+        {
+          "season": "2001-02",
+          "team": "MEM",
+          "pace": 91.1
+        },
+        {
+          "season": "2001-02",
+          "team": "MIA",
+          "pace": 87.4
+        },
+        {
+          "season": "2001-02",
+          "team": "MIL",
+          "pace": 90.2
+        },
+        {
+          "season": "2001-02",
+          "team": "MIN",
+          "pace": 90.5
+        },
+        {
+          "season": "2001-02",
+          "team": "NYK",
+          "pace": 89.7
+        },
+        {
+          "season": "2001-02",
+          "team": "OKC",
+          "pace": 89
+        },
+        {
+          "season": "2001-02",
+          "team": "ORL",
+          "pace": 93.2
+        },
+        {
+          "season": "2001-02",
+          "team": "PHI",
+          "pace": 88.9
+        },
+        {
+          "season": "2001-02",
+          "team": "PHX",
+          "pace": 91.4
+        },
+        {
+          "season": "2001-02",
+          "team": "POR",
+          "pace": 89.3
+        },
+        {
+          "season": "2001-02",
+          "team": "SAC",
+          "pace": 95.6
+        },
+        {
+          "season": "2001-02",
+          "team": "SAS",
+          "pace": 90
+        },
+        {
+          "season": "2001-02",
+          "team": "TOR",
+          "pace": 88.8
+        },
+        {
+          "season": "2001-02",
+          "team": "UTA",
+          "pace": 90.3
+        },
+        {
+          "season": "2001-02",
+          "team": "WAS",
+          "pace": 88.3
+        }
+      ]
+    },
+    "2002-03": {
+      "fetched_at": "2026-06-29T01:45:07.426Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2003.html",
+      "rows": [
+        {
+          "season": "2002-03",
+          "team": "ATL",
+          "pace": 91
+        },
+        {
+          "season": "2002-03",
+          "team": "BKN",
+          "pace": 91.6
+        },
+        {
+          "season": "2002-03",
+          "team": "BOS",
+          "pace": 90.9
+        },
+        {
+          "season": "2002-03",
+          "team": "CHI",
+          "pace": 93.5
+        },
+        {
+          "season": "2002-03",
+          "team": "CLE",
+          "pace": 94
+        },
+        {
+          "season": "2002-03",
+          "team": "DAL",
+          "pace": 92.5
+        },
+        {
+          "season": "2002-03",
+          "team": "DEN",
+          "pace": 91
+        },
+        {
+          "season": "2002-03",
+          "team": "DET",
+          "pace": 86.8
+        },
+        {
+          "season": "2002-03",
+          "team": "GSW",
+          "pace": 94.2
+        },
+        {
+          "season": "2002-03",
+          "team": "HOU",
+          "pace": 88.8
+        },
+        {
+          "season": "2002-03",
+          "team": "IND",
+          "pace": 91.6
+        },
+        {
+          "season": "2002-03",
+          "team": "LAC",
+          "pace": 91.3
+        },
+        {
+          "season": "2002-03",
+          "team": "LAL",
+          "pace": 92.5
+        },
+        {
+          "season": "2002-03",
+          "team": "MEM",
+          "pace": 92.7
+        },
+        {
+          "season": "2002-03",
+          "team": "MIA",
+          "pace": 87.8
+        },
+        {
+          "season": "2002-03",
+          "team": "MIL",
+          "pace": 90.4
+        },
+        {
+          "season": "2002-03",
+          "team": "MIN",
+          "pace": 91.9
+        },
+        {
+          "season": "2002-03",
+          "team": "NOP",
+          "pace": 89.4
+        },
+        {
+          "season": "2002-03",
+          "team": "NYK",
+          "pace": 90.7
+        },
+        {
+          "season": "2002-03",
+          "team": "OKC",
+          "pace": 88
+        },
+        {
+          "season": "2002-03",
+          "team": "ORL",
+          "pace": 93.1
+        },
+        {
+          "season": "2002-03",
+          "team": "PHI",
+          "pace": 91.4
+        },
+        {
+          "season": "2002-03",
+          "team": "PHX",
+          "pace": 91.5
+        },
+        {
+          "season": "2002-03",
+          "team": "POR",
+          "pace": 89.4
+        },
+        {
+          "season": "2002-03",
+          "team": "SAC",
+          "pace": 95.4
+        },
+        {
+          "season": "2002-03",
+          "team": "SAS",
+          "pace": 90
+        },
+        {
+          "season": "2002-03",
+          "team": "TOR",
+          "pace": 89.9
+        },
+        {
+          "season": "2002-03",
+          "team": "UTA",
+          "pace": 89.3
+        },
+        {
+          "season": "2002-03",
+          "team": "WAS",
+          "pace": 88.2
+        }
+      ]
+    },
+    "2003-04": {
+      "fetched_at": "2026-06-29T01:45:11.814Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2004.html",
+      "rows": [
+        {
+          "season": "2003-04",
+          "team": "ATL",
+          "pace": 90.8
+        },
+        {
+          "season": "2003-04",
+          "team": "BKN",
+          "pace": 89.4
+        },
+        {
+          "season": "2003-04",
+          "team": "BOS",
+          "pace": 93.2
+        },
+        {
+          "season": "2003-04",
+          "team": "CHI",
+          "pace": 92.2
+        },
+        {
+          "season": "2003-04",
+          "team": "CLE",
+          "pace": 90.8
+        },
+        {
+          "season": "2003-04",
+          "team": "DAL",
+          "pace": 93.2
+        },
+        {
+          "season": "2003-04",
+          "team": "DEN",
+          "pace": 93.3
+        },
+        {
+          "season": "2003-04",
+          "team": "DET",
+          "pace": 87.9
+        },
+        {
+          "season": "2003-04",
+          "team": "GSW",
+          "pace": 89.8
+        },
+        {
+          "season": "2003-04",
+          "team": "HOU",
+          "pace": 87.8
+        },
+        {
+          "season": "2003-04",
+          "team": "IND",
+          "pace": 87.5
+        },
+        {
+          "season": "2003-04",
+          "team": "LAC",
+          "pace": 91
+        },
+        {
+          "season": "2003-04",
+          "team": "LAL",
+          "pace": 92.3
+        },
+        {
+          "season": "2003-04",
+          "team": "MEM",
+          "pace": 91.4
+        },
+        {
+          "season": "2003-04",
+          "team": "MIA",
+          "pace": 88
+        },
+        {
+          "season": "2003-04",
+          "team": "MIL",
+          "pace": 91.6
+        },
+        {
+          "season": "2003-04",
+          "team": "MIN",
+          "pace": 89
+        },
+        {
+          "season": "2003-04",
+          "team": "NOP",
+          "pace": 89.1
+        },
+        {
+          "season": "2003-04",
+          "team": "NYK",
+          "pace": 89.5
+        },
+        {
+          "season": "2003-04",
+          "team": "OKC",
+          "pace": 89.9
+        },
+        {
+          "season": "2003-04",
+          "team": "ORL",
+          "pace": 90.8
+        },
+        {
+          "season": "2003-04",
+          "team": "PHI",
+          "pace": 88
+        },
+        {
+          "season": "2003-04",
+          "team": "PHX",
+          "pace": 92.6
+        },
+        {
+          "season": "2003-04",
+          "team": "POR",
+          "pace": 86.2
+        },
+        {
+          "season": "2003-04",
+          "team": "SAC",
+          "pace": 92.8
+        },
+        {
+          "season": "2003-04",
+          "team": "SAS",
+          "pace": 89.2
+        },
+        {
+          "season": "2003-04",
+          "team": "TOR",
+          "pace": 86.8
+        },
+        {
+          "season": "2003-04",
+          "team": "UTA",
+          "pace": 86.6
+        },
+        {
+          "season": "2003-04",
+          "team": "WAS",
+          "pace": 92.2
+        }
+      ]
+    },
+    "2004-05": {
+      "fetched_at": "2026-06-29T01:45:16.220Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2005.html",
+      "rows": [
+        {
+          "season": "2004-05",
+          "team": "ATL",
+          "pace": 91.4
+        },
+        {
+          "season": "2004-05",
+          "team": "BKN",
+          "pace": 89.1
+        },
+        {
+          "season": "2004-05",
+          "team": "BOS",
+          "pace": 93.3
+        },
+        {
+          "season": "2004-05",
+          "team": "CHA",
+          "pace": 92.3
+        },
+        {
+          "season": "2004-05",
+          "team": "CHI",
+          "pace": 92.4
+        },
+        {
+          "season": "2004-05",
+          "team": "CLE",
+          "pace": 89.7
+        },
+        {
+          "season": "2004-05",
+          "team": "DAL",
+          "pace": 92.7
+        },
+        {
+          "season": "2004-05",
+          "team": "DEN",
+          "pace": 93.5
+        },
+        {
+          "season": "2004-05",
+          "team": "DET",
+          "pace": 87.2
+        },
+        {
+          "season": "2004-05",
+          "team": "GSW",
+          "pace": 93.3
+        },
+        {
+          "season": "2004-05",
+          "team": "HOU",
+          "pace": 88.8
+        },
+        {
+          "season": "2004-05",
+          "team": "IND",
+          "pace": 87.2
+        },
+        {
+          "season": "2004-05",
+          "team": "LAC",
+          "pace": 89.1
+        },
+        {
+          "season": "2004-05",
+          "team": "LAL",
+          "pace": 90.8
+        },
+        {
+          "season": "2004-05",
+          "team": "MEM",
+          "pace": 88.5
+        },
+        {
+          "season": "2004-05",
+          "team": "MIA",
+          "pace": 90.8
+        },
+        {
+          "season": "2004-05",
+          "team": "MIL",
+          "pace": 90.8
+        },
+        {
+          "season": "2004-05",
+          "team": "MIN",
+          "pace": 89.1
+        },
+        {
+          "season": "2004-05",
+          "team": "NOP",
+          "pace": 87.6
+        },
+        {
+          "season": "2004-05",
+          "team": "NYK",
+          "pace": 90.7
+        },
+        {
+          "season": "2004-05",
+          "team": "OKC",
+          "pace": 87.9
+        },
+        {
+          "season": "2004-05",
+          "team": "ORL",
+          "pace": 94.7
+        },
+        {
+          "season": "2004-05",
+          "team": "PHI",
+          "pace": 94.9
+        },
+        {
+          "season": "2004-05",
+          "team": "PHX",
+          "pace": 95.9
+        },
+        {
+          "season": "2004-05",
+          "team": "POR",
+          "pace": 89.8
+        },
+        {
+          "season": "2004-05",
+          "team": "SAC",
+          "pace": 93
+        },
+        {
+          "season": "2004-05",
+          "team": "SAS",
+          "pace": 88.9
+        },
+        {
+          "season": "2004-05",
+          "team": "TOR",
+          "pace": 92.7
+        },
+        {
+          "season": "2004-05",
+          "team": "UTA",
+          "pace": 88.4
+        },
+        {
+          "season": "2004-05",
+          "team": "WAS",
+          "pace": 93.3
+        }
+      ]
+    },
+    "2005-06": {
+      "fetched_at": "2026-06-29T01:45:20.599Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2006.html",
+      "rows": [
+        {
+          "season": "2005-06",
+          "team": "ATL",
+          "pace": 90.4
+        },
+        {
+          "season": "2005-06",
+          "team": "BKN",
+          "pace": 89.8
+        },
+        {
+          "season": "2005-06",
+          "team": "BOS",
+          "pace": 92.2
+        },
+        {
+          "season": "2005-06",
+          "team": "CHA",
+          "pace": 93.4
+        },
+        {
+          "season": "2005-06",
+          "team": "CHI",
+          "pace": 92.9
+        },
+        {
+          "season": "2005-06",
+          "team": "CLE",
+          "pace": 89.8
+        },
+        {
+          "season": "2005-06",
+          "team": "DAL",
+          "pace": 87.8
+        },
+        {
+          "season": "2005-06",
+          "team": "DEN",
+          "pace": 93.9
+        },
+        {
+          "season": "2005-06",
+          "team": "DET",
+          "pace": 86.8
+        },
+        {
+          "season": "2005-06",
+          "team": "GSW",
+          "pace": 93.3
+        },
+        {
+          "season": "2005-06",
+          "team": "HOU",
+          "pace": 88
+        },
+        {
+          "season": "2005-06",
+          "team": "IND",
+          "pace": 89.7
+        },
+        {
+          "season": "2005-06",
+          "team": "LAC",
+          "pace": 91.7
+        },
+        {
+          "season": "2005-06",
+          "team": "LAL",
+          "pace": 90.9
+        },
+        {
+          "season": "2005-06",
+          "team": "MEM",
+          "pace": 86.3
+        },
+        {
+          "season": "2005-06",
+          "team": "MIA",
+          "pace": 91.6
+        },
+        {
+          "season": "2005-06",
+          "team": "MIL",
+          "pace": 91.2
+        },
+        {
+          "season": "2005-06",
+          "team": "MIN",
+          "pace": 88.8
+        },
+        {
+          "season": "2005-06",
+          "team": "NOP",
+          "pace": 89
+        },
+        {
+          "season": "2005-06",
+          "team": "NYK",
+          "pace": 90.8
+        },
+        {
+          "season": "2005-06",
+          "team": "OKC",
+          "pace": 91.6
+        },
+        {
+          "season": "2005-06",
+          "team": "ORL",
+          "pace": 88.3
+        },
+        {
+          "season": "2005-06",
+          "team": "PHI",
+          "pace": 92.7
+        },
+        {
+          "season": "2005-06",
+          "team": "PHX",
+          "pace": 95.8
+        },
+        {
+          "season": "2005-06",
+          "team": "POR",
+          "pace": 87.6
+        },
+        {
+          "season": "2005-06",
+          "team": "SAC",
+          "pace": 91.9
+        },
+        {
+          "season": "2005-06",
+          "team": "SAS",
+          "pace": 88.5
+        },
+        {
+          "season": "2005-06",
+          "team": "TOR",
+          "pace": 91.1
+        },
+        {
+          "season": "2005-06",
+          "team": "UTA",
+          "pace": 87.8
+        },
+        {
+          "season": "2005-06",
+          "team": "WAS",
+          "pace": 92.3
+        }
+      ]
+    },
+    "2006-07": {
+      "fetched_at": "2026-06-29T01:45:24.994Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2007.html",
+      "rows": [
+        {
+          "season": "2006-07",
+          "team": "ATL",
+          "pace": 90
+        },
+        {
+          "season": "2006-07",
+          "team": "BKN",
+          "pace": 91.4
+        },
+        {
+          "season": "2006-07",
+          "team": "BOS",
+          "pace": 92
+        },
+        {
+          "season": "2006-07",
+          "team": "CHA",
+          "pace": 92
+        },
+        {
+          "season": "2006-07",
+          "team": "CHI",
+          "pace": 93.6
+        },
+        {
+          "season": "2006-07",
+          "team": "CLE",
+          "pace": 90.8
+        },
+        {
+          "season": "2006-07",
+          "team": "DAL",
+          "pace": 89.5
+        },
+        {
+          "season": "2006-07",
+          "team": "DEN",
+          "pace": 97.4
+        },
+        {
+          "season": "2006-07",
+          "team": "DET",
+          "pace": 87.3
+        },
+        {
+          "season": "2006-07",
+          "team": "GSW",
+          "pace": 99.2
+        },
+        {
+          "season": "2006-07",
+          "team": "HOU",
+          "pace": 90.7
+        },
+        {
+          "season": "2006-07",
+          "team": "IND",
+          "pace": 92.4
+        },
+        {
+          "season": "2006-07",
+          "team": "LAC",
+          "pace": 90.8
+        },
+        {
+          "season": "2006-07",
+          "team": "LAL",
+          "pace": 93.5
+        },
+        {
+          "season": "2006-07",
+          "team": "MEM",
+          "pace": 93.6
+        },
+        {
+          "season": "2006-07",
+          "team": "MIA",
+          "pace": 89.9
+        },
+        {
+          "season": "2006-07",
+          "team": "MIL",
+          "pace": 92.3
+        },
+        {
+          "season": "2006-07",
+          "team": "MIN",
+          "pace": 91
+        },
+        {
+          "season": "2006-07",
+          "team": "NOP",
+          "pace": 90.2
+        },
+        {
+          "season": "2006-07",
+          "team": "NYK",
+          "pace": 90.8
+        },
+        {
+          "season": "2006-07",
+          "team": "OKC",
+          "pace": 91.8
+        },
+        {
+          "season": "2006-07",
+          "team": "ORL",
+          "pace": 89.9
+        },
+        {
+          "season": "2006-07",
+          "team": "PHI",
+          "pace": 90.7
+        },
+        {
+          "season": "2006-07",
+          "team": "PHX",
+          "pace": 95.6
+        },
+        {
+          "season": "2006-07",
+          "team": "POR",
+          "pace": 88.3
+        },
+        {
+          "season": "2006-07",
+          "team": "SAC",
+          "pace": 94.8
+        },
+        {
+          "season": "2006-07",
+          "team": "SAS",
+          "pace": 89.8
+        },
+        {
+          "season": "2006-07",
+          "team": "TOR",
+          "pace": 92.6
+        },
+        {
+          "season": "2006-07",
+          "team": "UTA",
+          "pace": 91.6
+        },
+        {
+          "season": "2006-07",
+          "team": "WAS",
+          "pace": 94.1
+        }
+      ]
+    },
+    "2007-08": {
+      "fetched_at": "2026-06-29T01:45:29.349Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2008.html",
+      "rows": [
+        {
+          "season": "2007-08",
+          "team": "ATL",
+          "pace": 91.1
+        },
+        {
+          "season": "2007-08",
+          "team": "BKN",
+          "pace": 91.5
+        },
+        {
+          "season": "2007-08",
+          "team": "BOS",
+          "pace": 90.9
+        },
+        {
+          "season": "2007-08",
+          "team": "CHA",
+          "pace": 91.8
+        },
+        {
+          "season": "2007-08",
+          "team": "CHI",
+          "pace": 93
+        },
+        {
+          "season": "2007-08",
+          "team": "CLE",
+          "pace": 90.2
+        },
+        {
+          "season": "2007-08",
+          "team": "DAL",
+          "pace": 90.2
+        },
+        {
+          "season": "2007-08",
+          "team": "DEN",
+          "pace": 99.7
+        },
+        {
+          "season": "2007-08",
+          "team": "DET",
+          "pace": 87.3
+        },
+        {
+          "season": "2007-08",
+          "team": "GSW",
+          "pace": 98.8
+        },
+        {
+          "season": "2007-08",
+          "team": "HOU",
+          "pace": 90.4
+        },
+        {
+          "season": "2007-08",
+          "team": "IND",
+          "pace": 97.7
+        },
+        {
+          "season": "2007-08",
+          "team": "LAC",
+          "pace": 92.1
+        },
+        {
+          "season": "2007-08",
+          "team": "LAL",
+          "pace": 95.6
+        },
+        {
+          "season": "2007-08",
+          "team": "MEM",
+          "pace": 95.3
+        },
+        {
+          "season": "2007-08",
+          "team": "MIA",
+          "pace": 90.2
+        },
+        {
+          "season": "2007-08",
+          "team": "MIL",
+          "pace": 91.3
+        },
+        {
+          "season": "2007-08",
+          "team": "MIN",
+          "pace": 91.9
+        },
+        {
+          "season": "2007-08",
+          "team": "NOP",
+          "pace": 89.9
+        },
+        {
+          "season": "2007-08",
+          "team": "NYK",
+          "pace": 91.6
+        },
+        {
+          "season": "2007-08",
+          "team": "OKC",
+          "pace": 96.3
+        },
+        {
+          "season": "2007-08",
+          "team": "ORL",
+          "pace": 93.4
+        },
+        {
+          "season": "2007-08",
+          "team": "PHI",
+          "pace": 90.4
+        },
+        {
+          "season": "2007-08",
+          "team": "PHX",
+          "pace": 96.7
+        },
+        {
+          "season": "2007-08",
+          "team": "POR",
+          "pace": 87.9
+        },
+        {
+          "season": "2007-08",
+          "team": "SAC",
+          "pace": 94.7
+        },
+        {
+          "season": "2007-08",
+          "team": "SAS",
+          "pace": 88.8
+        },
+        {
+          "season": "2007-08",
+          "team": "TOR",
+          "pace": 90.2
+        },
+        {
+          "season": "2007-08",
+          "team": "UTA",
+          "pace": 93.2
+        },
+        {
+          "season": "2007-08",
+          "team": "WAS",
+          "pace": 89.5
+        }
+      ]
+    },
+    "2008-09": {
+      "fetched_at": "2026-06-29T01:45:33.746Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2009.html",
+      "rows": [
+        {
+          "season": "2008-09",
+          "team": "ATL",
+          "pace": 89.6
+        },
+        {
+          "season": "2008-09",
+          "team": "BKN",
+          "pace": 89.9
+        },
+        {
+          "season": "2008-09",
+          "team": "BOS",
+          "pace": 90.4
+        },
+        {
+          "season": "2008-09",
+          "team": "CHA",
+          "pace": 88.3
+        },
+        {
+          "season": "2008-09",
+          "team": "CHI",
+          "pace": 93.1
+        },
+        {
+          "season": "2008-09",
+          "team": "CLE",
+          "pace": 88.7
+        },
+        {
+          "season": "2008-09",
+          "team": "DAL",
+          "pace": 91.5
+        },
+        {
+          "season": "2008-09",
+          "team": "DEN",
+          "pace": 94.3
+        },
+        {
+          "season": "2008-09",
+          "team": "DET",
+          "pace": 86.7
+        },
+        {
+          "season": "2008-09",
+          "team": "GSW",
+          "pace": 98.2
+        },
+        {
+          "season": "2008-09",
+          "team": "HOU",
+          "pace": 90.2
+        },
+        {
+          "season": "2008-09",
+          "team": "IND",
+          "pace": 96.5
+        },
+        {
+          "season": "2008-09",
+          "team": "LAC",
+          "pace": 92.1
+        },
+        {
+          "season": "2008-09",
+          "team": "LAL",
+          "pace": 94.3
+        },
+        {
+          "season": "2008-09",
+          "team": "MEM",
+          "pace": 90.1
+        },
+        {
+          "season": "2008-09",
+          "team": "MIA",
+          "pace": 89.9
+        },
+        {
+          "season": "2008-09",
+          "team": "MIL",
+          "pace": 92.6
+        },
+        {
+          "season": "2008-09",
+          "team": "MIN",
+          "pace": 91.6
+        },
+        {
+          "season": "2008-09",
+          "team": "NOP",
+          "pace": 87.8
+        },
+        {
+          "season": "2008-09",
+          "team": "NYK",
+          "pace": 96.7
+        },
+        {
+          "season": "2008-09",
+          "team": "OKC",
+          "pace": 93.6
+        },
+        {
+          "season": "2008-09",
+          "team": "ORL",
+          "pace": 92.3
+        },
+        {
+          "season": "2008-09",
+          "team": "PHI",
+          "pace": 90
+        },
+        {
+          "season": "2008-09",
+          "team": "PHX",
+          "pace": 96
+        },
+        {
+          "season": "2008-09",
+          "team": "POR",
+          "pace": 86.6
+        },
+        {
+          "season": "2008-09",
+          "team": "SAC",
+          "pace": 94.2
+        },
+        {
+          "season": "2008-09",
+          "team": "SAS",
+          "pace": 88.4
+        },
+        {
+          "season": "2008-09",
+          "team": "TOR",
+          "pace": 92
+        },
+        {
+          "season": "2008-09",
+          "team": "UTA",
+          "pace": 93.1
+        },
+        {
+          "season": "2008-09",
+          "team": "WAS",
+          "pace": 91
+        }
+      ]
+    },
+    "2009-10": {
+      "fetched_at": "2026-06-29T01:45:38.179Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2010.html",
+      "rows": [
+        {
+          "season": "2009-10",
+          "team": "ATL",
+          "pace": 90.1
+        },
+        {
+          "season": "2009-10",
+          "team": "BKN",
+          "pace": 91.4
+        },
+        {
+          "season": "2009-10",
+          "team": "BOS",
+          "pace": 91.6
+        },
+        {
+          "season": "2009-10",
+          "team": "CHA",
+          "pace": 90.4
+        },
+        {
+          "season": "2009-10",
+          "team": "CHI",
+          "pace": 93.1
+        },
+        {
+          "season": "2009-10",
+          "team": "CLE",
+          "pace": 91.4
+        },
+        {
+          "season": "2009-10",
+          "team": "DAL",
+          "pace": 92.5
+        },
+        {
+          "season": "2009-10",
+          "team": "DEN",
+          "pace": 94.8
+        },
+        {
+          "season": "2009-10",
+          "team": "DET",
+          "pace": 88.5
+        },
+        {
+          "season": "2009-10",
+          "team": "GSW",
+          "pace": 100.4
+        },
+        {
+          "season": "2009-10",
+          "team": "HOU",
+          "pace": 94
+        },
+        {
+          "season": "2009-10",
+          "team": "IND",
+          "pace": 97.1
+        },
+        {
+          "season": "2009-10",
+          "team": "LAC",
+          "pace": 92.6
+        },
+        {
+          "season": "2009-10",
+          "team": "LAL",
+          "pace": 92.8
+        },
+        {
+          "season": "2009-10",
+          "team": "MEM",
+          "pace": 93.6
+        },
+        {
+          "season": "2009-10",
+          "team": "MIA",
+          "pace": 89.6
+        },
+        {
+          "season": "2009-10",
+          "team": "MIL",
+          "pace": 91.7
+        },
+        {
+          "season": "2009-10",
+          "team": "MIN",
+          "pace": 96.1
+        },
+        {
+          "season": "2009-10",
+          "team": "NOP",
+          "pace": 92.6
+        },
+        {
+          "season": "2009-10",
+          "team": "NYK",
+          "pace": 94
+        },
+        {
+          "season": "2009-10",
+          "team": "OKC",
+          "pace": 93.1
+        },
+        {
+          "season": "2009-10",
+          "team": "ORL",
+          "pace": 92
+        },
+        {
+          "season": "2009-10",
+          "team": "PHI",
+          "pace": 91.6
+        },
+        {
+          "season": "2009-10",
+          "team": "PHX",
+          "pace": 95.3
+        },
+        {
+          "season": "2009-10",
+          "team": "POR",
+          "pace": 87.7
+        },
+        {
+          "season": "2009-10",
+          "team": "SAC",
+          "pace": 94
+        },
+        {
+          "season": "2009-10",
+          "team": "SAS",
+          "pace": 91.7
+        },
+        {
+          "season": "2009-10",
+          "team": "TOR",
+          "pace": 93.1
+        },
+        {
+          "season": "2009-10",
+          "team": "UTA",
+          "pace": 93.8
+        },
+        {
+          "season": "2009-10",
+          "team": "WAS",
+          "pace": 91.6
+        }
+      ]
+    },
+    "2010-11": {
+      "fetched_at": "2026-06-29T01:45:42.349Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2011.html",
+      "rows": [
+        {
+          "season": "2010-11",
+          "team": "ATL",
+          "pace": 89.3
+        },
+        {
+          "season": "2010-11",
+          "team": "BKN",
+          "pace": 89.9
+        },
+        {
+          "season": "2010-11",
+          "team": "BOS",
+          "pace": 90.4
+        },
+        {
+          "season": "2010-11",
+          "team": "CHA",
+          "pace": 89.6
+        },
+        {
+          "season": "2010-11",
+          "team": "CHI",
+          "pace": 90.4
+        },
+        {
+          "season": "2010-11",
+          "team": "CLE",
+          "pace": 93
+        },
+        {
+          "season": "2010-11",
+          "team": "DAL",
+          "pace": 91.3
+        },
+        {
+          "season": "2010-11",
+          "team": "DEN",
+          "pace": 95.6
+        },
+        {
+          "season": "2010-11",
+          "team": "DET",
+          "pace": 89.2
+        },
+        {
+          "season": "2010-11",
+          "team": "GSW",
+          "pace": 94.8
+        },
+        {
+          "season": "2010-11",
+          "team": "HOU",
+          "pace": 94.2
+        },
+        {
+          "season": "2010-11",
+          "team": "IND",
+          "pace": 94.7
+        },
+        {
+          "season": "2010-11",
+          "team": "LAC",
+          "pace": 92.8
+        },
+        {
+          "season": "2010-11",
+          "team": "LAL",
+          "pace": 90.7
+        },
+        {
+          "season": "2010-11",
+          "team": "MEM",
+          "pace": 91.9
+        },
+        {
+          "season": "2010-11",
+          "team": "MIA",
+          "pace": 90.9
+        },
+        {
+          "season": "2010-11",
+          "team": "MIL",
+          "pace": 89.8
+        },
+        {
+          "season": "2010-11",
+          "team": "MIN",
+          "pace": 96.5
+        },
+        {
+          "season": "2010-11",
+          "team": "NOP",
+          "pace": 88.7
+        },
+        {
+          "season": "2010-11",
+          "team": "NYK",
+          "pace": 95.6
+        },
+        {
+          "season": "2010-11",
+          "team": "OKC",
+          "pace": 92.7
+        },
+        {
+          "season": "2010-11",
+          "team": "ORL",
+          "pace": 91.2
+        },
+        {
+          "season": "2010-11",
+          "team": "PHI",
+          "pace": 91.7
+        },
+        {
+          "season": "2010-11",
+          "team": "PHX",
+          "pace": 94.4
+        },
+        {
+          "season": "2010-11",
+          "team": "POR",
+          "pace": 87.9
+        },
+        {
+          "season": "2010-11",
+          "team": "SAC",
+          "pace": 95.2
+        },
+        {
+          "season": "2010-11",
+          "team": "SAS",
+          "pace": 92.3
+        },
+        {
+          "season": "2010-11",
+          "team": "TOR",
+          "pace": 92.9
+        },
+        {
+          "season": "2010-11",
+          "team": "UTA",
+          "pace": 91
+        },
+        {
+          "season": "2010-11",
+          "team": "WAS",
+          "pace": 93.8
+        }
+      ]
+    },
+    "2011-12": {
+      "fetched_at": "2026-06-29T01:45:46.715Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2012.html",
+      "rows": [
+        {
+          "season": "2011-12",
+          "team": "ATL",
+          "pace": 90.2
+        },
+        {
+          "season": "2011-12",
+          "team": "BKN",
+          "pace": 90.1
+        },
+        {
+          "season": "2011-12",
+          "team": "BOS",
+          "pace": 90.4
+        },
+        {
+          "season": "2011-12",
+          "team": "CHA",
+          "pace": 91.1
+        },
+        {
+          "season": "2011-12",
+          "team": "CHI",
+          "pace": 89.1
+        },
+        {
+          "season": "2011-12",
+          "team": "CLE",
+          "pace": 91.3
+        },
+        {
+          "season": "2011-12",
+          "team": "DAL",
+          "pace": 91.4
+        },
+        {
+          "season": "2011-12",
+          "team": "DEN",
+          "pace": 94.2
+        },
+        {
+          "season": "2011-12",
+          "team": "DET",
+          "pace": 89.2
+        },
+        {
+          "season": "2011-12",
+          "team": "GSW",
+          "pace": 92.3
+        },
+        {
+          "season": "2011-12",
+          "team": "HOU",
+          "pace": 91.7
+        },
+        {
+          "season": "2011-12",
+          "team": "IND",
+          "pace": 90.7
+        },
+        {
+          "season": "2011-12",
+          "team": "LAC",
+          "pace": 89.2
+        },
+        {
+          "season": "2011-12",
+          "team": "LAL",
+          "pace": 90.5
+        },
+        {
+          "season": "2011-12",
+          "team": "MEM",
+          "pace": 90.8
+        },
+        {
+          "season": "2011-12",
+          "team": "MIA",
+          "pace": 91.2
+        },
+        {
+          "season": "2011-12",
+          "team": "MIL",
+          "pace": 93.7
+        },
+        {
+          "season": "2011-12",
+          "team": "MIN",
+          "pace": 93.3
+        },
+        {
+          "season": "2011-12",
+          "team": "NOP",
+          "pace": 88.3
+        },
+        {
+          "season": "2011-12",
+          "team": "NYK",
+          "pace": 93.2
+        },
+        {
+          "season": "2011-12",
+          "team": "OKC",
+          "pace": 93
+        },
+        {
+          "season": "2011-12",
+          "team": "ORL",
+          "pace": 89
+        },
+        {
+          "season": "2011-12",
+          "team": "PHI",
+          "pace": 89.7
+        },
+        {
+          "season": "2011-12",
+          "team": "PHX",
+          "pace": 92.6
+        },
+        {
+          "season": "2011-12",
+          "team": "POR",
+          "pace": 91.2
+        },
+        {
+          "season": "2011-12",
+          "team": "SAC",
+          "pace": 94.7
+        },
+        {
+          "season": "2011-12",
+          "team": "SAS",
+          "pace": 92.9
+        },
+        {
+          "season": "2011-12",
+          "team": "TOR",
+          "pace": 89.3
+        },
+        {
+          "season": "2011-12",
+          "team": "UTA",
+          "pace": 91.4
+        },
+        {
+          "season": "2011-12",
+          "team": "WAS",
+          "pace": 92.5
+        }
+      ]
+    },
+    "2012-13": {
+      "fetched_at": "2026-06-29T01:45:51.120Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2013.html",
+      "rows": [
+        {
+          "season": "2012-13",
+          "team": "ATL",
+          "pace": 92.6
+        },
+        {
+          "season": "2012-13",
+          "team": "BKN",
+          "pace": 88.8
+        },
+        {
+          "season": "2012-13",
+          "team": "BOS",
+          "pace": 91.7
+        },
+        {
+          "season": "2012-13",
+          "team": "CHA",
+          "pace": 91.5
+        },
+        {
+          "season": "2012-13",
+          "team": "CHI",
+          "pace": 89.3
+        },
+        {
+          "season": "2012-13",
+          "team": "CLE",
+          "pace": 92.3
+        },
+        {
+          "season": "2012-13",
+          "team": "DAL",
+          "pace": 94.1
+        },
+        {
+          "season": "2012-13",
+          "team": "DEN",
+          "pace": 95.1
+        },
+        {
+          "season": "2012-13",
+          "team": "DET",
+          "pace": 90.8
+        },
+        {
+          "season": "2012-13",
+          "team": "GSW",
+          "pace": 94.5
+        },
+        {
+          "season": "2012-13",
+          "team": "HOU",
+          "pace": 96.1
+        },
+        {
+          "season": "2012-13",
+          "team": "IND",
+          "pace": 90.2
+        },
+        {
+          "season": "2012-13",
+          "team": "LAC",
+          "pace": 91.1
+        },
+        {
+          "season": "2012-13",
+          "team": "LAL",
+          "pace": 94.4
+        },
+        {
+          "season": "2012-13",
+          "team": "MEM",
+          "pace": 88.4
+        },
+        {
+          "season": "2012-13",
+          "team": "MIA",
+          "pace": 90.7
+        },
+        {
+          "season": "2012-13",
+          "team": "MIL",
+          "pace": 94.7
+        },
+        {
+          "season": "2012-13",
+          "team": "MIN",
+          "pace": 92.8
+        },
+        {
+          "season": "2012-13",
+          "team": "NOP",
+          "pace": 88.5
+        },
+        {
+          "season": "2012-13",
+          "team": "NYK",
+          "pace": 89.8
+        },
+        {
+          "season": "2012-13",
+          "team": "OKC",
+          "pace": 93.3
+        },
+        {
+          "season": "2012-13",
+          "team": "ORL",
+          "pace": 92.2
+        },
+        {
+          "season": "2012-13",
+          "team": "PHI",
+          "pace": 91
+        },
+        {
+          "season": "2012-13",
+          "team": "PHX",
+          "pace": 93.4
+        },
+        {
+          "season": "2012-13",
+          "team": "POR",
+          "pace": 91.4
+        },
+        {
+          "season": "2012-13",
+          "team": "SAC",
+          "pace": 93.6
+        },
+        {
+          "season": "2012-13",
+          "team": "SAS",
+          "pace": 94.2
+        },
+        {
+          "season": "2012-13",
+          "team": "TOR",
+          "pace": 90.4
+        },
+        {
+          "season": "2012-13",
+          "team": "UTA",
+          "pace": 90.9
+        },
+        {
+          "season": "2012-13",
+          "team": "WAS",
+          "pace": 92.2
+        }
+      ]
+    },
+    "2013-14": {
+      "fetched_at": "2026-06-29T01:45:55.528Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2014.html",
+      "rows": [
+        {
+          "season": "2013-14",
+          "team": "ATL",
+          "pace": 94.6
+        },
+        {
+          "season": "2013-14",
+          "team": "BKN",
+          "pace": 91.4
+        },
+        {
+          "season": "2013-14",
+          "team": "BOS",
+          "pace": 93.3
+        },
+        {
+          "season": "2013-14",
+          "team": "CHA",
+          "pace": 92.4
+        },
+        {
+          "season": "2013-14",
+          "team": "CHI",
+          "pace": 90.2
+        },
+        {
+          "season": "2013-14",
+          "team": "CLE",
+          "pace": 93.1
+        },
+        {
+          "season": "2013-14",
+          "team": "DAL",
+          "pace": 93.5
+        },
+        {
+          "season": "2013-14",
+          "team": "DEN",
+          "pace": 98.1
+        },
+        {
+          "season": "2013-14",
+          "team": "DET",
+          "pace": 94.9
+        },
+        {
+          "season": "2013-14",
+          "team": "GSW",
+          "pace": 96.2
+        },
+        {
+          "season": "2013-14",
+          "team": "HOU",
+          "pace": 96.3
+        },
+        {
+          "season": "2013-14",
+          "team": "IND",
+          "pace": 92.5
+        },
+        {
+          "season": "2013-14",
+          "team": "LAC",
+          "pace": 95.9
+        },
+        {
+          "season": "2013-14",
+          "team": "LAL",
+          "pace": 98.7
+        },
+        {
+          "season": "2013-14",
+          "team": "MEM",
+          "pace": 89.9
+        },
+        {
+          "season": "2013-14",
+          "team": "MIA",
+          "pace": 91.2
+        },
+        {
+          "season": "2013-14",
+          "team": "MIL",
+          "pace": 91.8
+        },
+        {
+          "season": "2013-14",
+          "team": "MIN",
+          "pace": 97.3
+        },
+        {
+          "season": "2013-14",
+          "team": "NOP",
+          "pace": 92.2
+        },
+        {
+          "season": "2013-14",
+          "team": "NYK",
+          "pace": 90.3
+        },
+        {
+          "season": "2013-14",
+          "team": "OKC",
+          "pace": 95.4
+        },
+        {
+          "season": "2013-14",
+          "team": "ORL",
+          "pace": 93.6
+        },
+        {
+          "season": "2013-14",
+          "team": "PHI",
+          "pace": 99.2
+        },
+        {
+          "season": "2013-14",
+          "team": "PHX",
+          "pace": 95.8
+        },
+        {
+          "season": "2013-14",
+          "team": "POR",
+          "pace": 94.9
+        },
+        {
+          "season": "2013-14",
+          "team": "SAC",
+          "pace": 94.4
+        },
+        {
+          "season": "2013-14",
+          "team": "SAS",
+          "pace": 95
+        },
+        {
+          "season": "2013-14",
+          "team": "TOR",
+          "pace": 91.8
+        },
+        {
+          "season": "2013-14",
+          "team": "UTA",
+          "pace": 91.4
+        },
+        {
+          "season": "2013-14",
+          "team": "WAS",
+          "pace": 93.2
+        }
+      ]
+    },
+    "2014-15": {
+      "fetched_at": "2026-06-29T01:45:59.934Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2015.html",
+      "rows": [
+        {
+          "season": "2014-15",
+          "team": "ATL",
+          "pace": 93.9
+        },
+        {
+          "season": "2014-15",
+          "team": "BKN",
+          "pace": 92.7
+        },
+        {
+          "season": "2014-15",
+          "team": "BOS",
+          "pace": 95.8
+        },
+        {
+          "season": "2014-15",
+          "team": "CHA",
+          "pace": 93
+        },
+        {
+          "season": "2014-15",
+          "team": "CHI",
+          "pace": 92.8
+        },
+        {
+          "season": "2014-15",
+          "team": "CLE",
+          "pace": 92.3
+        },
+        {
+          "season": "2014-15",
+          "team": "DAL",
+          "pace": 95.2
+        },
+        {
+          "season": "2014-15",
+          "team": "DEN",
+          "pace": 96.1
+        },
+        {
+          "season": "2014-15",
+          "team": "DET",
+          "pace": 92.8
+        },
+        {
+          "season": "2014-15",
+          "team": "GSW",
+          "pace": 98.3
+        },
+        {
+          "season": "2014-15",
+          "team": "HOU",
+          "pace": 96.5
+        },
+        {
+          "season": "2014-15",
+          "team": "IND",
+          "pace": 93.2
+        },
+        {
+          "season": "2014-15",
+          "team": "LAC",
+          "pace": 94.7
+        },
+        {
+          "season": "2014-15",
+          "team": "LAL",
+          "pace": 94
+        },
+        {
+          "season": "2014-15",
+          "team": "MEM",
+          "pace": 92
+        },
+        {
+          "season": "2014-15",
+          "team": "MIA",
+          "pace": 90.9
+        },
+        {
+          "season": "2014-15",
+          "team": "MIL",
+          "pace": 94.1
+        },
+        {
+          "season": "2014-15",
+          "team": "MIN",
+          "pace": 94.4
+        },
+        {
+          "season": "2014-15",
+          "team": "NOP",
+          "pace": 91.4
+        },
+        {
+          "season": "2014-15",
+          "team": "NYK",
+          "pace": 91.2
+        },
+        {
+          "season": "2014-15",
+          "team": "OKC",
+          "pace": 95.7
+        },
+        {
+          "season": "2014-15",
+          "team": "ORL",
+          "pace": 93.8
+        },
+        {
+          "season": "2014-15",
+          "team": "PHI",
+          "pace": 95.7
+        },
+        {
+          "season": "2014-15",
+          "team": "PHX",
+          "pace": 96.3
+        },
+        {
+          "season": "2014-15",
+          "team": "POR",
+          "pace": 94.2
+        },
+        {
+          "season": "2014-15",
+          "team": "SAC",
+          "pace": 95.4
+        },
+        {
+          "season": "2014-15",
+          "team": "SAS",
+          "pace": 93.8
+        },
+        {
+          "season": "2014-15",
+          "team": "TOR",
+          "pace": 92.8
+        },
+        {
+          "season": "2014-15",
+          "team": "UTA",
+          "pace": 90.4
+        },
+        {
+          "season": "2014-15",
+          "team": "WAS",
+          "pace": 93.7
+        }
+      ]
+    },
+    "2015-16": {
+      "fetched_at": "2026-06-29T01:46:04.349Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2016.html",
+      "rows": [
+        {
+          "season": "2015-16",
+          "team": "ATL",
+          "pace": 97.1
+        },
+        {
+          "season": "2015-16",
+          "team": "BKN",
+          "pace": 95.2
+        },
+        {
+          "season": "2015-16",
+          "team": "BOS",
+          "pace": 98.5
+        },
+        {
+          "season": "2015-16",
+          "team": "CHA",
+          "pace": 95.6
+        },
+        {
+          "season": "2015-16",
+          "team": "CHI",
+          "pace": 95.7
+        },
+        {
+          "season": "2015-16",
+          "team": "CLE",
+          "pace": 93.3
+        },
+        {
+          "season": "2015-16",
+          "team": "DAL",
+          "pace": 94.3
+        },
+        {
+          "season": "2015-16",
+          "team": "DEN",
+          "pace": 95.7
+        },
+        {
+          "season": "2015-16",
+          "team": "DET",
+          "pace": 95.1
+        },
+        {
+          "season": "2015-16",
+          "team": "GSW",
+          "pace": 99.3
+        },
+        {
+          "season": "2015-16",
+          "team": "HOU",
+          "pace": 97.6
+        },
+        {
+          "season": "2015-16",
+          "team": "IND",
+          "pace": 96.6
+        },
+        {
+          "season": "2015-16",
+          "team": "LAC",
+          "pace": 95.8
+        },
+        {
+          "season": "2015-16",
+          "team": "LAL",
+          "pace": 95.6
+        },
+        {
+          "season": "2015-16",
+          "team": "MEM",
+          "pace": 93.3
+        },
+        {
+          "season": "2015-16",
+          "team": "MIA",
+          "pace": 93.6
+        },
+        {
+          "season": "2015-16",
+          "team": "MIL",
+          "pace": 94.2
+        },
+        {
+          "season": "2015-16",
+          "team": "MIN",
+          "pace": 95.2
+        },
+        {
+          "season": "2015-16",
+          "team": "NOP",
+          "pace": 96.8
+        },
+        {
+          "season": "2015-16",
+          "team": "NYK",
+          "pace": 93.4
+        },
+        {
+          "season": "2015-16",
+          "team": "OKC",
+          "pace": 96.7
+        },
+        {
+          "season": "2015-16",
+          "team": "ORL",
+          "pace": 96
+        },
+        {
+          "season": "2015-16",
+          "team": "PHI",
+          "pace": 97.9
+        },
+        {
+          "season": "2015-16",
+          "team": "PHX",
+          "pace": 98.5
+        },
+        {
+          "season": "2015-16",
+          "team": "POR",
+          "pace": 96
+        },
+        {
+          "season": "2015-16",
+          "team": "SAC",
+          "pace": 100
+        },
+        {
+          "season": "2015-16",
+          "team": "SAS",
+          "pace": 93.8
+        },
+        {
+          "season": "2015-16",
+          "team": "TOR",
+          "pace": 92.9
+        },
+        {
+          "season": "2015-16",
+          "team": "UTA",
+          "pace": 91
+        },
+        {
+          "season": "2015-16",
+          "team": "WAS",
+          "pace": 98.5
+        }
+      ]
+    },
+    "2016-17": {
+      "fetched_at": "2026-06-29T01:46:08.744Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2017.html",
+      "rows": [
+        {
+          "season": "2016-17",
+          "team": "ATL",
+          "pace": 97.4
+        },
+        {
+          "season": "2016-17",
+          "team": "BKN",
+          "pace": 101.3
+        },
+        {
+          "season": "2016-17",
+          "team": "BOS",
+          "pace": 96.8
+        },
+        {
+          "season": "2016-17",
+          "team": "CHA",
+          "pace": 95.7
+        },
+        {
+          "season": "2016-17",
+          "team": "CHI",
+          "pace": 95.3
+        },
+        {
+          "season": "2016-17",
+          "team": "CLE",
+          "pace": 96.2
+        },
+        {
+          "season": "2016-17",
+          "team": "DAL",
+          "pace": 92.2
+        },
+        {
+          "season": "2016-17",
+          "team": "DEN",
+          "pace": 98.3
+        },
+        {
+          "season": "2016-17",
+          "team": "DET",
+          "pace": 95
+        },
+        {
+          "season": "2016-17",
+          "team": "GSW",
+          "pace": 99.8
+        },
+        {
+          "season": "2016-17",
+          "team": "HOU",
+          "pace": 100
+        },
+        {
+          "season": "2016-17",
+          "team": "IND",
+          "pace": 95.9
+        },
+        {
+          "season": "2016-17",
+          "team": "LAC",
+          "pace": 96.1
+        },
+        {
+          "season": "2016-17",
+          "team": "LAL",
+          "pace": 98.5
+        },
+        {
+          "season": "2016-17",
+          "team": "MEM",
+          "pace": 92.3
+        },
+        {
+          "season": "2016-17",
+          "team": "MIA",
+          "pace": 95.2
+        },
+        {
+          "season": "2016-17",
+          "team": "MIL",
+          "pace": 94.5
+        },
+        {
+          "season": "2016-17",
+          "team": "MIN",
+          "pace": 94.6
+        },
+        {
+          "season": "2016-17",
+          "team": "NOP",
+          "pace": 98
+        },
+        {
+          "season": "2016-17",
+          "team": "NYK",
+          "pace": 96
+        },
+        {
+          "season": "2016-17",
+          "team": "OKC",
+          "pace": 97.8
+        },
+        {
+          "season": "2016-17",
+          "team": "ORL",
+          "pace": 96.8
+        },
+        {
+          "season": "2016-17",
+          "team": "PHI",
+          "pace": 98.5
+        },
+        {
+          "season": "2016-17",
+          "team": "PHX",
+          "pace": 100.3
+        },
+        {
+          "season": "2016-17",
+          "team": "POR",
+          "pace": 96.7
+        },
+        {
+          "season": "2016-17",
+          "team": "SAC",
+          "pace": 94.9
+        },
+        {
+          "season": "2016-17",
+          "team": "SAS",
+          "pace": 94.2
+        },
+        {
+          "season": "2016-17",
+          "team": "TOR",
+          "pace": 94.7
+        },
+        {
+          "season": "2016-17",
+          "team": "UTA",
+          "pace": 91.6
+        },
+        {
+          "season": "2016-17",
+          "team": "WAS",
+          "pace": 97.4
+        }
+      ]
+    },
+    "2017-18": {
+      "fetched_at": "2026-06-29T01:46:12.897Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2018.html",
+      "rows": [
+        {
+          "season": "2017-18",
+          "team": "ATL",
+          "pace": 98.3
+        },
+        {
+          "season": "2017-18",
+          "team": "BKN",
+          "pace": 98.9
+        },
+        {
+          "season": "2017-18",
+          "team": "BOS",
+          "pace": 96
+        },
+        {
+          "season": "2017-18",
+          "team": "CHA",
+          "pace": 98.4
+        },
+        {
+          "season": "2017-18",
+          "team": "CHI",
+          "pace": 98.3
+        },
+        {
+          "season": "2017-18",
+          "team": "CLE",
+          "pace": 98
+        },
+        {
+          "season": "2017-18",
+          "team": "DAL",
+          "pace": 95.6
+        },
+        {
+          "season": "2017-18",
+          "team": "DEN",
+          "pace": 96.8
+        },
+        {
+          "season": "2017-18",
+          "team": "DET",
+          "pace": 96.2
+        },
+        {
+          "season": "2017-18",
+          "team": "GSW",
+          "pace": 99.6
+        },
+        {
+          "season": "2017-18",
+          "team": "HOU",
+          "pace": 97.6
+        },
+        {
+          "season": "2017-18",
+          "team": "IND",
+          "pace": 96
+        },
+        {
+          "season": "2017-18",
+          "team": "LAC",
+          "pace": 98.7
+        },
+        {
+          "season": "2017-18",
+          "team": "LAL",
+          "pace": 100.3
+        },
+        {
+          "season": "2017-18",
+          "team": "MEM",
+          "pace": 94.9
+        },
+        {
+          "season": "2017-18",
+          "team": "MIA",
+          "pace": 95.6
+        },
+        {
+          "season": "2017-18",
+          "team": "MIL",
+          "pace": 96.3
+        },
+        {
+          "season": "2017-18",
+          "team": "MIN",
+          "pace": 96
+        },
+        {
+          "season": "2017-18",
+          "team": "NOP",
+          "pace": 100.5
+        },
+        {
+          "season": "2017-18",
+          "team": "NYK",
+          "pace": 96.8
+        },
+        {
+          "season": "2017-18",
+          "team": "OKC",
+          "pace": 96.7
+        },
+        {
+          "season": "2017-18",
+          "team": "ORL",
+          "pace": 98.1
+        },
+        {
+          "season": "2017-18",
+          "team": "PHI",
+          "pace": 99.8
+        },
+        {
+          "season": "2017-18",
+          "team": "PHX",
+          "pace": 100.3
+        },
+        {
+          "season": "2017-18",
+          "team": "POR",
+          "pace": 96.5
+        },
+        {
+          "season": "2017-18",
+          "team": "SAC",
+          "pace": 94.9
+        },
+        {
+          "season": "2017-18",
+          "team": "SAS",
+          "pace": 95
+        },
+        {
+          "season": "2017-18",
+          "team": "TOR",
+          "pace": 97.4
+        },
+        {
+          "season": "2017-18",
+          "team": "UTA",
+          "pace": 95.7
+        },
+        {
+          "season": "2017-18",
+          "team": "WAS",
+          "pace": 96.6
+        }
+      ]
+    },
+    "2018-19": {
+      "fetched_at": "2026-06-29T01:46:17.091Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2019.html",
+      "rows": [
+        {
+          "season": "2018-19",
+          "team": "ATL",
+          "pace": 103.9
+        },
+        {
+          "season": "2018-19",
+          "team": "BKN",
+          "pace": 100.8
+        },
+        {
+          "season": "2018-19",
+          "team": "BOS",
+          "pace": 99.6
+        },
+        {
+          "season": "2018-19",
+          "team": "CHA",
+          "pace": 98.7
+        },
+        {
+          "season": "2018-19",
+          "team": "CHI",
+          "pace": 99
+        },
+        {
+          "season": "2018-19",
+          "team": "CLE",
+          "pace": 96.6
+        },
+        {
+          "season": "2018-19",
+          "team": "DAL",
+          "pace": 99
+        },
+        {
+          "season": "2018-19",
+          "team": "DEN",
+          "pace": 97.7
+        },
+        {
+          "season": "2018-19",
+          "team": "DET",
+          "pace": 97.4
+        },
+        {
+          "season": "2018-19",
+          "team": "GSW",
+          "pace": 100.9
+        },
+        {
+          "season": "2018-19",
+          "team": "HOU",
+          "pace": 97.9
+        },
+        {
+          "season": "2018-19",
+          "team": "IND",
+          "pace": 98.1
+        },
+        {
+          "season": "2018-19",
+          "team": "LAC",
+          "pace": 101.7
+        },
+        {
+          "season": "2018-19",
+          "team": "LAL",
+          "pace": 103.2
+        },
+        {
+          "season": "2018-19",
+          "team": "MEM",
+          "pace": 96.6
+        },
+        {
+          "season": "2018-19",
+          "team": "MIA",
+          "pace": 98.2
+        },
+        {
+          "season": "2018-19",
+          "team": "MIL",
+          "pace": 103.3
+        },
+        {
+          "season": "2018-19",
+          "team": "MIN",
+          "pace": 100.2
+        },
+        {
+          "season": "2018-19",
+          "team": "NOP",
+          "pace": 103.3
+        },
+        {
+          "season": "2018-19",
+          "team": "NYK",
+          "pace": 99.6
+        },
+        {
+          "season": "2018-19",
+          "team": "OKC",
+          "pace": 102.8
+        },
+        {
+          "season": "2018-19",
+          "team": "ORL",
+          "pace": 98.1
+        },
+        {
+          "season": "2018-19",
+          "team": "PHI",
+          "pace": 101.6
+        },
+        {
+          "season": "2018-19",
+          "team": "PHX",
+          "pace": 100.5
+        },
+        {
+          "season": "2018-19",
+          "team": "POR",
+          "pace": 99.1
+        },
+        {
+          "season": "2018-19",
+          "team": "SAC",
+          "pace": 103.1
+        },
+        {
+          "season": "2018-19",
+          "team": "SAS",
+          "pace": 98.3
+        },
+        {
+          "season": "2018-19",
+          "team": "TOR",
+          "pace": 100.2
+        },
+        {
+          "season": "2018-19",
+          "team": "UTA",
+          "pace": 100.3
+        },
+        {
+          "season": "2018-19",
+          "team": "WAS",
+          "pace": 101.4
+        }
+      ]
+    },
+    "2019-20": {
+      "fetched_at": "2026-06-29T01:46:21.243Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2020.html",
+      "rows": [
+        {
+          "season": "2019-20",
+          "team": "ATL",
+          "pace": 103
+        },
+        {
+          "season": "2019-20",
+          "team": "BKN",
+          "pace": 101.4
+        },
+        {
+          "season": "2019-20",
+          "team": "BOS",
+          "pace": 99.5
+        },
+        {
+          "season": "2019-20",
+          "team": "CHA",
+          "pace": 95.8
+        },
+        {
+          "season": "2019-20",
+          "team": "CHI",
+          "pace": 99.7
+        },
+        {
+          "season": "2019-20",
+          "team": "CLE",
+          "pace": 98.7
+        },
+        {
+          "season": "2019-20",
+          "team": "DAL",
+          "pace": 99.3
+        },
+        {
+          "season": "2019-20",
+          "team": "DEN",
+          "pace": 97.1
+        },
+        {
+          "season": "2019-20",
+          "team": "DET",
+          "pace": 97.6
+        },
+        {
+          "season": "2019-20",
+          "team": "GSW",
+          "pace": 100.3
+        },
+        {
+          "season": "2019-20",
+          "team": "HOU",
+          "pace": 103.7
+        },
+        {
+          "season": "2019-20",
+          "team": "IND",
+          "pace": 98.9
+        },
+        {
+          "season": "2019-20",
+          "team": "LAC",
+          "pace": 101.5
+        },
+        {
+          "season": "2019-20",
+          "team": "LAL",
+          "pace": 100.9
+        },
+        {
+          "season": "2019-20",
+          "team": "MEM",
+          "pace": 102.8
+        },
+        {
+          "season": "2019-20",
+          "team": "MIA",
+          "pace": 98.3
+        },
+        {
+          "season": "2019-20",
+          "team": "MIL",
+          "pace": 105.1
+        },
+        {
+          "season": "2019-20",
+          "team": "MIN",
+          "pace": 103.4
+        },
+        {
+          "season": "2019-20",
+          "team": "NOP",
+          "pace": 103.7
+        },
+        {
+          "season": "2019-20",
+          "team": "NYK",
+          "pace": 98.6
+        },
+        {
+          "season": "2019-20",
+          "team": "OKC",
+          "pace": 98.8
+        },
+        {
+          "season": "2019-20",
+          "team": "ORL",
+          "pace": 98.6
+        },
+        {
+          "season": "2019-20",
+          "team": "PHI",
+          "pace": 99
+        },
+        {
+          "season": "2019-20",
+          "team": "PHX",
+          "pace": 101.3
+        },
+        {
+          "season": "2019-20",
+          "team": "POR",
+          "pace": 100.7
+        },
+        {
+          "season": "2019-20",
+          "team": "SAC",
+          "pace": 98.9
+        },
+        {
+          "season": "2019-20",
+          "team": "SAS",
+          "pace": 100.5
+        },
+        {
+          "season": "2019-20",
+          "team": "TOR",
+          "pace": 100.9
+        },
+        {
+          "season": "2019-20",
+          "team": "UTA",
+          "pace": 98.6
+        },
+        {
+          "season": "2019-20",
+          "team": "WAS",
+          "pace": 102.7
+        }
+      ]
+    },
+    "2020-21": {
+      "fetched_at": "2026-06-29T01:46:26.147Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2021.html",
+      "rows": [
+        {
+          "season": "2020-21",
+          "team": "ATL",
+          "pace": 97.6
+        },
+        {
+          "season": "2020-21",
+          "team": "BKN",
+          "pace": 99.5
+        },
+        {
+          "season": "2020-21",
+          "team": "BOS",
+          "pace": 98.3
+        },
+        {
+          "season": "2020-21",
+          "team": "CHA",
+          "pace": 98.3
+        },
+        {
+          "season": "2020-21",
+          "team": "CHI",
+          "pace": 99
+        },
+        {
+          "season": "2020-21",
+          "team": "CLE",
+          "pace": 97.3
+        },
+        {
+          "season": "2020-21",
+          "team": "DAL",
+          "pace": 97.3
+        },
+        {
+          "season": "2020-21",
+          "team": "DEN",
+          "pace": 97.1
+        },
+        {
+          "season": "2020-21",
+          "team": "DET",
+          "pace": 97.9
+        },
+        {
+          "season": "2020-21",
+          "team": "GSW",
+          "pace": 102.2
+        },
+        {
+          "season": "2020-21",
+          "team": "HOU",
+          "pace": 101.4
+        },
+        {
+          "season": "2020-21",
+          "team": "IND",
+          "pace": 101.6
+        },
+        {
+          "season": "2020-21",
+          "team": "LAC",
+          "pace": 96.9
+        },
+        {
+          "season": "2020-21",
+          "team": "LAL",
+          "pace": 98.7
+        },
+        {
+          "season": "2020-21",
+          "team": "MEM",
+          "pace": 100.4
+        },
+        {
+          "season": "2020-21",
+          "team": "MIA",
+          "pace": 96.6
+        },
+        {
+          "season": "2020-21",
+          "team": "MIL",
+          "pace": 102.2
+        },
+        {
+          "season": "2020-21",
+          "team": "MIN",
+          "pace": 101.6
+        },
+        {
+          "season": "2020-21",
+          "team": "NOP",
+          "pace": 100.1
+        },
+        {
+          "season": "2020-21",
+          "team": "NYK",
+          "pace": 95.9
+        },
+        {
+          "season": "2020-21",
+          "team": "OKC",
+          "pace": 101
+        },
+        {
+          "season": "2020-21",
+          "team": "ORL",
+          "pace": 98.7
+        },
+        {
+          "season": "2020-21",
+          "team": "PHI",
+          "pace": 99.5
+        },
+        {
+          "season": "2020-21",
+          "team": "PHX",
+          "pace": 97.2
+        },
+        {
+          "season": "2020-21",
+          "team": "POR",
+          "pace": 98.4
+        },
+        {
+          "season": "2020-21",
+          "team": "SAC",
+          "pace": 100
+        },
+        {
+          "season": "2020-21",
+          "team": "SAS",
+          "pace": 98.9
+        },
+        {
+          "season": "2020-21",
+          "team": "TOR",
+          "pace": 99.2
+        },
+        {
+          "season": "2020-21",
+          "team": "UTA",
+          "pace": 98.5
+        },
+        {
+          "season": "2020-21",
+          "team": "WAS",
+          "pace": 104.1
+        }
+      ]
+    },
+    "2021-22": {
+      "fetched_at": "2026-06-29T01:46:30.316Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2022.html",
+      "rows": [
+        {
+          "season": "2021-22",
+          "team": "ATL",
+          "pace": 97.7
+        },
+        {
+          "season": "2021-22",
+          "team": "BKN",
+          "pace": 99
+        },
+        {
+          "season": "2021-22",
+          "team": "BOS",
+          "pace": 96.6
+        },
+        {
+          "season": "2021-22",
+          "team": "CHA",
+          "pace": 100
+        },
+        {
+          "season": "2021-22",
+          "team": "CHI",
+          "pace": 98.3
+        },
+        {
+          "season": "2021-22",
+          "team": "CLE",
+          "pace": 96.1
+        },
+        {
+          "season": "2021-22",
+          "team": "DAL",
+          "pace": 95.4
+        },
+        {
+          "season": "2021-22",
+          "team": "DEN",
+          "pace": 97.8
+        },
+        {
+          "season": "2021-22",
+          "team": "DET",
+          "pace": 98.4
+        },
+        {
+          "season": "2021-22",
+          "team": "GSW",
+          "pace": 98.4
+        },
+        {
+          "season": "2021-22",
+          "team": "HOU",
+          "pace": 100.9
+        },
+        {
+          "season": "2021-22",
+          "team": "IND",
+          "pace": 98
+        },
+        {
+          "season": "2021-22",
+          "team": "LAC",
+          "pace": 98
+        },
+        {
+          "season": "2021-22",
+          "team": "LAL",
+          "pace": 100.1
+        },
+        {
+          "season": "2021-22",
+          "team": "MEM",
+          "pace": 100.3
+        },
+        {
+          "season": "2021-22",
+          "team": "MIA",
+          "pace": 95.9
+        },
+        {
+          "season": "2021-22",
+          "team": "MIL",
+          "pace": 99.9
+        },
+        {
+          "season": "2021-22",
+          "team": "MIN",
+          "pace": 100.9
+        },
+        {
+          "season": "2021-22",
+          "team": "NOP",
+          "pace": 97.2
+        },
+        {
+          "season": "2021-22",
+          "team": "NYK",
+          "pace": 95.9
+        },
+        {
+          "season": "2021-22",
+          "team": "OKC",
+          "pace": 98.6
+        },
+        {
+          "season": "2021-22",
+          "team": "ORL",
+          "pace": 99.2
+        },
+        {
+          "season": "2021-22",
+          "team": "PHI",
+          "pace": 96.2
+        },
+        {
+          "season": "2021-22",
+          "team": "PHX",
+          "pace": 99.8
+        },
+        {
+          "season": "2021-22",
+          "team": "POR",
+          "pace": 98.3
+        },
+        {
+          "season": "2021-22",
+          "team": "SAC",
+          "pace": 99.8
+        },
+        {
+          "season": "2021-22",
+          "team": "SAS",
+          "pace": 100
+        },
+        {
+          "season": "2021-22",
+          "team": "TOR",
+          "pace": 96
+        },
+        {
+          "season": "2021-22",
+          "team": "UTA",
+          "pace": 97.1
+        },
+        {
+          "season": "2021-22",
+          "team": "WAS",
+          "pace": 97
+        }
+      ]
+    },
+    "2022-23": {
+      "fetched_at": "2026-06-29T01:46:34.668Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2023.html",
+      "rows": [
+        {
+          "season": "2022-23",
+          "team": "ATL",
+          "pace": 100.7
+        },
+        {
+          "season": "2022-23",
+          "team": "BKN",
+          "pace": 98.3
+        },
+        {
+          "season": "2022-23",
+          "team": "BOS",
+          "pace": 98.5
+        },
+        {
+          "season": "2022-23",
+          "team": "CHA",
+          "pace": 100.8
+        },
+        {
+          "season": "2022-23",
+          "team": "CHI",
+          "pace": 98.5
+        },
+        {
+          "season": "2022-23",
+          "team": "CLE",
+          "pace": 95.7
+        },
+        {
+          "season": "2022-23",
+          "team": "DAL",
+          "pace": 96.6
+        },
+        {
+          "season": "2022-23",
+          "team": "DEN",
+          "pace": 98.1
+        },
+        {
+          "season": "2022-23",
+          "team": "DET",
+          "pace": 99
+        },
+        {
+          "season": "2022-23",
+          "team": "GSW",
+          "pace": 101.6
+        },
+        {
+          "season": "2022-23",
+          "team": "HOU",
+          "pace": 99
+        },
+        {
+          "season": "2022-23",
+          "team": "IND",
+          "pace": 101.1
+        },
+        {
+          "season": "2022-23",
+          "team": "LAC",
+          "pace": 98
+        },
+        {
+          "season": "2022-23",
+          "team": "LAL",
+          "pace": 101.3
+        },
+        {
+          "season": "2022-23",
+          "team": "MEM",
+          "pace": 101.1
+        },
+        {
+          "season": "2022-23",
+          "team": "MIA",
+          "pace": 96.3
+        },
+        {
+          "season": "2022-23",
+          "team": "MIL",
+          "pace": 100.5
+        },
+        {
+          "season": "2022-23",
+          "team": "MIN",
+          "pace": 101
+        },
+        {
+          "season": "2022-23",
+          "team": "NOP",
+          "pace": 99.1
+        },
+        {
+          "season": "2022-23",
+          "team": "NYK",
+          "pace": 97.1
+        },
+        {
+          "season": "2022-23",
+          "team": "OKC",
+          "pace": 101.1
+        },
+        {
+          "season": "2022-23",
+          "team": "ORL",
+          "pace": 99.3
+        },
+        {
+          "season": "2022-23",
+          "team": "PHI",
+          "pace": 96.9
+        },
+        {
+          "season": "2022-23",
+          "team": "PHX",
+          "pace": 98.2
+        },
+        {
+          "season": "2022-23",
+          "team": "POR",
+          "pace": 98.6
+        },
+        {
+          "season": "2022-23",
+          "team": "SAC",
+          "pace": 100.3
+        },
+        {
+          "season": "2022-23",
+          "team": "SAS",
+          "pace": 101.6
+        },
+        {
+          "season": "2022-23",
+          "team": "TOR",
+          "pace": 97.1
+        },
+        {
+          "season": "2022-23",
+          "team": "UTA",
+          "pace": 100.5
+        },
+        {
+          "season": "2022-23",
+          "team": "WAS",
+          "pace": 98.6
+        }
+      ]
+    },
+    "2023-24": {
+      "fetched_at": "2026-06-29T01:46:39.067Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2024.html",
+      "rows": [
+        {
+          "season": "2023-24",
+          "team": "ATL",
+          "pace": 100.1
+        },
+        {
+          "season": "2023-24",
+          "team": "BKN",
+          "pace": 96.9
+        },
+        {
+          "season": "2023-24",
+          "team": "BOS",
+          "pace": 97.2
+        },
+        {
+          "season": "2023-24",
+          "team": "CHA",
+          "pace": 97.3
+        },
+        {
+          "season": "2023-24",
+          "team": "CHI",
+          "pace": 96.3
+        },
+        {
+          "season": "2023-24",
+          "team": "CLE",
+          "pace": 97.2
+        },
+        {
+          "season": "2023-24",
+          "team": "DAL",
+          "pace": 100.1
+        },
+        {
+          "season": "2023-24",
+          "team": "DEN",
+          "pace": 96.8
+        },
+        {
+          "season": "2023-24",
+          "team": "DET",
+          "pace": 99.8
+        },
+        {
+          "season": "2023-24",
+          "team": "GSW",
+          "pace": 99.2
+        },
+        {
+          "season": "2023-24",
+          "team": "HOU",
+          "pace": 99
+        },
+        {
+          "season": "2023-24",
+          "team": "IND",
+          "pace": 101.7
+        },
+        {
+          "season": "2023-24",
+          "team": "LAC",
+          "pace": 97.2
+        },
+        {
+          "season": "2023-24",
+          "team": "LAL",
+          "pace": 100.9
+        },
+        {
+          "season": "2023-24",
+          "team": "MEM",
+          "pace": 98.2
+        },
+        {
+          "season": "2023-24",
+          "team": "MIA",
+          "pace": 96.2
+        },
+        {
+          "season": "2023-24",
+          "team": "MIL",
+          "pace": 99.9
+        },
+        {
+          "season": "2023-24",
+          "team": "MIN",
+          "pace": 97.1
+        },
+        {
+          "season": "2023-24",
+          "team": "NOP",
+          "pace": 97.9
+        },
+        {
+          "season": "2023-24",
+          "team": "NYK",
+          "pace": 95.2
+        },
+        {
+          "season": "2023-24",
+          "team": "OKC",
+          "pace": 99.8
+        },
+        {
+          "season": "2023-24",
+          "team": "ORL",
+          "pace": 96.9
+        },
+        {
+          "season": "2023-24",
+          "team": "PHI",
+          "pace": 97.5
+        },
+        {
+          "season": "2023-24",
+          "team": "PHX",
+          "pace": 98.3
+        },
+        {
+          "season": "2023-24",
+          "team": "POR",
+          "pace": 97.2
+        },
+        {
+          "season": "2023-24",
+          "team": "SAC",
+          "pace": 98.8
+        },
+        {
+          "season": "2023-24",
+          "team": "SAS",
+          "pace": 101.1
+        },
+        {
+          "season": "2023-24",
+          "team": "TOR",
+          "pace": 99.4
+        },
+        {
+          "season": "2023-24",
+          "team": "UTA",
+          "pace": 99.5
+        },
+        {
+          "season": "2023-24",
+          "team": "WAS",
+          "pace": 102.7
+        }
+      ]
+    },
+    "2024-25": {
+      "fetched_at": "2026-06-29T01:46:43.476Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2025.html",
+      "rows": [
+        {
+          "season": "2024-25",
+          "team": "ATL",
+          "pace": 102.6
+        },
+        {
+          "season": "2024-25",
+          "team": "BKN",
+          "pace": 96.4
+        },
+        {
+          "season": "2024-25",
+          "team": "BOS",
+          "pace": 95.7
+        },
+        {
+          "season": "2024-25",
+          "team": "CHA",
+          "pace": 97.6
+        },
+        {
+          "season": "2024-25",
+          "team": "CHI",
+          "pace": 102.8
+        },
+        {
+          "season": "2024-25",
+          "team": "CLE",
+          "pace": 99.8
+        },
+        {
+          "season": "2024-25",
+          "team": "DAL",
+          "pace": 99.2
+        },
+        {
+          "season": "2024-25",
+          "team": "DEN",
+          "pace": 99.8
+        },
+        {
+          "season": "2024-25",
+          "team": "DET",
+          "pace": 99.8
+        },
+        {
+          "season": "2024-25",
+          "team": "GSW",
+          "pace": 98.7
+        },
+        {
+          "season": "2024-25",
+          "team": "HOU",
+          "pace": 98.6
+        },
+        {
+          "season": "2024-25",
+          "team": "IND",
+          "pace": 99.9
+        },
+        {
+          "season": "2024-25",
+          "team": "LAC",
+          "pace": 97.5
+        },
+        {
+          "season": "2024-25",
+          "team": "LAL",
+          "pace": 97.6
+        },
+        {
+          "season": "2024-25",
+          "team": "MEM",
+          "pace": 103.3
+        },
+        {
+          "season": "2024-25",
+          "team": "MIA",
+          "pace": 96.2
+        },
+        {
+          "season": "2024-25",
+          "team": "MIL",
+          "pace": 99.3
+        },
+        {
+          "season": "2024-25",
+          "team": "MIN",
+          "pace": 97.3
+        },
+        {
+          "season": "2024-25",
+          "team": "NOP",
+          "pace": 99.1
+        },
+        {
+          "season": "2024-25",
+          "team": "NYK",
+          "pace": 96.7
+        },
+        {
+          "season": "2024-25",
+          "team": "OKC",
+          "pace": 100
+        },
+        {
+          "season": "2024-25",
+          "team": "ORL",
+          "pace": 96.1
+        },
+        {
+          "season": "2024-25",
+          "team": "PHI",
+          "pace": 97.4
+        },
+        {
+          "season": "2024-25",
+          "team": "PHX",
+          "pace": 97.1
+        },
+        {
+          "season": "2024-25",
+          "team": "POR",
+          "pace": 98.8
+        },
+        {
+          "season": "2024-25",
+          "team": "SAC",
+          "pace": 98.2
+        },
+        {
+          "season": "2024-25",
+          "team": "SAS",
+          "pace": 99.3
+        },
+        {
+          "season": "2024-25",
+          "team": "TOR",
+          "pace": 99.7
+        },
+        {
+          "season": "2024-25",
+          "team": "UTA",
+          "pace": 100
+        },
+        {
+          "season": "2024-25",
+          "team": "WAS",
+          "pace": 100.9
+        }
+      ]
+    },
+    "2025-26": {
+      "fetched_at": "2026-06-29T01:46:47.677Z",
+      "source": "https://www.basketball-reference.com/leagues/NBA_2026.html",
+      "rows": [
+        {
+          "season": "2025-26",
+          "team": "ATL",
+          "pace": 101.7
+        },
+        {
+          "season": "2025-26",
+          "team": "BKN",
+          "pace": 97.1
+        },
+        {
+          "season": "2025-26",
+          "team": "BOS",
+          "pace": 94.8
+        },
+        {
+          "season": "2025-26",
+          "team": "CHA",
+          "pace": 96.8
+        },
+        {
+          "season": "2025-26",
+          "team": "CHI",
+          "pace": 102.5
+        },
+        {
+          "season": "2025-26",
+          "team": "CLE",
+          "pace": 99.9
+        },
+        {
+          "season": "2025-26",
+          "team": "DAL",
+          "pace": 101.7
+        },
+        {
+          "season": "2025-26",
+          "team": "DEN",
+          "pace": 98.4
+        },
+        {
+          "season": "2025-26",
+          "team": "DET",
+          "pace": 99.3
+        },
+        {
+          "season": "2025-26",
+          "team": "GSW",
+          "pace": 99
+        },
+        {
+          "season": "2025-26",
+          "team": "HOU",
+          "pace": 96.1
+        },
+        {
+          "season": "2025-26",
+          "team": "IND",
+          "pace": 101
+        },
+        {
+          "season": "2025-26",
+          "team": "LAC",
+          "pace": 96.5
+        },
+        {
+          "season": "2025-26",
+          "team": "LAL",
+          "pace": 98.3
+        },
+        {
+          "season": "2025-26",
+          "team": "MEM",
+          "pace": 101.3
+        },
+        {
+          "season": "2025-26",
+          "team": "MIA",
+          "pace": 103.4
+        },
+        {
+          "season": "2025-26",
+          "team": "MIL",
+          "pace": 97.6
+        },
+        {
+          "season": "2025-26",
+          "team": "MIN",
+          "pace": 100.5
+        },
+        {
+          "season": "2025-26",
+          "team": "NOP",
+          "pace": 100.3
+        },
+        {
+          "season": "2025-26",
+          "team": "NYK",
+          "pace": 96.8
+        },
+        {
+          "season": "2025-26",
+          "team": "OKC",
+          "pace": 99.3
+        },
+        {
+          "season": "2025-26",
+          "team": "ORL",
+          "pace": 100
+        },
+        {
+          "season": "2025-26",
+          "team": "PHI",
+          "pace": 99.4
+        },
+        {
+          "season": "2025-26",
+          "team": "PHX",
+          "pace": 97.2
+        },
+        {
+          "season": "2025-26",
+          "team": "POR",
+          "pace": 100.5
+        },
+        {
+          "season": "2025-26",
+          "team": "SAC",
+          "pace": 99.2
+        },
+        {
+          "season": "2025-26",
+          "team": "SAS",
+          "pace": 99.9
+        },
+        {
+          "season": "2025-26",
+          "team": "TOR",
+          "pace": 98.4
+        },
+        {
+          "season": "2025-26",
+          "team": "UTA",
+          "pace": 102.3
+        },
+        {
+          "season": "2025-26",
+          "team": "WAS",
+          "pace": 101.4
+        }
+      ]
+    }
+  }
+}
