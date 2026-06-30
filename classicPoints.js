@@ -1,6 +1,13 @@
 const { calculateLegacyPoints } = require("./legacyPoints");
-const { normalizeTeamCodeForSeason, normalizeTeamName } = require("./teamFranchises");
+const {
+  normalizeTeamCodeForSeason,
+  normalizeTeamName,
+} = require("./teamFranchises");
 const { decadeLabelFromYear, eraSortValue, seasonEndYear, seasonEra } = require("./seasonEras");
+const {
+  ABA_ACCOLADE_DEFAULTS,
+  applyAbaAwardToAccolades,
+} = require("./abaAccolades");
 
 const STAT_TITLE_DESCRIPTIONS = {
   scoring_titles: "NBA Scoring Title",
@@ -48,6 +55,7 @@ function createEmptyClassicAccolades() {
     three_point_contest_wins: 0,
     games_started: 0,
     games_won: 0,
+    ...ABA_ACCOLADE_DEFAULTS,
     award_counts: {},
   };
 }
@@ -142,6 +150,10 @@ function applyAwardToAccolades(accolades, award) {
     return;
   }
 
+  if (applyAbaAwardToAccolades(accolades, rawDescription, teamNumber)) {
+    return;
+  }
+
   if (isEstimatedFinalsMvpDescription(description)) {
     accolades.estimated_finals_mvp_count += 1;
   } else if (isNbaFinalsMvpDescription(description)) {
@@ -209,9 +221,18 @@ function applyAwardToAccolades(accolades, award) {
   }
 }
 
-function teamCodesFromAwardTeam(team, season) {
-  const rawTeam = String(team || "").trim();
-  const direct = normalizeTeamName(rawTeam, season);
+function teamCodesFromAward(award) {
+  const season = award?.season;
+  const sourceLeague = award?.source_league;
+  const rawTeam = String(
+    award?.original_team ||
+      award?.source_team ||
+      award?.bref_team ||
+      award?.raw_team ||
+      award?.team ||
+      "",
+  ).trim();
+  const direct = normalizeTeamName(rawTeam, season, { sourceLeague });
 
   if (direct) {
     return [direct];
@@ -221,7 +242,7 @@ function teamCodesFromAwardTeam(team, season) {
     new Set(
       rawTeam
         .split(/\s*-\s*/)
-        .map((part) => normalizeTeamName(part, season))
+        .map((part) => normalizeTeamName(part, season, { sourceLeague }))
         .filter(Boolean),
     ),
   );
@@ -265,7 +286,7 @@ function addSeasonContext(records, season) {
 
 function addAwardContext(records, award) {
   const era = seasonEra(award?.season);
-  const teams = teamCodesFromAwardTeam(award?.team, award?.season);
+  const teams = teamCodesFromAward(award);
 
   if (!era || teams.length === 0) {
     return;

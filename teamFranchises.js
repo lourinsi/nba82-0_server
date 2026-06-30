@@ -571,7 +571,9 @@ function teamErasFromAwards(awardsRaw = []) {
   return normalizeTeamEras(
     awardsRaw
       .map((award) => ({
-        team: normalizeTeamName(award?.team, award?.season),
+        team: normalizeTeamName(originalTeamForRow(award), award?.season, {
+          sourceLeague: award?.source_league,
+        }),
         era: seasonEra(award?.season),
       }))
       .filter((award) => award.team && award.era),
@@ -621,7 +623,11 @@ function normalizeClassicPointsByTeamEra(classicPointsByTeamEra = []) {
     const awardTeams = Array.from(
       new Set(
         (block?.award_rows || [])
-          .map((award) => normalizeTeamName(award?.team, award?.season))
+          .map((award) =>
+            normalizeTeamName(originalTeamForRow(award), award?.season, {
+              sourceLeague: award?.source_league,
+            }),
+          )
           .filter(Boolean),
       ),
     );

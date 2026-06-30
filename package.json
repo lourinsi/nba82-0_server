@@ -31,6 +31,7 @@
     "seed:bref-positions": "node seed-bref-positions.js",
     "seed:goat-rankings": "node seed-goat-rankings.js",
     "seed:legacy-points": "node seed-legacy-points.js",
+    "seed:aba-accolades": "node seed-aba-accolades.js",
     "seed:retro-finals-mvps": "node seed-retro-finals-mvps.js",
     "seed:retro-finals-mvps:verify": "node seed-retro-finals-mvps.js --verifyOnly",
     "seed:three-point-accolades": "node seed-three-point-accolades.js",
@@ -43,7 +44,10 @@
     "refresh:positions:dry": "python scripts/refresh_positions_nba_api.py --dry-run",
     "fix:positions": "node fix-position-overrides.js",
     "verify:aba-teams": "node scripts/verify-aba-team-translations.js",
-    "verify:stat-titles": "node scripts/verify-stat-title-fallbacks.js"
+    "verify:aba-accolades": "node scripts/verify-aba-accolades.js",
+    "verify:stat-titles": "node scripts/verify-stat-title-fallbacks.js",
+    "images:check": "node scripts/check-player-image-map.js",
+    "images:write-map": "node scripts/check-player-image-map.js --write"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",

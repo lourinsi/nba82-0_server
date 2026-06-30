@@ -1,3 +1,5 @@
+const { ABA_ACCOLADE_WEIGHTS } = require("./abaAccolades");
+
 const ACCOLADE_WEIGHTS = {
   finals_mvp_count: 7.5,
   estimated_finals_mvp_count: 7.5,
@@ -26,6 +28,7 @@ const ACCOLADE_WEIGHTS = {
   all_rookie_2nd: 0.75,
   seasons_played: 0.25,
   games_started: 0.01,
+  ...ABA_ACCOLADE_WEIGHTS,
 };
 const ACCOLADE_WEIGHT_ENTRIES = Object.entries(ACCOLADE_WEIGHTS);
 const LEGACY_ENGINE_FACTORS = {

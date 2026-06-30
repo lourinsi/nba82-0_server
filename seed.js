@@ -10,6 +10,10 @@ const {
 const { decadeLabelFromYear, eraSortValue, seasonEra } = require("./seasonEras");
 const { applyLegacyScoringPipeline } = require("./seed-legacy-points");
 const { normalizeTeamCodeForSeason, normalizeTeamName } = require("./teamFranchises");
+const {
+  ABA_ACCOLADE_DEFAULTS,
+  applyAbaAwardToAccolades,
+} = require("./abaAccolades");
 require("dotenv").config();
 
 const NBA_STATS_AWARDS_URL = "https://stats.nba.com/stats/playerawards";
@@ -281,6 +285,7 @@ function createEmptyAccolades() {
     three_point_contest_wins: 0,
     games_started: 0,
     games_won: 0,
+    ...ABA_ACCOLADE_DEFAULTS,
     award_counts: {},
   };
 }
@@ -943,7 +948,9 @@ function parseAwards(resultSet) {
       all_nba_team_number: row.ALL_NBA_TEAM_NUMBER || null,
     });
 
-    if (description.includes("most valuable player") && !description.includes("voting") && !description.includes("ladder")) {
+    if (applyAbaAwardToAccolades(accolades, rawDescription, teamNumber)) {
+      // ABA accolades are intentionally tracked separately from NBA awards.
+    } else if (description.includes("most valuable player") && !description.includes("voting") && !description.includes("ladder")) {
       if (isNbaFinalsMvpDescription(description)) {
         accolades.finals_mvp_count += 1;
       } else if (description.includes("all-star")) {

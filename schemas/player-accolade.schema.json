@@ -118,8 +118,13 @@
               "properties": {
                 "season": { "type": ["string", "null"] },
                 "team": { "type": ["string", "null"] },
+                "original_team": { "type": "string" },
+                "source_league": { "enum": ["ABA", "NBA"] },
+                "team_name": { "type": "string" },
+                "franchise_group": { "type": "string" },
+                "is_aba_only_team": { "type": "boolean" },
                 "description": { "type": ["string", "null"] },
-                "all_nba_team_number": { "type": ["string", "null"] }
+                "all_nba_team_number": { "type": ["string", "integer", "null"] }
               },
               "additionalProperties": false
             }
@@ -155,6 +160,19 @@
         "scoring_titles",
         "assist_titles",
         "rebound_titles",
+        "aba_mvp_count",
+        "aba_playoffs_mvp_count",
+        "aba_all_league_1st",
+        "aba_all_league_2nd",
+        "aba_all_def_1st",
+        "aba_all_def_2nd",
+        "aba_all_star_selections",
+        "aba_all_star_mvp_count",
+        "aba_rookie_of_year_count",
+        "aba_championship_rings",
+        "aba_scoring_titles",
+        "aba_assist_titles",
+        "aba_rebound_titles",
         "three_point_titles",
         "steal_titles",
         "block_titles",
@@ -190,6 +208,19 @@
         "scoring_titles": { "type": "integer", "minimum": 0 },
         "assist_titles": { "type": "integer", "minimum": 0 },
         "rebound_titles": { "type": "integer", "minimum": 0 },
+        "aba_mvp_count": { "type": "integer", "minimum": 0 },
+        "aba_playoffs_mvp_count": { "type": "integer", "minimum": 0 },
+        "aba_all_league_1st": { "type": "integer", "minimum": 0 },
+        "aba_all_league_2nd": { "type": "integer", "minimum": 0 },
+        "aba_all_def_1st": { "type": "integer", "minimum": 0 },
+        "aba_all_def_2nd": { "type": "integer", "minimum": 0 },
+        "aba_all_star_selections": { "type": "integer", "minimum": 0 },
+        "aba_all_star_mvp_count": { "type": "integer", "minimum": 0 },
+        "aba_rookie_of_year_count": { "type": "integer", "minimum": 0 },
+        "aba_championship_rings": { "type": "integer", "minimum": 0 },
+        "aba_scoring_titles": { "type": "integer", "minimum": 0 },
+        "aba_assist_titles": { "type": "integer", "minimum": 0 },
+        "aba_rebound_titles": { "type": "integer", "minimum": 0 },
         "three_point_titles": { "type": "integer", "minimum": 0 },
         "steal_titles": { "type": "integer", "minimum": 0 },
         "block_titles": { "type": "integer", "minimum": 0 },
@@ -207,14 +238,19 @@
       "type": "array",
       "items": {
         "type": "object",
-        "properties": {
-          "season": { "type": ["string", "null"] },
-          "team": { "type": ["string", "null"] },
-          "description": { "type": ["string", "null"] },
-          "all_nba_team_number": { "type": ["string", "null"] }
-        },
-        "additionalProperties": false
-      }
+          "properties": {
+            "season": { "type": ["string", "null"] },
+            "team": { "type": ["string", "null"] },
+            "original_team": { "type": "string" },
+            "source_league": { "enum": ["ABA", "NBA"] },
+            "team_name": { "type": "string" },
+            "franchise_group": { "type": "string" },
+            "is_aba_only_team": { "type": "boolean" },
+            "description": { "type": ["string", "null"] },
+            "all_nba_team_number": { "type": ["string", "integer", "null"] }
+          },
+          "additionalProperties": false
+        }
     },
     "source": {
       "type": "object",
