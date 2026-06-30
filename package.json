@@ -46,8 +46,9 @@
     "verify:aba-teams": "node scripts/verify-aba-team-translations.js",
     "verify:aba-accolades": "node scripts/verify-aba-accolades.js",
     "verify:stat-titles": "node scripts/verify-stat-title-fallbacks.js",
-    "images:check": "node scripts/check-player-image-map.js",
-    "images:write-map": "node scripts/check-player-image-map.js --write"
+    "images:check": "node scripts/update-player-image-map.js --check",
+    "images:write-map": "node scripts/update-player-image-map.js --write",
+    "images:verify": "node scripts/verify-player-images.js"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
