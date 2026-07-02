@@ -7,6 +7,17 @@ const {
   STINT_SCALING_FACTOR,
   WEIGHTS: CLASSIC_STAT_WEIGHTS,
 } = require("./eraRelativeClassicPoints");
+const {
+  createMultiplayerLobby,
+  getMultiplayerLobby,
+  joinMultiplayerLobby,
+  leaveMultiplayerLobby,
+} = require("./multiplayerLobbyRepository");
+const {
+  getMultiplayerGameState,
+  startMultiplayerGame,
+  submitMultiplayerBid,
+} = require("./multiplayerGameRepository");
 require("dotenv").config({ quiet: true });
 const { playerCacheStatus, readJson, readPlayers } = require("./playerRepository");
 
@@ -160,8 +171,90 @@ app.get("/api/stats-engine-config", async (_req, res, next) => {
   }
 });
 
+app.post("/api/mystery-draft/multiplayer/lobbies", async (req, res, next) => {
+  try {
+    res.set("Cache-Control", "no-store");
+    res.status(201).json(await createMultiplayerLobby(req.body || {}));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/mystery-draft/multiplayer/lobbies/join", async (req, res, next) => {
+  try {
+    res.set("Cache-Control", "no-store");
+    res.json(await joinMultiplayerLobby(req.body || {}));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/mystery-draft/multiplayer/lobbies/:codeOrId", async (req, res, next) => {
+  try {
+    res.set("Cache-Control", "no-store");
+    res.json(await getMultiplayerLobby(req.params.codeOrId));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/mystery-draft/multiplayer/lobbies/:lobbyId/leave", async (req, res, next) => {
+  try {
+    res.set("Cache-Control", "no-store");
+    res.json(await leaveMultiplayerLobby({
+      lobbyId: req.params.lobbyId,
+      participantId: req.body?.participantId,
+    }));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/mystery-draft/multiplayer/lobbies/:lobbyId/start", async (req, res, next) => {
+  try {
+    res.set("Cache-Control", "no-store");
+    res.json(await startMultiplayerGame({
+      lobbyId: req.params.lobbyId,
+      participantId: req.body?.participantId,
+    }));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/mystery-draft/multiplayer/games/:codeOrId/state", async (req, res, next) => {
+  try {
+    res.set("Cache-Control", "no-store");
+    res.json(await getMultiplayerGameState(req.params.codeOrId, {
+      participantId: req.query?.participantId,
+    }));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/mystery-draft/multiplayer/games/:codeOrId/bids", async (req, res, next) => {
+  try {
+    res.set("Cache-Control", "no-store");
+    res.json(await submitMultiplayerBid({
+      amount: req.body?.amount,
+      codeOrId: req.params.codeOrId,
+      participantId: req.body?.participantId,
+      roundId: req.body?.roundId,
+    }));
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.use((error, req, res, _next) => {
   const statusCode = Number.isInteger(error.statusCode) ? error.statusCode : 500;
+  const publicMessage =
+    statusCode === 403 && error.code === "CORS_ORIGIN_DENIED"
+      ? "Origin is not allowed by CORS."
+      : (statusCode >= 400 && statusCode < 500) || statusCode === 503
+        ? error.message
+        : "Unable to load player accolade data.";
 
   if (statusCode !== 403) {
     setCorsHeaderForAllowedOrigin(req, res);
@@ -169,7 +262,7 @@ app.use((error, req, res, _next) => {
 
   console.error(error);
   res.status(statusCode).json({
-    error: statusCode === 403 ? "Origin is not allowed by CORS." : "Unable to load player accolade data.",
+    error: publicMessage,
     details: process.env.NODE_ENV === "production" ? undefined : error.message,
   });
 });

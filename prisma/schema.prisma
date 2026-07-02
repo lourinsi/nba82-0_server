@@ -53,3 +53,103 @@ model DataImport {
   @@index([source])
   @@map("data_imports")
 }
+
+model MultiplayerLobby {
+  id           String                    @id @default(cuid())
+  code         String                    @unique
+  hostUserId   String?                   @map("host_user_id")
+  status       String                    @default("waiting")
+  settings     Json
+  createdAt    DateTime                  @default(now()) @map("created_at")
+  updatedAt    DateTime                  @updatedAt @map("updated_at")
+  game         MultiplayerGame?
+  participants MultiplayerParticipant[]
+
+  @@index([status])
+  @@map("multiplayer_lobbies")
+}
+
+model MultiplayerParticipant {
+  id       String             @id @default(cuid())
+  lobbyId  String             @map("lobby_id")
+  userId   String?            @map("user_id")
+  clientId String?            @map("client_id")
+  name     String
+  isHost   Boolean            @default(false) @map("is_host")
+  joinedAt DateTime           @default(now()) @map("joined_at")
+  lobby    MultiplayerLobby   @relation(fields: [lobbyId], references: [id], onDelete: Cascade)
+
+  @@index([clientId])
+  @@index([lobbyId])
+  @@map("multiplayer_participants")
+}
+
+model MultiplayerGame {
+  id                String                  @id @default(cuid())
+  lobbyId           String                  @unique @map("lobby_id")
+  status            String                  @default("active")
+  currentRoundIndex Int                     @default(0) @map("current_round_index")
+  settings          Json
+  pool              Json?
+  createdAt         DateTime                @default(now()) @map("created_at")
+  updatedAt         DateTime                @updatedAt @map("updated_at")
+  lobby             MultiplayerLobby        @relation(fields: [lobbyId], references: [id], onDelete: Cascade)
+  rounds            MultiplayerRound[]
+  rosterPicks       MultiplayerRosterPick[]
+
+  @@index([status])
+  @@map("multiplayer_games")
+}
+
+model MultiplayerRound {
+  id                  String           @id @default(cuid())
+  gameId              String           @map("game_id")
+  roundIndex          Int              @map("round_index")
+  playerSeasonId      String           @map("player_season_id")
+  status              String           @default("bidding")
+  bidStartedAt        DateTime         @map("bid_started_at")
+  bidEndsAt           DateTime         @map("bid_ends_at")
+  revealEndsAt        DateTime?        @map("reveal_ends_at")
+  resolvedAt          DateTime?        @map("resolved_at")
+  winnerParticipantId String?          @map("winner_participant_id")
+  winningBid          Int?             @map("winning_bid")
+  noBid               Boolean          @default(false) @map("no_bid")
+  game                MultiplayerGame  @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  bids                MultiplayerBid[]
+
+  @@unique([gameId, roundIndex])
+  @@index([gameId])
+  @@index([gameId, roundIndex])
+  @@map("multiplayer_rounds")
+}
+
+model MultiplayerBid {
+  id            String           @id @default(cuid())
+  roundId       String           @map("round_id")
+  participantId String           @map("participant_id")
+  amount        Int
+  createdAt     DateTime         @default(now()) @map("created_at")
+  round         MultiplayerRound @relation(fields: [roundId], references: [id], onDelete: Cascade)
+
+  @@unique([roundId, participantId])
+  @@index([roundId])
+  @@index([participantId])
+  @@map("multiplayer_bids")
+}
+
+model MultiplayerRosterPick {
+  id             String          @id @default(cuid())
+  gameId         String          @map("game_id")
+  participantId  String          @map("participant_id")
+  playerSeasonId String          @map("player_season_id")
+  roundId        String          @unique @map("round_id")
+  paidAmount     Int             @map("paid_amount")
+  baseScore      Float           @map("base_score")
+  finalScore     Float           @map("final_score")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  game           MultiplayerGame @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@index([gameId])
+  @@index([participantId])
+  @@map("multiplayer_roster_picks")
+}
